@@ -5,26 +5,33 @@ using System.Collections.Generic;
 using static TileConfig;
 using static TileType;
 
+// IMPORTANT!!!
+// Remember to have a 1-tile distance between > 2 different tile types 
+// Because of the limitation here (only 2-tile configuration sprites are drawn)
+
 public enum TileConfig {
 	PRIMARY,
 	SECONDARY
 }
 
+// Tiles that are higher (higher z-index ish~) will be the PRIMARY over its counterpart -> greater value
 public enum TileType {
-	GRASS,
-	WATER,
-	DIRT,
-	PATH
+	MOUNTAIN = 50,
+	GRASS = 40,
+	PATH = 30, // probably should be the same as grass (we'll see later)
+	DIRT = 20,
+	WATER = 10,
+
 }
 
 public partial class World : Node2D
 {
 	[Export] TileMapLayer displayLayer;
 	[Export] TileMapLayer worldLayer;
-	[Export] Vector2I GrassTileWorldAtlas = new (1, 0);
-	[Export] Vector2I DirtTileWorldAtlas = new (0, 0);
-	[Export] Vector2I PathTileWorldAtlas = new(0, 0);
-	[Export] Vector2I WaterTileWorldAtlas = new(0, 0);
+	[Export] Vector2I GrassTileWorldAtlas;
+	[Export] Vector2I DirtTileWorldAtlas;
+	[Export] Vector2I PathTileWorldAtlas;
+	[Export] Vector2I WaterTileWorldAtlas;
 
 	readonly Dictionary<Vector2I, TileType> worldAtlasTileType = [];
 
@@ -66,9 +73,9 @@ public partial class World : Node2D
 		{new (SECONDARY, SECONDARY, SECONDARY, SECONDARY), new(8, 3)} // Full Secondary
 	};
 
-	readonly Dictionary<Tuple<TileType, TileType>, Tuple<TileConfig, int>> tileCombinationSource = new()
+	readonly Dictionary<Tuple<TileType, TileType>, int> tileCombinationSource = new()
 	{
-		{new (GRASS, WATER), new (PRIMARY, 0)}
+		{new (GRASS, WATER), 0}
 	};
 
 	// Called when the node enters the scene tree for the first time.
@@ -114,14 +121,25 @@ public partial class World : Node2D
 		 * Get the TileType of the 4 corners of the display tile specified by the displayCoord
 		 * Figure out what Tiles they are and which one is the PRIMARY & SECONDARY
 		 */
-		
+
 		// Compute the TileType of the 4 corners and arrange into an array with the order [top left, top right, bottom right, bottom left]
+		// This order aligns with the key in the neighbourhoodRules dictionary
 		TileType[] tileTypes = new TileType[4];
-		for (int i = 0; i < tileTypes.Length; i++)
+		for (int i = 0; i < 4; i++)
 			tileTypes[i] = WorldCoordToTileType(displayCoord - NEIGHBOURS[i]);
 
-		// Find out which one is the 
-		TileType[] uniqueTiles = [.. tileTypes.Distinct()];
+		// Find out which one is the PRIMARY & SECONDARY
+		TileConfig[] tileConfigs = new TileConfig[4];
+		TileType primaryTile = tileTypes.Max(); // Find TileType in array with Max value (PRIMARY)
+		TileType secondaryTile = tileTypes.Min(); // Find TileType in array with Min value (SECONDARY)
+		for (int i = 0; i < tileTypes.Length; i++)
+		{
+			if (tileTypes[i] == primaryTile)
+				tileConfigs[i] = PRIMARY;
+			else
+				tileConfigs[i] = SECONDARY;
+		}
+		// PROBLEM: if all WATER, it maps to all primary
 		
 		// Determine the TileType of all the 4 corners by calling TranslateWordCoordToType, passing in the corresponding world coordinate
 		// World coordinate is calculated by subtracting the display layer coordinate with the set vector (definef in NEIGHBOURS)
@@ -130,12 +148,23 @@ public partial class World : Node2D
 		// TileType bottomRight = WorldCoordToTileType(displayCoord); // No need to subtract with (0, 0)
 		// TileType bottomLeft = WorldCoordToTileType(displayCoord - NEIGHBOURS[2]);
 
-		return (tileCombinationSource[], neighbourhoodRules[new(topLeft, topRight, bottomRight, bottomLeft)]);
+		return
+		new(
+			//tileCombinationSource[new(primaryTile, secondaryTile)],
+			0,
+			neighbourhoodRules[new(tileConfigs[0], tileConfigs[1], tileConfigs[2], tileConfigs[3])]
+		);
 	}
 
 	private TileType WorldCoordToTileType(Vector2I worldCoord)
 	{
 		Vector2I worldAtlas = worldLayer.GetCellAtlasCoords(worldCoord);
-		return worldAtlasTileType[worldAtlas];
+
+		if (worldAtlas == GrassTileWorldAtlas)
+			return GRASS;
+		else if (worldAtlas == WaterTileWorldAtlas)
+			return WATER;
+		else
+			return WATER;
 	}
 }
