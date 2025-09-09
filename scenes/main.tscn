@@ -11,6 +11,7 @@ FPSCount = NodePath("Fps")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(388, 200)
+zoom = Vector2(2, 2)
 
 [node name="Fps" type="Label" parent="."]
 offset_left = 427.0
