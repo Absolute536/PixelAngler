@@ -10,7 +10,7 @@ FPSCount = NodePath("Fps")
 [node name="World" parent="." instance=ExtResource("1_o5qli")]
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(331, 187)
+position = Vector2(293, 124)
 
 [node name="Fps" type="Label" parent="."]
 offset_left = 427.0

@@ -81,7 +81,8 @@ public partial class World : Node2D
 		{new (WATER, WATER), 2},
 		{new (GRASS, GRASS), 1},
 		{new (GRASS, DIRT), 4},
-		{new (DIRT, DIRT), 3}
+		{new (DIRT, DIRT), 3},
+		{new (DIRT, WATER), 5}
 	};
 
 	// Called when the node enters the scene tree for the first time.
@@ -183,6 +184,6 @@ public partial class World : Node2D
 		else if (worldAtlas == PathTileWorldAtlas)
 			return PATH;
 		else
-			return WATER;
+			return DIRT;
 	}
 }
