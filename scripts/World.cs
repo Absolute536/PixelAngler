@@ -1,3 +1,5 @@
+namespace World;
+
 using Godot;
 using System;
 using System.Linq;
@@ -16,11 +18,11 @@ public enum TileConfig {
 
 // Tiles that are higher (higher z-index ish~) will be the PRIMARY over its counterpart -> greater value
 public enum TileType {
-	MOUNTAIN = 50,
-	GRASS = 40,
-	PATH = 30, // probably should be the same as grass (we'll see later)
-	DIRT = 20,
-	WATER = 10,
+	MOUNTAIN = 5,
+	GRASS = 4,
+	PATH = 3, // probably should be the same as grass (we'll see later)
+	DIRT = 2,
+	WATER = 1,
 
 }
 
@@ -33,7 +35,7 @@ public partial class World : Node2D
 	[Export] Vector2I PathTileWorldAtlas;
 	[Export] Vector2I WaterTileWorldAtlas;
 
-	readonly Dictionary<Vector2I, TileType> worldAtlasTileType = [];
+	// readonly Dictionary<Vector2I, TileType> worldAtlasTileType = [];
 
 	// Array of the 4 neighbourhood calculation vectors
 	// Used for calculating (converting) world coordinate to display coordinate and vice versa
@@ -55,7 +57,7 @@ public partial class World : Node2D
 	// Dictionary of 4-neighbour TileType -> Atlas coordinate of the tile to be selected
 	// TileConfig starts from the top left corner and go clockwise
 	readonly Dictionary<Tuple<TileConfig, TileConfig, TileConfig, TileConfig>, Vector2I> neighbourhoodRules = new() {
-		{new (PRIMARY, PRIMARY, PRIMARY, PRIMARY), new(1, 1)}, // Full Primary
+		{new (PRIMARY, PRIMARY, PRIMARY, PRIMARY), new(0 , 0)}, // Full Primary
 		{new (PRIMARY, SECONDARY, SECONDARY, SECONDARY), new(2, 2)}, // Top Left Corner
 		{new (SECONDARY, PRIMARY, SECONDARY, SECONDARY), new(0, 2)}, // Top Right Corner
 		{new (SECONDARY, SECONDARY, PRIMARY, SECONDARY), new(0, 0)}, // Bottom Right Corner
@@ -70,21 +72,25 @@ public partial class World : Node2D
 		{new (SECONDARY, PRIMARY, PRIMARY, PRIMARY), new(0, 3)}, // Empty Top Left Corner
 		{new (PRIMARY, SECONDARY, PRIMARY, SECONDARY), new(0, 5)}, // Left Diagonal Corners
 		{new (SECONDARY, PRIMARY, SECONDARY, PRIMARY), new(0, 6)}, // Right Diagonal Corners
-		{new (SECONDARY, SECONDARY, SECONDARY, SECONDARY), new(8, 3)} // Full Secondary
+		// {new (SECONDARY, SECONDARY, SECONDARY, SECONDARY), new(8, 3)} // Full Secondary
 	};
 
 	readonly Dictionary<Tuple<TileType, TileType>, int> tileCombinationSource = new()
 	{
-		{new (GRASS, WATER), 0}
+		{new (GRASS, WATER), 0},
+		{new (WATER, WATER), 2},
+		{new (GRASS, GRASS), 1},
+		{new (GRASS, DIRT), 4},
+		{new (DIRT, DIRT), 3}
 	};
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		worldAtlasTileType.Add(GrassTileWorldAtlas, GRASS);
-		worldAtlasTileType.Add(DirtTileWorldAtlas, DIRT);
-		worldAtlasTileType.Add(WaterTileWorldAtlas, WATER);
-		worldAtlasTileType.Add(PathTileWorldAtlas, PATH);
+		// worldAtlasTileType.Add(GrassTileWorldAtlas, GRASS);
+		// worldAtlasTileType.Add(DirtTileWorldAtlas, DIRT);
+		// worldAtlasTileType.Add(WaterTileWorldAtlas, WATER);
+		// worldAtlasTileType.Add(PathTileWorldAtlas, PATH);
 
 		if (!Engine.IsEditorHint())
 			foreach (Vector2I worldCoord in worldLayer.GetUsedCells())
@@ -115,6 +121,14 @@ public partial class World : Node2D
 		}
 	}
 
+	/*
+	 * THE TASK AT HAND
+	 * From the world coornidate, convert to display coordinate
+	 * Using display coordinate, find out the TileType of the 4 corners (4 neighbouring tiles in world layer)
+	 * The problem now is how to determine which of the two TileType found from the display coord is PRIMARY & SECONDARY
+	 * If only a single TileType is found (full tile), should it be primary or secondary?
+	 */
+
 	private Tuple<int, Vector2I> CalculateDisplayTile(Vector2I displayCoord)
 	{
 		/*
@@ -140,7 +154,7 @@ public partial class World : Node2D
 				tileConfigs[i] = SECONDARY;
 		}
 		// PROBLEM: if all WATER, it maps to all primary
-		
+
 		// Determine the TileType of all the 4 corners by calling TranslateWordCoordToType, passing in the corresponding world coordinate
 		// World coordinate is calculated by subtracting the display layer coordinate with the set vector (definef in NEIGHBOURS)
 		// TileType topLeft = WorldCoordToTileType(displayCoord - NEIGHBOURS[3]);
@@ -148,12 +162,12 @@ public partial class World : Node2D
 		// TileType bottomRight = WorldCoordToTileType(displayCoord); // No need to subtract with (0, 0)
 		// TileType bottomLeft = WorldCoordToTileType(displayCoord - NEIGHBOURS[2]);
 
+		// replace '0' with the actual one
 		return
 		new(
-			//tileCombinationSource[new(primaryTile, secondaryTile)],
-			0,
+			tileCombinationSource[new(primaryTile, secondaryTile)],
 			neighbourhoodRules[new(tileConfigs[0], tileConfigs[1], tileConfigs[2], tileConfigs[3])]
-		);
+		); 
 	}
 
 	private TileType WorldCoordToTileType(Vector2I worldCoord)
@@ -164,6 +178,10 @@ public partial class World : Node2D
 			return GRASS;
 		else if (worldAtlas == WaterTileWorldAtlas)
 			return WATER;
+		else if (worldAtlas == DirtTileWorldAtlas)
+			return DIRT;
+		else if (worldAtlas == PathTileWorldAtlas)
+			return PATH;
 		else
 			return WATER;
 	}
