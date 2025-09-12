@@ -19,8 +19,8 @@ public enum TileConfig {
 // Tiles that are higher (higher z-index ish~) will be the PRIMARY over its counterpart -> greater value
 public enum TileType {
 	MOUNTAIN = 5,
-	GRASS = 4,
-	PATH = 3, // probably should be the same as grass (we'll see later)
+	GRASS = 3,
+	PATH = 4, // probably should be the same as grass (we'll see later)
 	DIRT = 2,
 	WATER = 1,
 
@@ -34,6 +34,7 @@ public partial class World : Node2D
 	[Export] Vector2I DirtTileWorldAtlas;
 	[Export] Vector2I PathTileWorldAtlas;
 	[Export] Vector2I WaterTileWorldAtlas;
+	[Export] Vector2I MountainTileWorldAtlas;
 
 	// readonly Dictionary<Vector2I, TileType> worldAtlasTileType = [];
 
@@ -82,7 +83,11 @@ public partial class World : Node2D
 		{new (GRASS, GRASS), 1},
 		{new (GRASS, DIRT), 4},
 		{new (DIRT, DIRT), 3},
-		{new (DIRT, WATER), 5}
+		{new (DIRT, WATER), 5},
+		{new (PATH, PATH), 6},
+		{new (PATH, GRASS), 7},
+		{new (MOUNTAIN, GRASS), 8},
+		{new (MOUNTAIN, MOUNTAIN), 0}
 	};
 
 	// Called when the node enters the scene tree for the first time.
@@ -183,7 +188,9 @@ public partial class World : Node2D
 			return DIRT;
 		else if (worldAtlas == PathTileWorldAtlas)
 			return PATH;
+		else if (worldAtlas == MountainTileWorldAtlas)
+			return MOUNTAIN;
 		else
-			return DIRT;
+			return GRASS;
 	}
 }
