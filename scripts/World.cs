@@ -6,10 +6,12 @@ using System.Linq;
 using System.Collections.Generic;
 using static TileConfig;
 using static TileType;
+using System.Numerics;
 
 // IMPORTANT!!!
 // Remember to have a 1-tile distance between > 2 different tile types 
 // Because of the limitation here (only 2-tile configuration sprites are drawn)
+
 
 public enum TileConfig {
 	PRIMARY,
@@ -18,7 +20,9 @@ public enum TileConfig {
 
 // Tiles that are higher (higher z-index ish~) will be the PRIMARY over its counterpart -> greater value
 public enum TileType {
-	MOUNTAIN = 5,
+	MOUNTAIN3 = 7,
+	MOUNTAIN2 = 6,
+	MOUNTAIN1 = 5,
 	GRASS = 3,
 	PATH = 4, // probably should be the same as grass (we'll see later)
 	DIRT = 2,
@@ -34,7 +38,9 @@ public partial class World : Node2D
 	[Export] Vector2I DirtTileWorldAtlas;
 	[Export] Vector2I PathTileWorldAtlas;
 	[Export] Vector2I WaterTileWorldAtlas;
-	[Export] Vector2I MountainTileWorldAtlas;
+	[Export] Vector2I MountainTileOneWorldAtlas;
+	[Export] Vector2I MountainTileTwoWorldAtlas;
+	[Export] Vector2I MountainTileThreeWorldAtlas;
 
 	// readonly Dictionary<Vector2I, TileType> worldAtlasTileType = [];
 
@@ -86,8 +92,14 @@ public partial class World : Node2D
 		{new (DIRT, WATER), 5},
 		{new (PATH, PATH), 6},
 		{new (PATH, GRASS), 7},
-		{new (MOUNTAIN, GRASS), 8},
-		{new (MOUNTAIN, MOUNTAIN), 0}
+		{new (MOUNTAIN1, GRASS), 8},
+		{new (MOUNTAIN1, MOUNTAIN1), 1},
+		{new (MOUNTAIN2, MOUNTAIN1), 8},
+		{new (MOUNTAIN2, GRASS), 8},
+		{new (MOUNTAIN2, MOUNTAIN2), 1},
+		{new (MOUNTAIN3, MOUNTAIN2), 8},
+		{new (MOUNTAIN3, GRASS), 8},
+		{new (MOUNTAIN3, MOUNTAIN3), 1}
 	};
 
 	// Called when the node enters the scene tree for the first time.
@@ -188,8 +200,12 @@ public partial class World : Node2D
 			return DIRT;
 		else if (worldAtlas == PathTileWorldAtlas)
 			return PATH;
-		else if (worldAtlas == MountainTileWorldAtlas)
-			return MOUNTAIN;
+		else if (worldAtlas == MountainTileOneWorldAtlas)
+			return MOUNTAIN1;
+		else if (worldAtlas == MountainTileTwoWorldAtlas)
+			return MOUNTAIN2;
+		else if (worldAtlas == MountainTileThreeWorldAtlas)
+			return MOUNTAIN3;
 		else
 			return GRASS;
 	}
