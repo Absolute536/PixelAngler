@@ -19,15 +19,16 @@ public enum TileConfig {
 }
 
 // Tiles that are higher (higher z-index ish~) will be the PRIMARY over its counterpart -> greater value
-public enum TileType {
-	MOUNTAIN3 = 7,
-	MOUNTAIN2 = 6,
-	MOUNTAIN1 = 5,
-	GRASS = 3,
-	PATH = 4, // probably should be the same as grass (we'll see later)
-	DIRT = 2,
-	WATER = 1,
-
+// Should flip the enum definition order so that they are automatically ordered
+public enum TileType
+{
+	WATER,
+	DIRT,
+	GRASS,
+	PATH,
+	MOUNTAIN1,
+	MOUNTAIN2,
+	MOUNTAIN3
 }
 
 public partial class World : Node2D
