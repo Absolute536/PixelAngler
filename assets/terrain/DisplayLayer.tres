@@ -1,0 +1,295 @@
+[gd_resource type="TileSet" load_steps=19 format=3 uid="uid://du35ilwys81fd"]
+
+[ext_resource type="Texture2D" uid="uid://c01jo723r70cx" path="res://assets/terrain/Tileset.png" id="1_8g32x"]
+[ext_resource type="Texture2D" uid="uid://dxfb8jlp77r8c" path="res://assets/terrain/GrassBaseTile.png" id="2_7khgd"]
+[ext_resource type="Texture2D" uid="uid://c352munlj05n5" path="res://assets/terrain/WaterBaseTile.png" id="3_o4acl"]
+[ext_resource type="Texture2D" uid="uid://cmvxbr7b7q4s2" path="res://assets/terrain/DirtBaseTile.png" id="4_emjw8"]
+[ext_resource type="Texture2D" uid="uid://ca0wdp7anufmt" path="res://assets/terrain/Grass(Dirt).png" id="5_ul1gj"]
+[ext_resource type="Texture2D" uid="uid://1l82cp3xtb0v" path="res://assets/terrain/Dirt(Water).png" id="6_2fg2g"]
+[ext_resource type="Texture2D" uid="uid://70ad4ikm7g6j" path="res://assets/terrain/PathBaseTile.png" id="7_1hu5n"]
+[ext_resource type="Texture2D" uid="uid://c1csjlfb5htvi" path="res://assets/terrain/Path(Grass).png" id="8_5eiab"]
+[ext_resource type="Texture2D" uid="uid://bbwxxlqjphvbw" path="res://assets/terrain/Mountain(Grass).png" id="9_nldih"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_d1c63"]
+texture = ExtResource("1_8g32x")
+0:0/animation_columns = 4
+0:0/animation_separation = Vector2i(2, 0)
+0:0/animation_frame_0/duration = 1.0
+0:0/animation_frame_1/duration = 1.0
+0:0/animation_frame_2/duration = 1.0
+0:0/animation_frame_3/duration = 1.0
+0:0/0 = 0
+1:0/animation_columns = 4
+1:0/animation_separation = Vector2i(2, 0)
+1:0/animation_frame_0/duration = 1.0
+1:0/animation_frame_1/duration = 1.0
+1:0/animation_frame_2/duration = 1.0
+1:0/animation_frame_3/duration = 1.0
+1:0/0 = 0
+2:0/animation_columns = 4
+2:0/animation_separation = Vector2i(2, 0)
+2:0/animation_frame_0/duration = 1.0
+2:0/animation_frame_1/duration = 1.0
+2:0/animation_frame_2/duration = 1.0
+2:0/animation_frame_3/duration = 1.0
+2:0/0 = 0
+0:1/animation_columns = 4
+0:1/animation_separation = Vector2i(2, 0)
+0:1/animation_frame_0/duration = 1.0
+0:1/animation_frame_1/duration = 1.0
+0:1/animation_frame_2/duration = 1.0
+0:1/animation_frame_3/duration = 1.0
+0:1/0 = 0
+1:1/animation_speed = 2.0
+1:1/0 = 0
+2:1/animation_columns = 4
+2:1/animation_separation = Vector2i(2, 0)
+2:1/animation_frame_0/duration = 1.0
+2:1/animation_frame_1/duration = 1.0
+2:1/animation_frame_2/duration = 1.0
+2:1/animation_frame_3/duration = 1.0
+2:1/0 = 0
+0:2/animation_columns = 4
+0:2/animation_separation = Vector2i(2, 0)
+0:2/animation_frame_0/duration = 1.0
+0:2/animation_frame_1/duration = 1.0
+0:2/animation_frame_2/duration = 1.0
+0:2/animation_frame_3/duration = 1.0
+0:2/0 = 0
+1:2/animation_columns = 4
+1:2/animation_separation = Vector2i(2, 0)
+1:2/animation_frame_0/duration = 1.0
+1:2/animation_frame_1/duration = 1.0
+1:2/animation_frame_2/duration = 1.0
+1:2/animation_frame_3/duration = 1.0
+1:2/0 = 0
+2:2/animation_columns = 4
+2:2/animation_separation = Vector2i(2, 0)
+2:2/animation_frame_0/duration = 1.0
+2:2/animation_frame_1/duration = 1.0
+2:2/animation_frame_2/duration = 1.0
+2:2/animation_frame_3/duration = 1.0
+2:2/0 = 0
+0:3/animation_columns = 4
+0:3/animation_separation = Vector2i(1, 0)
+0:3/animation_frame_0/duration = 1.0
+0:3/animation_frame_1/duration = 1.0
+0:3/animation_frame_2/duration = 1.0
+0:3/animation_frame_3/duration = 1.0
+0:3/0 = 0
+1:3/animation_columns = 4
+1:3/animation_separation = Vector2i(1, 0)
+1:3/animation_frame_0/duration = 1.0
+1:3/animation_frame_1/duration = 1.0
+1:3/animation_frame_2/duration = 1.0
+1:3/animation_frame_3/duration = 1.0
+1:3/0 = 0
+0:4/animation_columns = 4
+0:4/animation_separation = Vector2i(1, 0)
+0:4/animation_frame_0/duration = 1.0
+0:4/animation_frame_1/duration = 1.0
+0:4/animation_frame_2/duration = 1.0
+0:4/animation_frame_3/duration = 1.0
+0:4/0 = 0
+1:4/animation_columns = 4
+1:4/animation_separation = Vector2i(1, 0)
+1:4/animation_frame_0/duration = 1.0
+1:4/animation_frame_1/duration = 1.0
+1:4/animation_frame_2/duration = 1.0
+1:4/animation_frame_3/duration = 1.0
+1:4/0 = 0
+0:5/animation_columns = 4
+0:5/animation_frame_0/duration = 1.0
+0:5/animation_frame_1/duration = 1.0
+0:5/animation_frame_2/duration = 1.0
+0:5/animation_frame_3/duration = 1.0
+0:5/0 = 0
+0:6/animation_columns = 4
+0:6/animation_frame_0/duration = 1.0
+0:6/animation_frame_1/duration = 1.0
+0:6/animation_frame_2/duration = 1.0
+0:6/animation_frame_3/duration = 1.0
+0:6/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0uv0p"]
+texture = ExtResource("2_7khgd")
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_b3faq"]
+texture = ExtResource("3_o4acl")
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ygioq"]
+texture = ExtResource("4_emjw8")
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_pdh0q"]
+texture = ExtResource("5_ul1gj")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+0:5/0 = 0
+0:6/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_h1bdy"]
+texture = ExtResource("6_2fg2g")
+0:0/animation_columns = 4
+0:0/animation_separation = Vector2i(2, 0)
+0:0/animation_frame_0/duration = 1.0
+0:0/animation_frame_1/duration = 1.0
+0:0/animation_frame_2/duration = 1.0
+0:0/animation_frame_3/duration = 1.0
+0:0/0 = 0
+1:0/animation_columns = 4
+1:0/animation_separation = Vector2i(2, 0)
+1:0/animation_frame_0/duration = 1.0
+1:0/animation_frame_1/duration = 1.0
+1:0/animation_frame_2/duration = 1.0
+1:0/animation_frame_3/duration = 1.0
+1:0/0 = 0
+2:0/animation_columns = 4
+2:0/animation_separation = Vector2i(2, 0)
+2:0/animation_frame_0/duration = 1.0
+2:0/animation_frame_1/duration = 1.0
+2:0/animation_frame_2/duration = 1.0
+2:0/animation_frame_3/duration = 1.0
+2:0/0 = 0
+0:1/animation_columns = 4
+0:1/animation_separation = Vector2i(2, 0)
+0:1/animation_frame_0/duration = 1.0
+0:1/animation_frame_1/duration = 1.0
+0:1/animation_frame_2/duration = 1.0
+0:1/animation_frame_3/duration = 1.0
+0:1/0 = 0
+1:1/0 = 0
+2:1/animation_columns = 4
+2:1/animation_separation = Vector2i(2, 0)
+2:1/animation_frame_0/duration = 1.0
+2:1/animation_frame_1/duration = 1.0
+2:1/animation_frame_2/duration = 1.0
+2:1/animation_frame_3/duration = 1.0
+2:1/0 = 0
+0:2/animation_columns = 4
+0:2/animation_separation = Vector2i(2, 0)
+0:2/animation_frame_0/duration = 1.0
+0:2/animation_frame_1/duration = 1.0
+0:2/animation_frame_2/duration = 1.0
+0:2/animation_frame_3/duration = 1.0
+0:2/0 = 0
+1:2/animation_columns = 4
+1:2/animation_separation = Vector2i(2, 0)
+1:2/animation_frame_0/duration = 1.0
+1:2/animation_frame_1/duration = 1.0
+1:2/animation_frame_2/duration = 1.0
+1:2/animation_frame_3/duration = 1.0
+1:2/0 = 0
+2:2/animation_columns = 4
+2:2/animation_separation = Vector2i(2, 0)
+2:2/animation_frame_0/duration = 1.0
+2:2/animation_frame_1/duration = 1.0
+2:2/animation_frame_2/duration = 1.0
+2:2/animation_frame_3/duration = 1.0
+2:2/0 = 0
+0:3/animation_columns = 4
+0:3/animation_separation = Vector2i(1, 0)
+0:3/animation_frame_0/duration = 1.0
+0:3/animation_frame_1/duration = 1.0
+0:3/animation_frame_2/duration = 1.0
+0:3/animation_frame_3/duration = 1.0
+0:3/0 = 0
+1:3/animation_columns = 4
+1:3/animation_separation = Vector2i(1, 0)
+1:3/animation_frame_0/duration = 1.0
+1:3/animation_frame_1/duration = 1.0
+1:3/animation_frame_2/duration = 1.0
+1:3/animation_frame_3/duration = 1.0
+1:3/0 = 0
+0:4/animation_columns = 4
+0:4/animation_separation = Vector2i(1, 0)
+0:4/animation_frame_0/duration = 1.0
+0:4/animation_frame_1/duration = 1.0
+0:4/animation_frame_2/duration = 1.0
+0:4/animation_frame_3/duration = 1.0
+0:4/0 = 0
+1:4/animation_columns = 4
+1:4/animation_separation = Vector2i(1, 0)
+1:4/animation_frame_0/duration = 1.0
+1:4/animation_frame_1/duration = 1.0
+1:4/animation_frame_2/duration = 1.0
+1:4/animation_frame_3/duration = 1.0
+1:4/0 = 0
+0:5/animation_columns = 4
+0:5/animation_frame_0/duration = 1.0
+0:5/animation_frame_1/duration = 1.0
+0:5/animation_frame_2/duration = 1.0
+0:5/animation_frame_3/duration = 1.0
+0:5/0 = 0
+0:6/animation_columns = 4
+0:6/animation_frame_0/duration = 1.0
+0:6/animation_frame_1/duration = 1.0
+0:6/animation_frame_2/duration = 1.0
+0:6/animation_frame_3/duration = 1.0
+0:6/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7c4bj"]
+texture = ExtResource("7_1hu5n")
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nrtoj"]
+texture = ExtResource("8_5eiab")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+0:5/0 = 0
+0:6/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_i4b1j"]
+texture = ExtResource("9_nldih")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+0:5/0 = 0
+1:5/0 = 0
+0:6/0 = 0
+1:6/0 = 0
+
+[resource]
+sources/0 = SubResource("TileSetAtlasSource_d1c63")
+sources/1 = SubResource("TileSetAtlasSource_0uv0p")
+sources/2 = SubResource("TileSetAtlasSource_b3faq")
+sources/4 = SubResource("TileSetAtlasSource_pdh0q")
+sources/3 = SubResource("TileSetAtlasSource_ygioq")
+sources/5 = SubResource("TileSetAtlasSource_h1bdy")
+sources/6 = SubResource("TileSetAtlasSource_7c4bj")
+sources/7 = SubResource("TileSetAtlasSource_nrtoj")
+sources/8 = SubResource("TileSetAtlasSource_i4b1j")
