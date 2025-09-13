@@ -6,7 +6,6 @@ using System.Linq;
 using System.Collections.Generic;
 using static TileConfig;
 using static TileType;
-using System.Numerics;
 
 // IMPORTANT!!!
 // Remember to have a 1-tile distance between > 2 different tile types 
@@ -83,7 +82,7 @@ public partial class World : Node2D
 		// {new (SECONDARY, SECONDARY, SECONDARY, SECONDARY), new(8, 3)} // Full Secondary
 	};
 
-	readonly Dictionary<Tuple<TileType, TileType>, int> tileCombinationSource = new()
+	readonly Dictionary<(TileType primaryTile, TileType secondaryTile), int> tileCombinationSource = new()
 	{
 		{new (GRASS, WATER), 0},
 		{new (WATER, WATER), 2},
