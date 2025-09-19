@@ -1,4 +1,4 @@
-namespace World;
+namespace WorldInfo;
 
 using Godot;
 using System;
@@ -51,7 +51,7 @@ public partial class World : Node2D
 
 	// [World to Display] top left, bottom left, top right, bottom right
 	// [Display to World] bottom right, top right, bottom left, top left
-	readonly Vector2I[] NEIGHBOURS = [new(1, 1), new(0, 1), new(0, 0), new(1, 0)]; 
+	readonly Vector2I[] NEIGHBOURS = [new(1, 1), new(0, 1), new(0, 0), new(1, 0)];
 
 	// readonly Dictionary<string, Vector2I> NeighbourCalculationVectors = new()
 	// {
@@ -161,6 +161,7 @@ public partial class World : Node2D
 			tileTypes[i] = WorldCoordToTileType(displayCoord - NEIGHBOURS[i]);
 
 		// Find out which one is the PRIMARY & SECONDARY
+		// TileType with higher value (int) means its on top so primary
 		TileConfig[] tileConfigs = new TileConfig[4];
 		TileType primaryTile = tileTypes.Max(); // Find TileType in array with Max value (PRIMARY)
 		TileType secondaryTile = tileTypes.Min(); // Find TileType in array with Min value (SECONDARY)
@@ -185,12 +186,13 @@ public partial class World : Node2D
 		new(
 			tileCombinationSource[new(primaryTile, secondaryTile)],
 			neighbourhoodRules[new(tileConfigs[0], tileConfigs[1], tileConfigs[2], tileConfigs[3])]
-		); 
+		);
 	}
 
-	private TileType WorldCoordToTileType(Vector2I worldCoord)
+	public TileType WorldCoordToTileType(Vector2I worldCoord)
 	{
 		Vector2I worldAtlas = worldLayer.GetCellAtlasCoords(worldCoord);
+		// Console.WriteLine(worldCoord);
 
 		if (worldAtlas == GrassTileWorldAtlas)
 			return GRASS;
@@ -209,4 +211,21 @@ public partial class World : Node2D
 		else
 			return GRASS;
 	}
+
+	// public static TileType TestingLocation(Vector2I worldC)
+	// {
+	// 	Vector2I worldCoord = worldLayer.GetCellAtlasCoords(worldC);
+	// 	if (worldCoord == new Vector2I(0, 0))
+	// 		return GRASS;
+	// 	else if (worldCoord == new Vector2I(2, 0))
+	// 		return DIRT;
+	// 	else if (worldCoord == new Vector2I(1, 0))
+	// 	{
+	// 		return WATER;
+	// 	}
+	// 	else if (worldCoord == new Vector2I(3, 0))
+	// 		return PATH;
+
+	// 	return GRASS;
+	// }
 }
