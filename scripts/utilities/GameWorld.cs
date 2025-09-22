@@ -23,11 +23,24 @@ public enum TileConfiguration
     MinorTile
 }
 
-public class WorldRender
+/*
+ * Provide the 8-neighbourhood rules
+ * Return TileType based on a given world coordinate
+ * 
+ */
+public class GameWorld
 {
-    private Vector2I _grassAtlas;
+    private static GameWorld instance = new GameWorld();
+    static GameWorld()
+    {
+        
+    }
+    private GameWorld()
+    {
 
-    readonly Dictionary<Tuple<TileConfiguration, TileConfiguration, TileConfiguration, TileConfiguration>, Vector2I> TileNeighbourhoodAtlas = new()
+    }
+    readonly static Dictionary<TileType, Vector2I> TileTypeAltas = [];
+    readonly static Dictionary<Tuple<TileConfiguration, TileConfiguration, TileConfiguration, TileConfiguration>, Vector2I> TileNeighbourhoodAtlas = new()
     {
         {new (MajorTile, MajorTile, MajorTile, MajorTile), new (0, 0)}, // All Corners
         {new (MajorTile, MinorTile, MinorTile, MinorTile), new (2, 2)}, // Top Left Corner

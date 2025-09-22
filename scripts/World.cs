@@ -6,6 +6,7 @@ using System.Linq;
 using System.Collections.Generic;
 using static TileConfig;
 using static TileType;
+using GamePlayer;
 
 // IMPORTANT!!!
 // Remember to have a 1-tile distance between > 2 different tile types 
@@ -21,13 +22,13 @@ public enum TileConfig {
 // Should flip the enum definition order so that they are automatically ordered
 public enum TileType
 {
-	WATER,
-	DIRT,
-	GRASS,
-	PATH,
-	MOUNTAIN1,
-	MOUNTAIN2,
-	MOUNTAIN3
+	Water,
+	Dirt,
+	Grass,
+	Path,
+	MountainLayer1,
+	MountainLayer2,
+	MountainLayer3
 }
 
 public partial class World : Node2D
@@ -38,11 +39,12 @@ public partial class World : Node2D
 	[Export] Vector2I DirtTileWorldAtlas;
 	[Export] Vector2I PathTileWorldAtlas;
 	[Export] Vector2I WaterTileWorldAtlas;
-	[Export] Vector2I MountainTileOneWorldAtlas;
-	[Export] Vector2I MountainTileTwoWorldAtlas;
-	[Export] Vector2I MountainTileThreeWorldAtlas;
+	[Export] Vector2I MountainLayerOneWorldAtlas;
+	[Export] Vector2I MountainLayerTwoWorldAtlas;
+	[Export] Vector2I MountainLayerThreeWorldAtlas;
 
-	// readonly Dictionary<Vector2I, TileType> worldAtlasTileType = [];
+	private Player PPlayer;
+
 
 	// Array of the 4 neighbourhood calculation vectors
 	// Used for calculating (converting) world coordinate to display coordinate and vice versa
@@ -84,37 +86,49 @@ public partial class World : Node2D
 
 	readonly Dictionary<(TileType primaryTile, TileType secondaryTile), int> tileCombinationSource = new()
 	{
-		{new (GRASS, WATER), 0},
-		{new (WATER, WATER), 2},
-		{new (GRASS, GRASS), 1},
-		{new (GRASS, DIRT), 4},
-		{new (DIRT, DIRT), 3},
-		{new (DIRT, WATER), 5},
-		{new (PATH, PATH), 6},
-		{new (PATH, GRASS), 7},
-		{new (MOUNTAIN1, GRASS), 8},
-		{new (MOUNTAIN1, MOUNTAIN1), 1},
-		{new (MOUNTAIN2, MOUNTAIN1), 8},
-		{new (MOUNTAIN2, GRASS), 8},
-		{new (MOUNTAIN2, MOUNTAIN2), 1},
-		{new (MOUNTAIN3, MOUNTAIN2), 8},
-		{new (MOUNTAIN3, GRASS), 8},
-		{new (MOUNTAIN3, MOUNTAIN3), 1}
+		{new (Grass, Water), 0},
+		{new (Water, Water), 2},
+		{new (Grass, Grass), 1},
+		{new (Grass, Dirt), 4},
+		{new (Dirt, Dirt), 3},
+		{new (Dirt, Water), 5},
+		{new (Path, Path), 6},
+		{new (Path, Grass), 7},
+		{new (MountainLayer1, Grass), 8},
+		{new (MountainLayer1, MountainLayer1), 1},
+		{new (MountainLayer2, MountainLayer1), 8},
+		{new (MountainLayer2, Grass), 8},
+		{new (MountainLayer2, MountainLayer2), 1},
+		{new (MountainLayer3, MountainLayer2), 8},
+		{new (MountainLayer3, Grass), 8},
+		{new (MountainLayer3, MountainLayer3), 1}
 	};
+
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		// worldAtlasTileType.Add(GrassTileWorldAtlas, GRASS);
-		// worldAtlasTileType.Add(DirtTileWorldAtlas, DIRT);
-		// worldAtlasTileType.Add(WaterTileWorldAtlas, WATER);
-		// worldAtlasTileType.Add(PathTileWorldAtlas, PATH);
+		// worldAtlasTileType.Add(GrassTileWorldAtlas, Grass);
+		// worldAtlasTileType.Add(DirtTileWorldAtlas, Dirt);
+		// worldAtlasTileType.Add(WaterTileWorldAtlas, Water);
+		// worldAtlasTileType.Add(PathTileWorldAtlas, Path);
 
 		if (!Engine.IsEditorHint())
+		{
+			PPlayer = GetTree().CurrentScene.GetNode("Player") as Player;
+
 			foreach (Vector2I worldCoord in worldLayer.GetUsedCells())
 			{
 				ShowDisplayTile(worldCoord);
 			}
+
+			PPlayer.PositionChange += OnPlayerPositionChange;
+		}
+	}
+
+	private void OnPlayerPositionChange(object sender, PositionArgs positionArgs)
+	{
+		positionArgs.Type = WorldCoordToTileType(positionArgs.WorldCoordinate);
 	}
 
 	private void ShowDisplayTile(Vector2I worldCoord)
@@ -172,7 +186,7 @@ public partial class World : Node2D
 			else
 				tileConfigs[i] = SECONDARY;
 		}
-		// PROBLEM: if all WATER, it maps to all primary
+		// PROBLEM: if all Water, it maps to all primary
 
 		// Determine the TileType of all the 4 corners by calling TranslateWordCoordToType, passing in the corresponding world coordinate
 		// World coordinate is calculated by subtracting the display layer coordinate with the set vector (definef in NEIGHBOURS)
@@ -195,37 +209,37 @@ public partial class World : Node2D
 		// Console.WriteLine(worldCoord);
 
 		if (worldAtlas == GrassTileWorldAtlas)
-			return GRASS;
+			return Grass;
 		else if (worldAtlas == WaterTileWorldAtlas)
-			return WATER;
+			return Water;
 		else if (worldAtlas == DirtTileWorldAtlas)
-			return DIRT;
+			return Dirt;
 		else if (worldAtlas == PathTileWorldAtlas)
-			return PATH;
-		else if (worldAtlas == MountainTileOneWorldAtlas)
-			return MOUNTAIN1;
-		else if (worldAtlas == MountainTileTwoWorldAtlas)
-			return MOUNTAIN2;
-		else if (worldAtlas == MountainTileThreeWorldAtlas)
-			return MOUNTAIN3;
+			return Path;
+		else if (worldAtlas == MountainLayerOneWorldAtlas)
+			return MountainLayer1;
+		else if (worldAtlas == MountainLayerTwoWorldAtlas)
+			return MountainLayer2;
+		else if (worldAtlas == MountainLayerThreeWorldAtlas)
+			return MountainLayer3;
 		else
-			return GRASS;
+			return Grass;
 	}
 
 	// public static TileType TestingLocation(Vector2I worldC)
 	// {
 	// 	Vector2I worldCoord = worldLayer.GetCellAtlasCoords(worldC);
 	// 	if (worldCoord == new Vector2I(0, 0))
-	// 		return GRASS;
+	// 		return Grass;
 	// 	else if (worldCoord == new Vector2I(2, 0))
-	// 		return DIRT;
+	// 		return Dirt;
 	// 	else if (worldCoord == new Vector2I(1, 0))
 	// 	{
-	// 		return WATER;
+	// 		return Water;
 	// 	}
 	// 	else if (worldCoord == new Vector2I(3, 0))
-	// 		return PATH;
+	// 		return Path;
 
-	// 	return GRASS;
+	// 	return Grass;
 	// }
 }

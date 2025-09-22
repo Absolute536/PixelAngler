@@ -4,8 +4,8 @@
 [ext_resource type="Script" uid="uid://dwkgu7hv8ofdd" path="res://scripts/Player.cs" id="1_v6fml"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_p0vlq"]
-radius = 4.0
-height = 24.0
+radius = 5.0
+height = 26.0
 
 [node name="CharacterBody2D" type="CharacterBody2D" node_paths=PackedStringArray("_spriteAnimation", "DebugText")]
 script = ExtResource("1_v6fml")
@@ -13,7 +13,7 @@ _spriteAnimation = NodePath("PlayerAnimation")
 DebugText = NodePath("DebugText")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -10)
+position = Vector2(0, -12)
 shape = SubResource("CapsuleShape2D_p0vlq")
 
 [node name="PlayerAnimation" type="AnimatedSprite2D" parent="."]

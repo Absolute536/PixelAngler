@@ -1,9 +1,24 @@
+namespace GamePlayer;
+
 using Godot;
 using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 using System.Text;
+using WorldInfo;
 // using WorldInfo;
+
+public class PositionArgs : EventArgs
+{
+	public Vector2I WorldCoordinate { get; }
+	public TileType Type { set; get; }
+	public PositionArgs(Vector2I worldCoordinate, TileType type)
+	{
+		WorldCoordinate = worldCoordinate;
+		Type = type;
+	}
+}
 
 public partial class Player : CharacterBody2D
 {
@@ -15,6 +30,16 @@ public partial class Player : CharacterBody2D
 
 
 	// Testing
+
+	public delegate void PositionChangedEventHandler(object sender, PositionArgs positionArgs);
+	public event PositionChangedEventHandler PositionChange;
+
+	private void Relocate()
+	{
+		PositionArgs positionArgs = new PositionArgs(new Vector2I((int)Position.X / 16, (int)Position.Y / 16), TileType.Water);
+		PositionChange?.Invoke(this, positionArgs);
+		DebugText.Text = positionArgs.Type.ToString();
+	}
 
 
 	StringBuilder stringBuilder = new StringBuilder();
@@ -50,11 +75,25 @@ public partial class Player : CharacterBody2D
 			// stringBuilder.Append("Velocity Y: " + velocity.Y + "\n");
 			// stringBuilder.Append("Position: " + Position + "\n");
 			// stringBuilder.Append("Global: " + GlobalPosition);
-			var input = new Vector2I((int)Position.X / 16, (int)Position.Y /16);
+
+			/*
+			 * The root node of the player is at the same Position as the World node in the main scene
+			 * So, the Position of the player and its Global Position is the same (idk if it's really like that)
+			 * So the Position of the playe can be rather naturally translated to the coordinates in the world tile map layer
+			 * A division of 16 pixel is needed because each tile is 16 by 16 pixels in the tile map layer
+			 * Player sprite is also 16 pixels wide
+			 * 1 pixel displacement in the world tile map = 16 pixel displacement in the global scene
+			 * Opposite: 1 displacement in global scene = 1 / 16 displacement in world tile map coordinate
+			 * So need to divide the Position by 16 to map the global coordinate to the internal coordinate of the tile map layer
+			 * Then we can use the internal coordinate to obtain tile information, etc...
+			 */
+
+			// var input = new Vector2I((int)Position.X / 16, (int)Position.Y / 16);
 			// var test = GetTree().CurrentScene.GetNode("World").GetNode("WorldLayer").Call("LocalToMap", input);
 
 			//TESTING!!!
-			stringBuilder.Append("Location: " + GetTree().CurrentScene.GetNode("World").Call("WorldCoordToTileType", input));
+			// stringBuilder.Append("Location: " + GetTree().CurrentScene.GetNode("World").Call("WorldCoordToTileType", input));
+
 			switch (direction)
 			{
 				case Vector2(1, 0):
@@ -80,7 +119,8 @@ public partial class Player : CharacterBody2D
 			_spriteAnimation.Stop();
 		}
 
-		DebugText.Text = stringBuilder.ToString();
+		// DebugText.Text = stringBuilder.ToString();
+		Relocate();
 
 		Velocity = velocity;
 		MoveAndSlide();
