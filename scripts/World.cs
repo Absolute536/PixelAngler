@@ -81,7 +81,6 @@ public partial class World : Node2D
 		{new (SECONDARY, PRIMARY, PRIMARY, PRIMARY), new(0, 3)}, // Empty Top Left Corner
 		{new (PRIMARY, SECONDARY, PRIMARY, SECONDARY), new(0, 5)}, // Left Diagonal Corners
 		{new (SECONDARY, PRIMARY, SECONDARY, PRIMARY), new(0, 6)}, // Right Diagonal Corners
-		// {new (SECONDARY, SECONDARY, SECONDARY, SECONDARY), new(8, 3)} // Full Secondary
 	};
 
 	readonly Dictionary<(TileType primaryTile, TileType secondaryTile), int> tileCombinationSource = new()

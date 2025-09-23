@@ -28,8 +28,12 @@ public partial class Player : CharacterBody2D
 	public const float Speed = 50.0f;
 	// public const float JumpVelocity = -400.0f;
 
-
+	private Vector2 oldPosition;
 	// Testing
+	public override void _Ready()
+	{
+		oldPosition = Position;
+	}
 
 	public delegate void PositionChangedEventHandler(object sender, PositionArgs positionArgs);
 	public event PositionChangedEventHandler PositionChange;
@@ -120,9 +124,35 @@ public partial class Player : CharacterBody2D
 		}
 
 		// DebugText.Text = stringBuilder.ToString();
-		Relocate();
-
+		if (!oldPosition.IsEqualApprox(Position))
+		{
+			Relocate();
+			oldPosition = Position;
+			Console.WriteLine("Position Changed.");
+		}
 		Velocity = velocity;
 		MoveAndSlide();
+
+		CastLine();
+	}
+
+	private void CastLine()
+	{
+		if (Input.IsActionPressed("ItemAction"))
+		{
+			Line2D line = new Line2D();
+			Vector2[] points = [new Vector2(0, 0), new Vector2(10.0f, -10.0f), new Vector2(20.0f, -20.0f), new Vector2(30.0f, -10.0f), new Vector2(40.0f, -5.0f), new Vector2(-10.0f, 10.0f)];
+			line.Points = points;
+			line.DefaultColor = Colors.White;
+			line.Width = 1.0f;
+			line.JointMode = Line2D.LineJointMode.Round;
+			AddChild(line);
+
+			var fish = GD.Load<PackedScene>("res://scenes/Fish.tscn");
+			CharacterBody2D fishInstance = fish.Instantiate() as CharacterBody2D;
+			fishInstance.Position = points[points.Length - 1];
+			AddChild(fishInstance);
+			
+		}
 	}
 }
