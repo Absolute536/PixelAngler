@@ -121,13 +121,13 @@ public partial class World : Node2D
 				ShowDisplayTile(worldCoord);
 			}
 
-			PPlayer.PositionChange += OnPlayerPositionChange;
+			PPlayer.PositionChange = OnPlayerPositionChange;
 		}
 	}
 
-	private void OnPlayerPositionChange(object sender, PositionArgs positionArgs)
+	private TileType OnPlayerPositionChange(Vector2I worldCoord)
 	{
-		positionArgs.Type = WorldCoordToTileType(positionArgs.WorldCoordinate);
+		return WorldCoordToTileType(worldCoord);
 	}
 
 	private void ShowDisplayTile(Vector2I worldCoord)

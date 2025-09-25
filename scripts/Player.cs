@@ -2,7 +2,9 @@ namespace GamePlayer;
 
 using Godot;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Text;
@@ -35,15 +37,14 @@ public partial class Player : CharacterBody2D
 		oldPosition = Position;
 	}
 
-	public delegate void PositionChangedEventHandler(object sender, PositionArgs positionArgs);
-	public event PositionChangedEventHandler PositionChange;
+	public delegate TileType PositionChangedEventHandler(Vector2I worldCoordinate);
+	public PositionChangedEventHandler PositionChange;
 
 	private void Relocate()
 	{
-		PositionArgs positionArgs = new PositionArgs(new Vector2I((int)Position.X / 16, (int)Position.Y / 16), TileType.Water);
-		PositionChange?.Invoke(this, positionArgs);
-		DebugText.Text = positionArgs.Type.ToString();
+		DebugText.Text = PositionChange(new Vector2I((int)Position.X / 16, (int)Position.Y / 16)).ToString();
 	}
+
 
 
 	StringBuilder stringBuilder = new StringBuilder();
@@ -136,23 +137,52 @@ public partial class Player : CharacterBody2D
 		CastLine();
 	}
 
+	List<Vector2> polyPoints = [new Vector2(0, 0)];
+	Line2D l = new();
+
 	private void CastLine()
 	{
+
+		
+
+
+		if (Input.IsActionJustPressed("ItemAction"))
+		{
+			l.Name = "FishingLine";
+			l.Width = 1.0f;
+			l.DefaultColor = Colors.White;
+			l.Points = polyPoints.ToArray();
+			AddChild(l);
+			Console.WriteLine("FIshing Line created on pressed");
+
+		}
+
+		int count = 1;
 		if (Input.IsActionPressed("ItemAction"))
 		{
-			Line2D line = new Line2D();
-			Vector2[] points = [new Vector2(0, 0), new Vector2(10.0f, -10.0f), new Vector2(20.0f, -20.0f), new Vector2(30.0f, -10.0f), new Vector2(40.0f, -5.0f), new Vector2(-10.0f, 10.0f)];
-			line.Points = points;
-			line.DefaultColor = Colors.White;
-			line.Width = 1.0f;
-			line.JointMode = Line2D.LineJointMode.Round;
-			AddChild(line);
+			// Line2D line = new Line2D();
+			// Vector2[] points = [new Vector2(0, 0), new Vector2(10.0f, -10.0f), new Vector2(20.0f, -20.0f), new Vector2(30.0f, -10.0f), new Vector2(40.0f, -5.0f), new Vector2(-10.0f, 10.0f)];
+			// line.Points = points;
+			// line.DefaultColor = Colors.White;
+			// line.Width = 1.0f;
+			// line.JointMode = Line2D.LineJointMode.Round;
+			// AddChild(line);
 
-			var fish = GD.Load<PackedScene>("res://scenes/Fish.tscn");
-			CharacterBody2D fishInstance = fish.Instantiate() as CharacterBody2D;
-			fishInstance.Position = points[points.Length - 1];
-			AddChild(fishInstance);
-			
+			polyPoints.Add(new Vector2(count, -count));
+			Line2D fishingLine = GetNode<Line2D>("FishingLine");
+			fishingLine.Points = polyPoints.ToArray();
+			count++;
+			Console.WriteLine("Fishing Line extending on hold");
+
 		}
+
+		if (Input.IsActionJustReleased("ItemAction"))
+		{
+			// var fish = GD.Load<PackedScene>("res://scenes/Fish.tscn");
+			// CharacterBody2D fishInstance = fish.Instantiate() as CharacterBody2D;
+			// fishInstance.Position = l.Points[l.Points.Length - 1];
+			// AddChild(fishInstance);
+		}
+
 	}
 }
