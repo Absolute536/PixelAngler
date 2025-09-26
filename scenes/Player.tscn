@@ -7,7 +7,7 @@
 radius = 5.0
 height = 26.0
 
-[node name="CharacterBody2D" type="CharacterBody2D" node_paths=PackedStringArray("_spriteAnimation", "DebugText")]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("_spriteAnimation", "DebugText")]
 script = ExtResource("1_v6fml")
 _spriteAnimation = NodePath("PlayerAnimation")
 DebugText = NodePath("DebugText")
@@ -17,14 +17,17 @@ position = Vector2(0, -12)
 shape = SubResource("CapsuleShape2D_p0vlq")
 
 [node name="PlayerAnimation" type="AnimatedSprite2D" parent="."]
-position = Vector2(0, -16)
 sprite_frames = ExtResource("1_p0vlq")
 animation = &"walk_left"
 frame = 3
 frame_progress = 0.679877
+offset = Vector2(0, -16)
 
 [node name="DebugText" type="Label" parent="."]
 offset_left = -41.0
 offset_top = -46.0
 offset_right = 47.0
 offset_bottom = -5.0
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(0, -8)

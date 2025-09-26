@@ -8,13 +8,12 @@ using static TileConfig;
 using static TileType;
 using GamePlayer;
 
-
 // IMPORTANT!!!
 // Remember to have a 1-tile distance between > 2 different tile types 
 // Because of the limitation here (only 2-tile configuration sprites are drawn)
 
-
-public enum TileConfig {
+public enum TileConfig
+{
 	Primary,
 	Secondary
 }
@@ -117,7 +116,7 @@ public partial class World : Node2D
 
 		if (!Engine.IsEditorHint())
 		{
-			PPlayer = GetTree().CurrentScene.GetNode("Player") as Player;
+			PPlayer = GetNode<CharacterBody2D>("WorldEntities/Player") as Player;
 
 			foreach (Vector2I worldCoord in WorldLayer.GetUsedCells())
 			{
