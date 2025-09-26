@@ -15,8 +15,8 @@ using GamePlayer;
 
 
 public enum TileConfig {
-	PRIMARY,
-	SECONDARY
+	Primary,
+	Secondary
 }
 
 // Tiles that are higher (higher z-index ish~) will be the PRIMARY over its counterpart -> greater value
@@ -46,6 +46,7 @@ public partial class World : Node2D
 
 	private Player PPlayer;
 
+	private const int TileNeighbourhoodSize = 4;
 	
 
 	// Array of the 4 neighbourhood calculation vectors
@@ -68,21 +69,21 @@ public partial class World : Node2D
 	// Dictionary of 4-neighbour TileType -> Atlas coordinate of the tile to be selected
 	// TileConfig starts from the top left corner and go clockwise
 	readonly Dictionary<Tuple<TileConfig, TileConfig, TileConfig, TileConfig>, Vector2I> neighbourhoodRules = new() {
-		{new (PRIMARY, PRIMARY, PRIMARY, PRIMARY), new(0 , 0)}, // Full Primary
-		{new (PRIMARY, SECONDARY, SECONDARY, SECONDARY), new(2, 2)}, // Top Left Corner
-		{new (SECONDARY, PRIMARY, SECONDARY, SECONDARY), new(0, 2)}, // Top Right Corner
-		{new (SECONDARY, SECONDARY, PRIMARY, SECONDARY), new(0, 0)}, // Bottom Right Corner
-		{new (SECONDARY, SECONDARY, SECONDARY, PRIMARY), new(2, 0)}, // Bottom Left Corner
-		{new (PRIMARY, PRIMARY, SECONDARY, SECONDARY), new(1, 2)}, // Top Side
-		{new (SECONDARY, PRIMARY, PRIMARY, SECONDARY), new(0, 1)}, // Right Side
-		{new (PRIMARY, SECONDARY, SECONDARY, PRIMARY), new(2, 1)}, // Left Side
-		{new (SECONDARY, SECONDARY, PRIMARY, PRIMARY), new(1, 0)}, // Bottom Side
-		{new (PRIMARY, PRIMARY, SECONDARY, PRIMARY), new(1, 4)}, // Empty Bottom Right Corner
-		{new (PRIMARY, PRIMARY, PRIMARY, SECONDARY), new(0, 4)}, // Empty Bottom Left Corner
-		{new (PRIMARY, SECONDARY, PRIMARY, PRIMARY), new(1, 3)}, // Empty Top Right Corner
-		{new (SECONDARY, PRIMARY, PRIMARY, PRIMARY), new(0, 3)}, // Empty Top Left Corner
-		{new (PRIMARY, SECONDARY, PRIMARY, SECONDARY), new(0, 5)}, // Left Diagonal Corners
-		{new (SECONDARY, PRIMARY, SECONDARY, PRIMARY), new(0, 6)}, // Right Diagonal Corners
+		{new (Primary, Primary, Primary, Primary), new(0 , 0)}, // Full Primary
+		{new (Primary, Secondary, Secondary, Secondary), new(2, 2)}, // Top Left Corner
+		{new (Secondary, Primary, Secondary, Secondary), new(0, 2)}, // Top Right Corner
+		{new (Secondary, Secondary, Primary, Secondary), new(0, 0)}, // Bottom Right Corner
+		{new (Secondary, Secondary, Secondary, Primary), new(2, 0)}, // Bottom Left Corner
+		{new (Primary, Primary, Secondary, Secondary), new(1, 2)}, // Top Side
+		{new (Secondary, Primary, Primary, Secondary), new(0, 1)}, // Right Side
+		{new (Primary, Secondary, Secondary, Primary), new(2, 1)}, // Left Side
+		{new (Secondary, Secondary, Primary, Primary), new(1, 0)}, // Bottom Side
+		{new (Primary, Primary, Secondary, Primary), new(1, 4)}, // Empty Bottom Right Corner
+		{new (Primary, Primary, Primary, Secondary), new(0, 4)}, // Empty Bottom Left Corner
+		{new (Primary, Secondary, Primary, Primary), new(1, 3)}, // Empty Top Right Corner
+		{new (Secondary, Primary, Primary, Primary), new(0, 3)}, // Empty Top Left Corner
+		{new (Primary, Secondary, Primary, Secondary), new(0, 5)}, // Left Diagonal Corners
+		{new (Secondary, Primary, Secondary, Primary), new(0, 6)}, // Right Diagonal Corners
 	};
 
 	readonly Dictionary<(TileType primaryTile, TileType secondaryTile), int> tileCombinationSource = new()
@@ -185,9 +186,9 @@ public partial class World : Node2D
 		for (int i = 0; i < cornerTileTypes.Length; i++)
 		{
 			if (cornerTileTypes[i] == primaryTile)
-				tileTypeConfiguration[i] = PRIMARY;
+				tileTypeConfiguration[i] = Primary;
 			else
-				tileTypeConfiguration[i] = SECONDARY;
+				tileTypeConfiguration[i] = Secondary;
 		}
 
 		Tuple<TileConfig, TileConfig, TileConfig, TileConfig> tileConfiguration = new(tileTypeConfiguration[0], tileTypeConfiguration[1], tileTypeConfiguration[2], tileTypeConfiguration[3]);
@@ -210,7 +211,7 @@ public partial class World : Node2D
 	 * If only a single TileType is found (full tile), should it be primary or secondary?
 	 */
 
-	public TileType WorldCoordToTileType(Vector2I worldCoord)
+	private TileType WorldCoordToTileType(Vector2I worldCoord)
 	{
 		Vector2I worldAtlas = WorldLayer.GetCellAtlasCoords(worldCoord);
 		// Console.WriteLine(worldCoord);
