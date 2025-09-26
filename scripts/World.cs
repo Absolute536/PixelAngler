@@ -136,10 +136,9 @@ public partial class World : Node2D
 	 * 5. Repeat until all tiles are populated
 	 */
 
+	// Populate tiles of the 4 neighbour tiles in DisplayLayer
 	private void PopulateDisplayTile(Vector2I worldLayerCoordinate)
 	{
-		// Populate tiles of the 4 neighbour tiles in DisplayLayer
-
 		// Calculate coordinate of each of the neighbours
 		Vector2I[] neighbourDisplayCoords = CalculateDisplayLayerNeighbourCoordinates(worldLayerCoordinate);
 
@@ -154,9 +153,9 @@ public partial class World : Node2D
 			// Determine the tile set source id from the corner tile combination
 			int tileSetSourceId = CalculateTileSetSourceId(cornerTileTypes);
 
+			// Populate the cell with the designated tile based on calculation results
 			DisplayLayer.SetCell(neighbourDisplayCoord, tileSetSourceId, displayLayerAtlasCoord);
 		}
-
 	}
 
 	private Vector2I[] CalculateDisplayLayerNeighbourCoordinates(Vector2I worldLayerCoordinate)
@@ -203,28 +202,6 @@ public partial class World : Node2D
 		return tileCombinationSource[new (primaryTile,secondaryTile)];
 	}
 
-	private void ShowDisplayTile(Vector2I worldCoord)
-	{
-		// Random rand = new Random();
-		// [Above] attempt to display variation in full tiles
-
-		// const int topLeftDisplayVector = 0;
-		// const int bottomLeftDisplayVector = 1;
-		// const int topRightDisplayVector = 2;
-		// const int bottomRightDisplayVector = 3;
-
-		// Iterate through the 4 neighbours and display the 4 corners
-		for (int i = 0; i < NEIGHBOURS.Length; i++)
-		{
-			Vector2I displayCoord = worldCoord + NEIGHBOURS[i];
-
-			Tuple<int, Vector2I> displayInfo = CalculateDisplayTile(displayCoord);
-			// baseDisplayLayer.SetCell(displayCoord, 0, new Vector2I(rand.Next(5), 0)); // Display the base (SECONDARY) tile layer (choose randomly)
-			DisplayLayer.SetCell(displayCoord, displayInfo.Item1, displayInfo.Item2);
-
-		}
-	}
-
 	/*
 	 * THE TASK AT HAND
 	 * From the world coornidate, convert to display coordinate
@@ -232,48 +209,6 @@ public partial class World : Node2D
 	 * The problem now is how to determine which of the two TileType found from the display coord is PRIMARY & SECONDARY
 	 * If only a single TileType is found (full tile), should it be primary or secondary?
 	 */
-
-	private Tuple<int, Vector2I> CalculateDisplayTile(Vector2I displayCoord)
-	{
-		/*
-		 * Get the TileType of the 4 corners of the display tile specified by the displayCoord
-		 * Figure out what Tiles they are and which one is the PRIMARY & SECONDARY
-		 */
-
-		// Compute the TileType of the 4 corners and arrange into an array with the order [top left, top right, bottom right, bottom left]
-		// This order aligns with the key in the neighbourhoodRules dictionary
-		TileType[] tileTypes = new TileType[4];
-		for (int i = 0; i < 4; i++)
-			tileTypes[i] = WorldCoordToTileType(displayCoord - NEIGHBOURS[i]);
-
-		// Find out which one is the PRIMARY & SECONDARY
-		// TileType with higher value (int) means its on top so primary
-		TileConfig[] tileConfigs = new TileConfig[4];
-		TileType primaryTile = tileTypes.Max(); // Find TileType in array with Max value (PRIMARY)
-		TileType secondaryTile = tileTypes.Min(); // Find TileType in array with Min value (SECONDARY)
-		for (int i = 0; i < tileTypes.Length; i++)
-		{
-			if (tileTypes[i] == primaryTile)
-				tileConfigs[i] = PRIMARY;
-			else
-				tileConfigs[i] = SECONDARY;
-		}
-		// PROBLEM: if all Water, it maps to all primary
-
-		// Determine the TileType of all the 4 corners by calling TranslateWordCoordToType, passing in the corresponding world coordinate
-		// World coordinate is calculated by subtracting the display layer coordinate with the set vector (definef in NEIGHBOURS)
-		// TileType topLeft = WorldCoordToTileType(displayCoord - NEIGHBOURS[3]);
-		// TileType topRight = WorldCoordToTileType(displayCoord - NEIGHBOURS[1]);
-		// TileType bottomRight = WorldCoordToTileType(displayCoord); // No need to subtract with (0, 0)
-		// TileType bottomLeft = WorldCoordToTileType(displayCoord - NEIGHBOURS[2]);
-
-		// replace '0' with the actual one
-		return
-		new(
-			tileCombinationSource[new(primaryTile, secondaryTile)],
-			neighbourhoodRules[new(tileConfigs[0], tileConfigs[1], tileConfigs[2], tileConfigs[3])]
-		);
-	}
 
 	public TileType WorldCoordToTileType(Vector2I worldCoord)
 	{
@@ -298,20 +233,4 @@ public partial class World : Node2D
 			return Grass;
 	}
 
-	// public static TileType TestingLocation(Vector2I worldC)
-	// {
-	// 	Vector2I worldCoord = worldLayer.GetCellAtlasCoords(worldC);
-	// 	if (worldCoord == new Vector2I(0, 0))
-	// 		return Grass;
-	// 	else if (worldCoord == new Vector2I(2, 0))
-	// 		return Dirt;
-	// 	else if (worldCoord == new Vector2I(1, 0))
-	// 	{
-	// 		return Water;
-	// 	}
-	// 	else if (worldCoord == new Vector2I(3, 0))
-	// 		return Path;
-
-	// 	return Grass;
-	// }
 }
