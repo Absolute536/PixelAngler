@@ -143,9 +143,6 @@ public partial class Player : CharacterBody2D
 	private void CastLine()
 	{
 
-		
-
-
 		if (Input.IsActionJustPressed("ItemAction"))
 		{
 			l.Name = "FishingLine";

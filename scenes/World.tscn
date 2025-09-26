@@ -6,10 +6,10 @@
 
 [sub_resource type="TileSet" id="TileSet_h1bdy"]
 
-[node name="World" type="Node2D" node_paths=PackedStringArray("displayLayer", "worldLayer")]
+[node name="World" type="Node2D" node_paths=PackedStringArray("DisplayLayer", "WorldLayer")]
 script = ExtResource("1_7g83o")
-displayLayer = NodePath("DisplayLayer")
-worldLayer = NodePath("WorldLayer")
+DisplayLayer = NodePath("DisplayLayer")
+WorldLayer = NodePath("WorldLayer")
 DirtTileWorldAtlas = Vector2i(2, 0)
 PathTileWorldAtlas = Vector2i(3, 0)
 WaterTileWorldAtlas = Vector2i(1, 0)

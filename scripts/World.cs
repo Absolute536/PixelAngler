@@ -8,6 +8,7 @@ using static TileConfig;
 using static TileType;
 using GamePlayer;
 
+
 // IMPORTANT!!!
 // Remember to have a 1-tile distance between > 2 different tile types 
 // Because of the limitation here (only 2-tile configuration sprites are drawn)
@@ -33,8 +34,8 @@ public enum TileType
 
 public partial class World : Node2D
 {
-	[Export] TileMapLayer displayLayer;
-	[Export] TileMapLayer worldLayer;
+	[Export] TileMapLayer DisplayLayer;
+	[Export] TileMapLayer WorldLayer;
 	[Export] Vector2I GrassTileWorldAtlas;
 	[Export] Vector2I DirtTileWorldAtlas;
 	[Export] Vector2I PathTileWorldAtlas;
@@ -45,6 +46,7 @@ public partial class World : Node2D
 
 	private Player PPlayer;
 
+	
 
 	// Array of the 4 neighbourhood calculation vectors
 	// Used for calculating (converting) world coordinate to display coordinate and vice versa
@@ -116,18 +118,89 @@ public partial class World : Node2D
 		{
 			PPlayer = GetTree().CurrentScene.GetNode("Player") as Player;
 
-			foreach (Vector2I worldCoord in worldLayer.GetUsedCells())
+			foreach (Vector2I worldCoord in WorldLayer.GetUsedCells())
 			{
-				ShowDisplayTile(worldCoord);
+				PopulateDisplayTile(worldCoord);
 			}
 
-			PPlayer.PositionChange = OnPlayerPositionChange;
+			PPlayer.PositionChange = WorldCoordToTileType;
 		}
 	}
 
-	private TileType OnPlayerPositionChange(Vector2I worldCoord)
+	/*
+	 * Let's Note down the things we need to do here and see how to improve it
+	 * 1. Iterate through the used cells in WorldLayer (populated tiles)
+	 * 2. Get the position (coordinate in Vector2I) of each tile
+	 * 3. Use the information to determine the location and type of the corresponding 4 (neighbour) tiles in DisplayLayer
+	 * 4. Populate those neighbour tiles in DisplayLayer
+	 * 5. Repeat until all tiles are populated
+	 */
+
+	private void PopulateDisplayTile(Vector2I worldLayerCoordinate)
 	{
-		return WorldCoordToTileType(worldCoord);
+		// Populate tiles of the 4 neighbour tiles in DisplayLayer
+
+		// Calculate coordinate of each of the neighbours
+		Vector2I[] neighbourDisplayCoords = CalculateDisplayLayerNeighbourCoordinates(worldLayerCoordinate);
+
+		// Determine the tile type of he 4 corners in each neighbour
+		foreach (Vector2I neighbourDisplayCoord in neighbourDisplayCoords)
+		{
+			TileType[] cornerTileTypes = CalculateCornerTileTypes(neighbourDisplayCoord);
+
+			// Determine the display tile atlas coordinate
+			Vector2I displayLayerAtlasCoord = CalculateTileConfigurationNeighbourhoodAtlas(cornerTileTypes);
+
+			// Determine the tile set source id from the corner tile combination
+			int tileSetSourceId = CalculateTileSetSourceId(cornerTileTypes);
+
+			DisplayLayer.SetCell(neighbourDisplayCoord, tileSetSourceId, displayLayerAtlasCoord);
+		}
+
+	}
+
+	private Vector2I[] CalculateDisplayLayerNeighbourCoordinates(Vector2I worldLayerCoordinate)
+	{
+		Vector2I[] displayLayerNeighbourCoords = new Vector2I[4]; // Shoudl I use NEIGHBOURS.Length or 4? Hmm
+		for (int i = 0; i < displayLayerNeighbourCoords.Length; i++)
+			displayLayerNeighbourCoords[i] = worldLayerCoordinate + NEIGHBOURS[i];
+		
+		return displayLayerNeighbourCoords;
+	}
+
+	private TileType[] CalculateCornerTileTypes(Vector2I displayLayerCoordinate)
+	{
+		TileType[] cornerTileTypes = new TileType[4];
+		for (int i = 0; i < cornerTileTypes.Length; i++)
+			cornerTileTypes[i] = WorldCoordToTileType(displayLayerCoordinate - NEIGHBOURS[i]); // Also start from top left and go clockwise
+		
+		return cornerTileTypes;
+	}
+
+	private Vector2I CalculateTileConfigurationNeighbourhoodAtlas(TileType[] cornerTileTypes)
+	{
+		TileType primaryTile = cornerTileTypes.Max();
+
+		TileConfig[] tileTypeConfiguration = new TileConfig[cornerTileTypes.Length];
+
+		for (int i = 0; i < cornerTileTypes.Length; i++)
+		{
+			if (cornerTileTypes[i] == primaryTile)
+				tileTypeConfiguration[i] = PRIMARY;
+			else
+				tileTypeConfiguration[i] = SECONDARY;
+		}
+
+		Tuple<TileConfig, TileConfig, TileConfig, TileConfig> tileConfiguration = new(tileTypeConfiguration[0], tileTypeConfiguration[1], tileTypeConfiguration[2], tileTypeConfiguration[3]);
+
+		return neighbourhoodRules[tileConfiguration];
+	}
+	private int CalculateTileSetSourceId(TileType[] cornerTileTypes)
+	{
+		TileType primaryTile = cornerTileTypes.Max();
+		TileType secondaryTile = cornerTileTypes.Min();
+
+		return tileCombinationSource[new (primaryTile,secondaryTile)];
 	}
 
 	private void ShowDisplayTile(Vector2I worldCoord)
@@ -147,7 +220,7 @@ public partial class World : Node2D
 
 			Tuple<int, Vector2I> displayInfo = CalculateDisplayTile(displayCoord);
 			// baseDisplayLayer.SetCell(displayCoord, 0, new Vector2I(rand.Next(5), 0)); // Display the base (SECONDARY) tile layer (choose randomly)
-			displayLayer.SetCell(displayCoord, displayInfo.Item1, displayInfo.Item2);
+			DisplayLayer.SetCell(displayCoord, displayInfo.Item1, displayInfo.Item2);
 
 		}
 	}
@@ -204,7 +277,7 @@ public partial class World : Node2D
 
 	public TileType WorldCoordToTileType(Vector2I worldCoord)
 	{
-		Vector2I worldAtlas = worldLayer.GetCellAtlasCoords(worldCoord);
+		Vector2I worldAtlas = WorldLayer.GetCellAtlasCoords(worldCoord);
 		// Console.WriteLine(worldCoord);
 
 		if (worldAtlas == GrassTileWorldAtlas)
