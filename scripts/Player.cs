@@ -27,7 +27,7 @@ public partial class Player : CharacterBody2D
 	[Export] AnimatedSprite2D _spriteAnimation;
 	[Export] Label DebugText;
 
-	public const float Speed = 50.0f;
+	[Export] public float Speed = 50.0f;
 	// public const float JumpVelocity = -400.0f;
 
 	private Vector2 oldPosition;

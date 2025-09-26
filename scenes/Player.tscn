@@ -11,6 +11,7 @@ height = 26.0
 script = ExtResource("1_v6fml")
 _spriteAnimation = NodePath("PlayerAnimation")
 DebugText = NodePath("DebugText")
+Speed = 100.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -12)

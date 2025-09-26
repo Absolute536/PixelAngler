@@ -26,6 +26,7 @@ public enum TileType
 	Dirt,
 	Grass,
 	Path,
+	// Damn these MountainLayer shites are hacky af
 	MountainLayer1,
 	MountainLayer2,
 	MountainLayer3
@@ -85,6 +86,7 @@ public partial class World : Node2D
 		{new (Secondary, Primary, Secondary, Primary), new(0, 6)}, // Right Diagonal Corners
 	};
 
+	// aMaZiNg HaCk TAT AHHHHHHHHHHHHHHHHHHHHHHHH!!!!
 	readonly Dictionary<(TileType primaryTile, TileType secondaryTile), int> tileCombinationSource = new()
 	{
 		{new (Grass, Water), 0},
