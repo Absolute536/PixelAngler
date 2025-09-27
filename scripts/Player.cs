@@ -91,6 +91,7 @@ public partial class Player : CharacterBody2D
 			// stringBuilder.Append("Position: " + Position + "\n");
 			// stringBuilder.Append("Global: " + GlobalPosition);
 			// Testing out branching again
+			// testing 2
 			/*
 			 * The root node of the player is at the same Position as the World node in the main scene
 			 * So, the Position of the player and its Global Position is the same (idk if it's really like that)
