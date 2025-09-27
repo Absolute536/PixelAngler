@@ -31,10 +31,12 @@ public partial class Player : CharacterBody2D
 	// public const float JumpVelocity = -400.0f;
 
 	private Vector2 oldPosition;
+	private Camera2D camera;
 	// Testing
 	public override void _Ready()
 	{
 		oldPosition = Position;
+		camera = GetNode<Camera2D>("Camera2D");
 	}
 
 	public delegate TileType PositionChangedEventHandler(Vector2I worldCoordinate);
@@ -45,7 +47,14 @@ public partial class Player : CharacterBody2D
 		DebugText.Text = PositionChange(new Vector2I((int)Position.X / 16, (int)Position.Y / 16)).ToString();
 	}
 
+	// delta from _PhysicsProcess
+	private void ProcessPlayerInput(double delta)
+	{
+		// Move and slide moves the node (CharacterBody2D) based on the Velocity property
+		// So we need to modify that property per physics tick to move the node
+		Vector2 direction = Input.GetVector("Left", "Right", "Up", "Down");
 
+	}
 
 	StringBuilder stringBuilder = new StringBuilder();
 	public override void _PhysicsProcess(double delta)
@@ -76,6 +85,7 @@ public partial class Player : CharacterBody2D
 		{
 			velocity.X = direction.X * Speed;
 			velocity.Y = direction.Y * Speed;
+
 			// stringBuilder.Append("Velocity X: " + velocity.X + "\n");
 			// stringBuilder.Append("Velocity Y: " + velocity.Y + "\n");
 			// stringBuilder.Append("Position: " + Position + "\n");
@@ -119,8 +129,10 @@ public partial class Player : CharacterBody2D
 		}
 		else
 		{
-			velocity.X = Mathf.MoveToward(Velocity.X, 0, Speed);
-			velocity.Y = Mathf.MoveToward(Velocity.Y, 0, Speed);
+			// velocity.X = Mathf.MoveToward(Velocity.X, 0, Speed);
+			// velocity.Y = Mathf.MoveToward(Velocity.Y, 0, Speed);
+			velocity.X = 0;
+			velocity.Y = 0;
 			_spriteAnimation.Stop();
 		}
 
@@ -130,10 +142,16 @@ public partial class Player : CharacterBody2D
 			Relocate();
 			oldPosition = Position;
 			Console.WriteLine("Position Changed.");
+			Console.WriteLine("Position: " + Position);
+			Console.WriteLine("Velociy: " + Velocity);
+			Console.WriteLine("Camera Position: " + camera.GlobalPosition);
+
 		}
 		Velocity = velocity;
-		MoveAndSlide();
+		// Position += velocity * (float) delta;
 
+		MoveAndSlide();
+		Position = Position.Round();
 		CastLine();
 	}
 
