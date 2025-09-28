@@ -21,9 +21,7 @@ shape = SubResource("CapsuleShape2D_p0vlq")
 
 [node name="PlayerAnimation" type="AnimatedSprite2D" parent="."]
 sprite_frames = ExtResource("1_p0vlq")
-animation = &"walk_left"
-frame = 3
-frame_progress = 0.679877
+animation = &"walk_front"
 offset = Vector2(0, -16)
 
 [node name="DebugText" type="Label" parent="."]
@@ -33,4 +31,5 @@ offset_right = 47.0
 offset_bottom = -5.0
 
 [node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(0, -8)
 process_callback = 0
