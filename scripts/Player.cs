@@ -27,18 +27,16 @@ public partial class Player : CharacterBody2D
 	[Export] AnimatedSprite2D _spriteAnimation;
 	[Export] Label DebugText;
 
-	[Export] public float Speed = 50.0f;
+	[Export] public float Speed = 60.0f;
 	// public const float JumpVelocity = -400.0f;
 
 	private Vector2 oldPosition;
-	private Camera2D camera;
 	private Vector2 oldInputVector;
 	// Testing
 	public override void _Ready()
 	{
 		oldPosition = Position;
 		oldInputVector = Vector2.Zero;
-		camera = GetNode<Camera2D>("Camera2D");
 	}
 
 	public delegate TileType PositionChangedEventHandler(Vector2I worldCoordinate);
@@ -59,7 +57,7 @@ public partial class Player : CharacterBody2D
 		DebugText.Text = PositionChange(new Vector2I((int) x, (int) y)).ToString();
 	}
 
-	
+
 	/*
 	 * PROBLEMS
 	 *
@@ -100,6 +98,29 @@ public partial class Player : CharacterBody2D
 	 - if refresh rate and fps mismatch (more precisely, lower fps than rr), it may cause jitter -> V-Sync can fix this, but increased input lag
 	 - if physics tick and fps mismatch, it can cause jitter -> physics interpolation can fix automatically, but increased input lag
 	 - the jitter in our case comes from the player position itself being sub-pixel, as camera is attached to player
+
+	 FUCK IT, let's do
+	 - Player movement in PhysicsProcess
+	 - Camera interpolation in Process manually (goodbye time)
+
+
+	 IN CONCLUSION, this shit is kinda fucked
+	 - if refresh rate is low, there are some sort of jitter even if FPS matches
+	 - FPS higher than physics tick, there will be jitter, but can be solved by physics interpolation
+	 - FPS higher than refresh rate, no problem
+	 - FPS lower than refresh rate, jitter occurs because the monitor is displaying the same frame for longer time
+	 - If camera is fixed, jitter occurs due to the sub-pixel position of the player on diagonal movement
+	 - If camera moves with the player, the camera itself will shake instead (due to the above reason)
+	 
+	 SO, WE DO THESE
+	 - Get refresh rate on game start, set max fps to refresh rate + 60 (or just refresh rate?) or multiples of 60
+	 - Enable Physics Interpolation -> to ensure physics tick and fps difference won't cause jitter
+	 - Rounding the position (according to Reddit solution) to eliminate jitter because of the sub-pixel position
+
+	 https://www.reddit.com/r/godot/comments/16lft93/fix_for_pixelperfect_diagonal_movement_causing/
+	 https://www.reddit.com/r/godot/comments/157z5ok/how_do_i_make_diagonal_kinrmaticbody2d_movement/
+	 https://docs.godotengine.org/en/4.4/tutorials/math/interpolation.html
+	 Lerp Smoothing is broken video
 	 */
 
 	// delta from _PhysicsProcess
@@ -148,14 +169,15 @@ public partial class Player : CharacterBody2D
 		}
 
 		// Attempt the reddit Jitter solution
-		// if (oldInputVector != direction)
-		// {
-		// 	oldInputVector = direction;
-		// 	if (direction != Vector2.Zero)aw
-		// 		GlobalPosition = GlobalPosition.Round();
+		if (oldInputVector != direction)
+		{
+			oldInputVector = direction;
+			if (direction != Vector2.Zero)
+				GlobalPosition = GlobalPosition.Round();
 
-		// 	Console.WriteLine("After Jitter fix: " + Position);
-		// }
+			Console.WriteLine("After Jitter fix: " + Position);
+		}
+		Console.WriteLine("Position: " + Position);
 		// Position = Position.Round();
 		// camera.GlobalPosition = GlobalPosition.Round();
 
