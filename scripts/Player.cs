@@ -24,7 +24,7 @@ public class PositionArgs : EventArgs
 
 public partial class Player : CharacterBody2D
 {
-	[Export] AnimatedSprite2D _spriteAnimation;
+	[Export] public AnimatedSprite2D AnimationPlayer;
 	[Export] Label DebugText;
 
 	[Export] public float Speed = 60.0f;
@@ -140,18 +140,18 @@ public partial class Player : CharacterBody2D
 			velocity.Y = direction.Y * Speed;
 
 			if (direction == Vector2.Left)
-				_spriteAnimation.Play("walk_left");
+				AnimationPlayer.Play("walk_left");
 			else if (direction == Vector2.Right)
-				_spriteAnimation.Play("walk_right");
+				AnimationPlayer.Play("walk_right");
 			else if (direction == Vector2.Up)
-				_spriteAnimation.Play("walk_back");
+				AnimationPlayer.Play("walk_back");
 			else if (direction == Vector2.Down)
-				_spriteAnimation.Play("walk_front");
+				AnimationPlayer.Play("walk_front");
 
 		}
 		else
 		{
-			_spriteAnimation.Stop();
+			AnimationPlayer.Stop();
 			velocity.X = Mathf.MoveToward(Velocity.X, 0, Speed);
 			velocity.Y = Mathf.MoveToward(Velocity.Y, 0, Speed);
 			// velocity.X = 0;
@@ -178,6 +178,7 @@ public partial class Player : CharacterBody2D
 			Console.WriteLine("After Jitter fix: " + Position);
 		}
 		Console.WriteLine("Position: " + Position);
+		
 		// Position = Position.Round();
 		// camera.GlobalPosition = GlobalPosition.Round();
 
