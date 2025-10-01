@@ -9,10 +9,21 @@ public partial class PlayerActionState : State
     [Export] public CharacterBody2D Player;
 
     private Player player;
-    
+    private Sprite2D castMarker;
+
     public override void _Ready()
     {
-        player = (Player) Player;
+        player = (Player)Player;
+        castMarker = new Sprite2D();
+
+        // https://docs.godotengine.org/en/stable/tutorials/io/runtime_file_loading_and_saving.html
+        Image markerImg = Image.LoadFromFile("res://icon.svg");
+        castMarker.Texture = ImageTexture.CreateFromImage(markerImg);
+        castMarker.Visible = false;
+        castMarker.Name = "CastMarker";
+        castMarker.Scale = new Vector2(0.5f, 0.5f);
+        player.CallDeferred(MethodName.AddChild, castMarker);
+        
     }
 
     public override void EnterState(string previousState)
@@ -35,6 +46,7 @@ public partial class PlayerActionState : State
         fishingLine = line;
 
         player.AddChild(fishingLine);
+        castMarker.Visible = true;
     }
 
     public override void ExitState()
@@ -71,6 +83,7 @@ public partial class PlayerActionState : State
         {
             // Add the point to the Line2D so that the line is extending
             fishingLine.AddPoint(new(lineLength, -lineLength));
+            castMarker.Position += new Vector2(lineLength / 4, 0);
         }
 
         // Upon releasing the left mouse click
@@ -78,6 +91,9 @@ public partial class PlayerActionState : State
         {
             lineLength = 0; // reset length
             OnTransitionedEventHandler("PlayerIdleState"); // if it's released, go back to idle
+
+            castMarker.Position = new Vector2(0, 0);
+            castMarker.Visible = false;
 
         }
 
