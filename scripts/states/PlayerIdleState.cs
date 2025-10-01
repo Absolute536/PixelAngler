@@ -50,7 +50,7 @@ public partial class PlayerIdleState : State
         else if (Input.IsActionJustPressed("ItemAction"))
         {
             GD.Print(Name + ": " + "ItemAction");
-            // OnTransitionedEventHandler("PlayerActionState"); ~ like this? or a fishing state?
+            OnTransitionedEventHandler("PlayerActionState"); // ~ like this? or a fishing state?
         }
     }
 

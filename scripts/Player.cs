@@ -193,7 +193,14 @@ public partial class Player : CharacterBody2D
 	public override void _PhysicsProcess(double delta)
 	{
 
-		ProcessPlayerInput(delta);
+		// ProcessPlayerInput(delta);
+
+		// Move the location detection prototype here first to test the state machine
+		if (!oldPosition.IsEqualApprox(Position))
+		{
+			Relocate();
+			oldPosition = Position;
+		}
 
 		// Vector2 velocity = Velocity;
 

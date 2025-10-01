@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://bd2sgwdtpfwaj"]
+[gd_scene load_steps=8 format=3 uid="uid://bd2sgwdtpfwaj"]
 
 [ext_resource type="SpriteFrames" uid="uid://chi3wqli78166" path="res://resources/Player.tres" id="1_p0vlq"]
 [ext_resource type="Script" uid="uid://dwkgu7hv8ofdd" path="res://scripts/Player.cs" id="1_v6fml"]
 [ext_resource type="Script" uid="uid://bakg405h3gvhu" path="res://scripts/states/StateMachine.cs" id="3_mdl7e"]
 [ext_resource type="Script" uid="uid://c3nbul0aiq2h4" path="res://scripts/states/PlayerIdleState.cs" id="4_qu4a1"]
 [ext_resource type="Script" uid="uid://bt2i3d64duevn" path="res://scripts/states/PlayerWalkingState.cs" id="5_qu4a1"]
+[ext_resource type="Script" uid="uid://xlq80rqmo0m" path="res://scripts/states/PlayerActionState.cs" id="6_70d11"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_p0vlq"]
 radius = 5.0
@@ -15,7 +16,6 @@ motion_mode = 1
 script = ExtResource("1_v6fml")
 AnimationPlayer = NodePath("PlayerAnimation")
 DebugText = NodePath("DebugText")
-Speed = 100.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 y_sort_enabled = true
@@ -49,4 +49,10 @@ metadata/_custom_type_script = "uid://c3nbul0aiq2h4"
 [node name="PlayerWalkingState" type="Node" parent="StateMachine" node_paths=PackedStringArray("Player")]
 script = ExtResource("5_qu4a1")
 Player = NodePath("../..")
+MovementSpeed = 100.0
 metadata/_custom_type_script = "uid://bt2i3d64duevn"
+
+[node name="PlayerActionState" type="Node" parent="StateMachine" node_paths=PackedStringArray("Player")]
+script = ExtResource("6_70d11")
+Player = NodePath("../..")
+metadata/_custom_type_script = "uid://xlq80rqmo0m"
