@@ -10,9 +10,10 @@
 radius = 5.0
 height = 26.0
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("DebugText")]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("AnimationPlayer", "DebugText")]
 motion_mode = 1
 script = ExtResource("1_v6fml")
+AnimationPlayer = NodePath("PlayerAnimation")
 DebugText = NodePath("DebugText")
 Speed = 100.0
 

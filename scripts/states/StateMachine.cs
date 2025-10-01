@@ -8,25 +8,24 @@ using Godot;
 [GlobalClass]
 public partial class StateMachine : Node
 {
-    [Export] public BaseState initialState;
-    private BaseState currentState;
-    private Dictionary<string, BaseState> availableStates = new();
+    [Export] public State initialState;
+    private State currentState;
+    private Dictionary<string, State> availableStates = new();
 
     public override void _Ready()
     {
         // Initialise currentState
-        foreach (Node stateNode in GetChildren())
+        foreach (State state in GetChildren().Cast<State>())
         {
-            BaseState state = stateNode as BaseState; // I think I know why now. In the editor, they are of type Node (?)
-            availableStates.Add(state.StateName, state);
+            availableStates.Add(state.Name, state);
             state.TransitionedEventHandler += OnStateTransition;
             // We're subscribing to the state's transition event
             // Probably overkill cuz the only observer is the state machine, but we'll see
         }
 
         // Wait until owner node is ready (do we need this?)
-        while (!Owner.IsNodeReady())
-            Console.WriteLine("Owner is not ready, waiting...");
+        // while (!Owner.IsNodeReady())
+        //     Console.WriteLine("Owner is not ready, waiting...");
 
         if (initialState != null)
         {
@@ -48,6 +47,7 @@ public partial class StateMachine : Node
     public override void _PhysicsProcess(double delta)
     {
         currentState.PhysicsProcessUpdate(delta);
+        GD.Print("Current State: " + currentState.Name);
     }
 
     public override void _UnhandledInput(InputEvent @event)
@@ -62,8 +62,8 @@ public partial class StateMachine : Node
         // If True, fetch it from dictionary, call its EnterState(), call the currentState's ExitState() and assign new state to currentState
         if (availableStates.Keys.Contains(nextState))
         {
-            BaseState targetState = availableStates[nextState];
-            targetState.EnterState(currentState.StateName); // Currently we use the name of the node (string) to specify the previous state and next state
+            State targetState = availableStates[nextState];
+            targetState.EnterState(currentState.Name); // Currently we use the name of the node (string) to specify the previous state and next state
             currentState.ExitState();
             currentState = targetState;
         }

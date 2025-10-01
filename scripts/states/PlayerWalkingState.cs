@@ -3,16 +3,11 @@ using System;
 using GamePlayer;
 
 [GlobalClass]
-public partial class PlayerWalkingState : BaseState
+public partial class PlayerWalkingState : State
 {
     [Export] public CharacterBody2D Player;
 
     private Player player;
-
-    public PlayerWalkingState()
-    {
-        StateName = "WALKING";
-    }
 
     public override void _Ready()
     {
@@ -67,11 +62,12 @@ public partial class PlayerWalkingState : BaseState
         {
             velocity.X = Mathf.MoveToward(player.Velocity.X, 0, player.Speed);
             velocity.Y = Mathf.MoveToward(player.Velocity.Y, 0, player.Speed);
-            InvokeTransitionedEventHandler("IDLE");
+            OnTransitionedEventHandler("PlayerIdleState");
+            GD.Print("Transition to idle");
             // velocity.X = 0;
             // velocity.Y = 0;
         }
-
+        GD.Print("Will print if execute after transitioned to idle");
         player.Velocity = velocity;
         player.MoveAndSlide();
 
