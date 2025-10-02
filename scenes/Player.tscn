@@ -26,7 +26,7 @@ shape = SubResource("CapsuleShape2D_p0vlq")
 
 [node name="PlayerAnimation" type="AnimatedSprite2D" parent="."]
 sprite_frames = ExtResource("1_p0vlq")
-animation = &"walk_back"
+animation = &"walk_front"
 offset = Vector2(0, -16)
 
 [node name="DebugText" type="Label" parent="."]

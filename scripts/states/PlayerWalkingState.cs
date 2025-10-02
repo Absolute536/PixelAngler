@@ -3,14 +3,10 @@ using System;
 using GamePlayer;
 
 [GlobalClass]
-public partial class PlayerWalkingState : Node, State
+public partial class PlayerWalkingState : State
 {
     [Export] public CharacterBody2D Player;
     [Export] public float MovementSpeed;
-
-    public string StateName { get; set; }
-
-    public event State.Transitioned TransitionedEventHandler;
 
     private Player player;
     private Vector2 oldInputVector = Vector2.Zero; // Set old input vector to zeros cuz no input at start???
@@ -26,30 +22,30 @@ public partial class PlayerWalkingState : Node, State
         player = (Player)Player;
     }
 
-    public void EnterState(String previousState)
+    public override void EnterState(String previousState)
     {
         // Nothing cuz we need to check the animation on enter first
         // Hmm, what to do for walking then?
         player.AudioPlayer.Play();
     }
 
-    public void ExitState()
+    public override void ExitState()
     {
         // Nothing on exit yet
         player.AudioPlayer.Stop();
     }
 
-    public void HandleInput(InputEvent inputEvent)
+    public override void HandleInput(InputEvent inputEvent)
     {
         // Nothing here
     }
 
-    public void ProcessUpdate(double delta)
+    public override void ProcessUpdate(double delta)
     {
         // Nothing per frame
     }
 
-    public void PhysicsProcessUpdate(double delta)
+    public override void PhysicsProcessUpdate(double delta)
     {
         // Mostly here
         // Let's just use the previous code and see if it works.
@@ -78,7 +74,7 @@ public partial class PlayerWalkingState : Node, State
             else if (movementVector == Vector2.Down)
                 player.AnimationPlayer.Play("walk_front");
         }
-        else
+        else if (movementVector == Vector2.Zero || Input.IsActionJustPressed("ItemAction"))
         {
             // Use MoveToward for the x & y component of velocity to smooth stopping movement (? look into this further)
             // Cuz it's generated automatically
@@ -86,7 +82,7 @@ public partial class PlayerWalkingState : Node, State
             velocity.Y = Mathf.MoveToward(player.Velocity.Y, 0, MovementSpeed);
 
             // Transition to idle state
-            TransitionedEventHandler?.Invoke("PlayerIdleState");
+            OnTransitionedEventHandler("PlayerIdleState");
             // GD.Print("Transition to idle");
             // velocity.X = 0;
             // velocity.Y = 0;

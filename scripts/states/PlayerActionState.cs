@@ -5,12 +5,9 @@ using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 
 [GlobalClass]
-public partial class PlayerActionState : Node, State
+public partial class PlayerActionState : State
 {
-    public string StateName { get; set; }
     [Export] public CharacterBody2D Player;
-
-    public event State.Transitioned TransitionedEventHandler;
 
     private Player player;
     private Sprite2D castMarker;
@@ -22,7 +19,15 @@ public partial class PlayerActionState : Node, State
 
     public override void _Ready()
     {
-        StateName = Name;
+        // ----> initialise the property in Ready() instead of constructor
+        // This is because _Ready() triggers after the constructor (or _init())
+        // So putting the initialisation in constructor might cause it to get "" empty string (I think) or null value?
+        // Because the node is not loaded yet, and the Name property of the Node can't be accessed yet
+        // Order is: initial value upon definition (default value), then constructor, then exported value assignment
+        // And since StateMachine accesses the property in Ready(), it is guaranteed that it is safe
+        // Because the Ready() callback for a node only triggers after the Ready() of all its children nodes
+        // So we won't get Dictionary has the same key "" exception because the State Nodes hasn't initialised their name yet
+        StateName = Name; 
         player = (Player)Player;
         castMarker = new Sprite2D();
 
@@ -36,7 +41,7 @@ public partial class PlayerActionState : Node, State
 
     }
 
-    public void EnterState(string previousState)
+    public override void EnterState(string previousState)
     {
         // Comment out first cuz haven't made the animation yet
         // player.AnimationPlayer.Play("Idle");
@@ -59,18 +64,18 @@ public partial class PlayerActionState : Node, State
         castMarker.Visible = true;
     }
 
-    public void ExitState()
+    public override void ExitState()
     {
         // Remove the fishing line on exiting the state (performance cost?)
         fishingLine.QueueFree();
     }
 
-    public void HandleInput(InputEvent inputEvent)
+    public override void HandleInput(InputEvent inputEvent)
     {
         // Nothing here
     }
 
-    public void ProcessUpdate(double delta)
+    public override void ProcessUpdate(double delta)
     {
         // Nothing per frame
     }
@@ -82,7 +87,7 @@ public partial class PlayerActionState : Node, State
 
     private int lineLength = 0;
 
-    public void PhysicsProcessUpdate(double delta)
+    public override void PhysicsProcessUpdate(double delta)
     {
         // Let's list out the steps
         // We transition from idle to action on left mouse click
@@ -100,7 +105,7 @@ public partial class PlayerActionState : Node, State
         if (Input.IsActionJustReleased("ItemAction"))
         {
             lineLength = 0; // reset length
-            TransitionedEventHandler?.Invoke("PlayerIdleState"); // if it's released, go back to idle
+            OnTransitionedEventHandler("PlayerIdleState"); // if it's released, go back to idle
 
             castMarker.Position = new Vector2(0, 0);
             castMarker.Visible = false;

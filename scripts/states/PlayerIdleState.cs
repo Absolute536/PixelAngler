@@ -3,13 +3,10 @@ using Godot;
 using GamePlayer;
 
 [GlobalClass]
-public partial class PlayerIdleState : Node, State
+public partial class PlayerIdleState : State
 {
     // Property for Idle state here
     [Export] public CharacterBody2D Player;
-
-    [Export] public string StateName { get; set; }
-    public event State.Transitioned TransitionedEventHandler;
 
     private Player player;
 
@@ -24,7 +21,7 @@ public partial class PlayerIdleState : Node, State
         player = (Player)Player;
     }
 
-    public void EnterState(string previousState)
+    public override void EnterState(string previousState)
     {
         // Comment out first cuz haven't made the animation yet
         // player.AnimationPlayer.Play("Idle");
@@ -38,34 +35,34 @@ public partial class PlayerIdleState : Node, State
 
         }
 
-    public void ExitState()
+    public override void ExitState()
     {
         // Nothing on exit yet
     }
 
-    public void HandleInput(InputEvent inputEvent)
+    public override void HandleInput(InputEvent inputEvent)
     {
         // Nothing here
     }
 
-    public void ProcessUpdate(double delta)
+    public override void ProcessUpdate(double delta)
     {
         // Nothing per frame
     }
 
-    public void PhysicsProcessUpdate(double delta)
+    public override void PhysicsProcessUpdate(double delta)
     {
         // Check input every physics tick
         Vector2 movementVector = Input.GetVector("Left", "Right", "Up", "Down");
 
         // If has movement input, transition to walking state
         if (movementVector != Vector2.Zero)
-            TransitionedEventHandler?.Invoke("PlayerWalkingState");
+            OnTransitionedEventHandler("PlayerWalkingState");
         // If not movement input and ItemAction is clicked, transition to fishing state(?)
-        else if (Input.IsActionJustPressed("ItemAction"))
+        else if (Input.IsActionPressed("ItemAction"))
         {
             GD.Print(Name + ": " + "ItemAction");
-            TransitionedEventHandler?.Invoke("PlayerActionState"); // ~ like this? or a fishing state?
+            OnTransitionedEventHandler("PlayerActionState"); // ~ like this? or a fishing state?
         }
     }
 
