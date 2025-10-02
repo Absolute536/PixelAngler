@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://bd2sgwdtpfwaj"]
+[gd_scene load_steps=9 format=3 uid="uid://bd2sgwdtpfwaj"]
 
 [ext_resource type="SpriteFrames" uid="uid://chi3wqli78166" path="res://resources/Player.tres" id="1_p0vlq"]
 [ext_resource type="Script" uid="uid://dwkgu7hv8ofdd" path="res://scripts/Player.cs" id="1_v6fml"]
+[ext_resource type="AudioStream" uid="uid://df2su45hulwfh" path="res://assets/audio/soundEffects/KeySound2.mp3" id="3_cw2d6"]
 [ext_resource type="Script" uid="uid://bakg405h3gvhu" path="res://scripts/states/StateMachine.cs" id="3_mdl7e"]
 [ext_resource type="Script" uid="uid://c3nbul0aiq2h4" path="res://scripts/states/PlayerIdleState.cs" id="4_qu4a1"]
 [ext_resource type="Script" uid="uid://bt2i3d64duevn" path="res://scripts/states/PlayerWalkingState.cs" id="5_qu4a1"]
@@ -11,10 +12,11 @@
 radius = 5.0
 height = 26.0
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("AnimationPlayer", "DebugText")]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("AnimationPlayer", "AudioPlayer", "DebugText")]
 motion_mode = 1
 script = ExtResource("1_v6fml")
 AnimationPlayer = NodePath("PlayerAnimation")
+AudioPlayer = NodePath("AudioStreamPlayer2D")
 DebugText = NodePath("DebugText")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -24,7 +26,7 @@ shape = SubResource("CapsuleShape2D_p0vlq")
 
 [node name="PlayerAnimation" type="AnimatedSprite2D" parent="."]
 sprite_frames = ExtResource("1_p0vlq")
-animation = &"walk_front"
+animation = &"walk_back"
 offset = Vector2(0, -16)
 
 [node name="DebugText" type="Label" parent="."]
@@ -36,9 +38,12 @@ offset_bottom = -5.0
 [node name="Camera2D" type="Camera2D" parent="."]
 process_callback = 0
 
-[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initialState")]
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_cw2d6")
+volume_db = -6.0
+
+[node name="StateMachine" type="Node" parent="."]
 script = ExtResource("3_mdl7e")
-initialState = NodePath("PlayerIdleState")
 metadata/_custom_type_script = "uid://bakg405h3gvhu"
 
 [node name="PlayerIdleState" type="Node" parent="StateMachine" node_paths=PackedStringArray("Player")]

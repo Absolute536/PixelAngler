@@ -25,6 +25,7 @@ public class PositionArgs : EventArgs
 public partial class Player : CharacterBody2D
 {
 	[Export] public AnimatedSprite2D AnimationPlayer;
+	[Export] public AudioStreamPlayer2D AudioPlayer;
 	[Export] Label DebugText;
 
 	[Export] public float Speed = 60.0f;
@@ -37,12 +38,13 @@ public partial class Player : CharacterBody2D
 	{
 		oldPosition = Position;
 		oldInputVector = Vector2.Zero;
+		// Relocate();
 	}
 
 	public delegate TileType PositionChangedEventHandler(Vector2I worldCoordinate);
 	public PositionChangedEventHandler PositionChange;
 
-	private void Relocate()
+	public void Relocate()
 	{
 		// BUG: Negative value on the y axis will cause misidentification by 1 tile downwards (x also?)
 		// Negative values were offset by 1 tile lower/left because of -0.0xxx values get truncated to 0
@@ -196,11 +198,11 @@ public partial class Player : CharacterBody2D
 		// ProcessPlayerInput(delta);
 
 		// Move the location detection prototype here first to test the state machine
-		if (!oldPosition.IsEqualApprox(Position))
-		{
-			Relocate();
-			oldPosition = Position;
-		}
+		// if (!oldPosition.IsEqualApprox(Position))
+		// {
+		// 	Relocate();
+		// 	oldPosition = Position;
+		// }
 
 		// Vector2 velocity = Velocity;
 

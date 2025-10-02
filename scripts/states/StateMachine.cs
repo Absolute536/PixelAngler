@@ -8,7 +8,7 @@ using Godot;
 [GlobalClass]
 public partial class StateMachine : Node
 {
-    [Export] public State initialState;
+    public State initialState;
     private State currentState;
     private Dictionary<string, State> availableStates = new();
 
@@ -17,7 +17,7 @@ public partial class StateMachine : Node
         // Initialise currentState
         foreach (State state in GetChildren().Cast<State>())
         {
-            availableStates.Add(state.Name, state);
+            availableStates.Add(state.StateName, state);
             state.TransitionedEventHandler += OnStateTransition;
             // We're subscribing to the state's transition event
             // Probably overkill cuz the only observer is the state machine, but we'll see
@@ -47,7 +47,7 @@ public partial class StateMachine : Node
     public override void _PhysicsProcess(double delta)
     {
         currentState.PhysicsProcessUpdate(delta);
-        GD.Print("Current State: " + currentState.Name);
+        GD.Print("Current State: " + currentState.StateName);
     }
 
     public override void _UnhandledInput(InputEvent @event)
@@ -63,7 +63,7 @@ public partial class StateMachine : Node
         if (availableStates.Keys.Contains(nextState))
         {
             State targetState = availableStates[nextState];
-            targetState.EnterState(currentState.Name); // Currently we use the name of the node (string) to specify the previous state and next state
+            targetState.EnterState(currentState.StateName); // Currently we use the name of the node (string) to specify the previous state and next state
             currentState.ExitState();
             currentState = targetState;
         }

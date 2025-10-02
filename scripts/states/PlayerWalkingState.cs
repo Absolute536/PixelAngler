@@ -3,41 +3,53 @@ using System;
 using GamePlayer;
 
 [GlobalClass]
-public partial class PlayerWalkingState : State
+public partial class PlayerWalkingState : Node, State
 {
     [Export] public CharacterBody2D Player;
     [Export] public float MovementSpeed;
 
+    public string StateName { get; set; }
+
+    public event State.Transitioned TransitionedEventHandler;
+
     private Player player;
     private Vector2 oldInputVector = Vector2.Zero; // Set old input vector to zeros cuz no input at start???
 
+    // public PlayerWalkingState()
+    // {
+        
+    // }
+
     public override void _Ready()
     {
+        StateName = Name;
         player = (Player)Player;
     }
 
-    public override void EnterState(String previousState)
+    public void EnterState(String previousState)
     {
         // Nothing cuz we need to check the animation on enter first
         // Hmm, what to do for walking then?
+        player.AudioPlayer.Play();
     }
 
-    public override void ExitState()
+    public void ExitState()
     {
         // Nothing on exit yet
+        player.AudioPlayer.Stop();
     }
 
-    public override void HandleInput(InputEvent inputEvent)
+    public void HandleInput(InputEvent inputEvent)
     {
         // Nothing here
     }
 
-    public override void ProcessUpdate(double delta)
+    public void ProcessUpdate(double delta)
     {
         // Nothing per frame
     }
 
-    public override void PhysicsProcessUpdate(double delta)
+    public void PhysicsProcessUpdate(double delta)
     {
         // Mostly here
         // Let's just use the previous code and see if it works.
@@ -67,14 +79,14 @@ public partial class PlayerWalkingState : State
                 player.AnimationPlayer.Play("walk_front");
         }
         else
-        { 
+        {
             // Use MoveToward for the x & y component of velocity to smooth stopping movement (? look into this further)
             // Cuz it's generated automatically
             velocity.X = Mathf.MoveToward(player.Velocity.X, 0, MovementSpeed);
             velocity.Y = Mathf.MoveToward(player.Velocity.Y, 0, MovementSpeed);
 
             // Transition to idle state
-            OnTransitionedEventHandler("PlayerIdleState");
+            TransitionedEventHandler?.Invoke("PlayerIdleState");
             // GD.Print("Transition to idle");
             // velocity.X = 0;
             // velocity.Y = 0;
@@ -85,17 +97,22 @@ public partial class PlayerWalkingState : State
         player.Velocity = velocity;
         // Call the player's MoveAndSlide to actually move the node
         player.MoveAndSlide();
+        GD.Print("Player Position: " + player.Position);
+
+        // Hmm... Is this needed? Yeah I think we need this
 
         if (oldInputVector != movementVector)
-		{
-			oldInputVector = movementVector;
-			if (movementVector != Vector2.Zero)
-				player.GlobalPosition = player.GlobalPosition.Round();
+        {
+            oldInputVector = movementVector;
+            if (movementVector != Vector2.Zero)
+                player.GlobalPosition = player.GlobalPosition.Round();
 
-			Console.WriteLine("After Jitter fix: " + player.Position);
-		}
-		Console.WriteLine("Position: " + player.Position);
-        
+            Console.WriteLine("After Jitter fix: " + player.Position);
+        }
+        Console.WriteLine("Position: " + player.Position);
 
+        // Maybe can call the get location here to retrieve player's location when walking
+        // But then, fishing is only possible when idling, so probably need to be called once on enter in idle
+        // and it should be enough
     }
 }

@@ -2,17 +2,27 @@ using Godot;
 using System;
 using GamePlayer;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 
 [GlobalClass]
-public partial class PlayerActionState : State
+public partial class PlayerActionState : Node, State
 {
+    public string StateName { get; set; }
     [Export] public CharacterBody2D Player;
+
+    public event State.Transitioned TransitionedEventHandler;
 
     private Player player;
     private Sprite2D castMarker;
+    
+    // public PlayerActionState()
+    // {
+    //      // StateName property is the Name of the node
+    // }
 
     public override void _Ready()
     {
+        StateName = Name;
         player = (Player)Player;
         castMarker = new Sprite2D();
 
@@ -23,10 +33,10 @@ public partial class PlayerActionState : State
         castMarker.Name = "CastMarker";
         castMarker.Scale = new Vector2(0.5f, 0.5f);
         player.CallDeferred(MethodName.AddChild, castMarker);
-        
+
     }
 
-    public override void EnterState(string previousState)
+    public void EnterState(string previousState)
     {
         // Comment out first cuz haven't made the animation yet
         // player.AnimationPlayer.Play("Idle");
@@ -49,18 +59,18 @@ public partial class PlayerActionState : State
         castMarker.Visible = true;
     }
 
-    public override void ExitState()
+    public void ExitState()
     {
         // Remove the fishing line on exiting the state (performance cost?)
         fishingLine.QueueFree();
     }
 
-    public override void HandleInput(InputEvent inputEvent)
+    public void HandleInput(InputEvent inputEvent)
     {
         // Nothing here
     }
 
-    public override void ProcessUpdate(double delta)
+    public void ProcessUpdate(double delta)
     {
         // Nothing per frame
     }
@@ -72,7 +82,7 @@ public partial class PlayerActionState : State
 
     private int lineLength = 0;
 
-    public override void PhysicsProcessUpdate(double delta)
+    public void PhysicsProcessUpdate(double delta)
     {
         // Let's list out the steps
         // We transition from idle to action on left mouse click
@@ -90,7 +100,7 @@ public partial class PlayerActionState : State
         if (Input.IsActionJustReleased("ItemAction"))
         {
             lineLength = 0; // reset length
-            OnTransitionedEventHandler("PlayerIdleState"); // if it's released, go back to idle
+            TransitionedEventHandler?.Invoke("PlayerIdleState"); // if it's released, go back to idle
 
             castMarker.Position = new Vector2(0, 0);
             castMarker.Visible = false;
