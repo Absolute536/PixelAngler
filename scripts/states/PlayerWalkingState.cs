@@ -64,6 +64,7 @@ public partial class PlayerWalkingState : State
             velocity.X = movementVector.X * MovementSpeed;
             velocity.Y = movementVector.Y * MovementSpeed;
 
+            player.FacingDirection = movementVector;
             PlayWalkingAnimation(movementVector);
         }
         else if (movementVector == Vector2.Zero || Input.IsActionJustPressed("ItemAction"))
@@ -76,7 +77,7 @@ public partial class PlayerWalkingState : State
             // MoveToward moves the "from" towards "to" by the "delta" specified
             // So MoveToward(10, 60, 10) returns 20
             // MoveToward(10, 30, 50) returns 50 - it won't exceed the "to" value
-            
+
             // velocity.X = Mathf.MoveToward(player.Velocity.X, 0, MovementSpeed);
             // velocity.Y = Mathf.MoveToward(player.Velocity.Y, 0, MovementSpeed);
 
@@ -124,5 +125,5 @@ public partial class PlayerWalkingState : State
         else
             player.AnimationPlayer.Play("Left");
     }
-    
+
 }

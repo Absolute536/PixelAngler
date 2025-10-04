@@ -30,7 +30,31 @@ public partial class Player : CharacterBody2D
 		set => _strength = value;
 		get => _strength;
 	}
-	
+
+	// TODO: Implement the different action based on selected item and cast according to facing direction
+	public string SelectedItem = "Fishing Rod"; // use string for now
+	private Vector2 _facingDirection = Vector2.Down; // by default face down?
+	public Vector2 FacingDirection
+	{
+		get => _facingDirection;
+		set
+		{
+			if (value == Vector2.Up || value == Vector2.Down)
+				_facingDirection = value;
+			else if (value.X > 0)
+				_facingDirection = Vector2.Right;
+			else
+				_facingDirection = Vector2.Left;
+
+		}
+	}
+	// ---------------------------------------------------------------------------------------------------
+
+
+	// Equipment list
+	// Currently equipped items? (or on the UI)
+	// Do we need item shop here as well?
+
 	// FOR DEBUG USE: REMOVE LATER OR HIDE IT
 	[Export] Label DebugText;
 

@@ -2,7 +2,7 @@ using Godot;
 using System;
 using GamePlayer;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
+
 
 [GlobalClass]
 public partial class PlayerActionState : State
@@ -11,12 +11,14 @@ public partial class PlayerActionState : State
 
     private Player player;
     private Sprite2D castMarker;
-    
+
     // public PlayerActionState()
     // {
     //      // StateName property is the Name of the node
     // }
 
+    // NOTE: Clean up this part cuz we're assuming the ItemAction is only for fishing, there could be other things as well?
+    // Or maybe we just make it like this and the bug catching part is like a clickable area that pops up?
     public override void _Ready()
     {
         // ----> initialise the property in Ready() instead of constructor
@@ -27,7 +29,7 @@ public partial class PlayerActionState : State
         // And since StateMachine accesses the property in Ready(), it is guaranteed that it is safe
         // Because the Ready() callback for a node only triggers after the Ready() of all its children nodes
         // So we won't get Dictionary has the same key "" exception because the State Nodes hasn't initialised their name yet
-        StateName = Name; 
+        StateName = Name;
         player = (Player)Player;
         castMarker = new Sprite2D();
 
@@ -91,24 +93,26 @@ public partial class PlayerActionState : State
     {
         // Let's list out the steps
         // We transition from idle to action on left mouse click
-        // In this state, if the mouse is held, 
+        // In this state, if the mouse is held,
 
-        lineLength++; // Increase length per physics tick 
+        // CREATE AND EXTEND CAST MARKER HERE (Fishing Rod as SelectedItem)
+        
         if (Input.IsActionPressed("ItemAction"))
         {
-            // Add the point to the Line2D so that the line is extending
-            fishingLine.AddPoint(new(lineLength, -lineLength));
-            castMarker.Position += new Vector2(lineLength / 4, 0);
+            
+
+            if (player.SelectedItem == "Fishing Rod")
+                StartFishingItemAction();
         }
 
         // Upon releasing the left mouse click
         if (Input.IsActionJustReleased("ItemAction"))
         {
-            lineLength = 0; // reset length
+            EndFishingItemAction();
+            
             OnTransitionedEventHandler("PlayerIdleState"); // if it's released, go back to idle
 
-            castMarker.Position = new Vector2(0, 0);
-            castMarker.Visible = false;
+            
 
         }
 
@@ -116,5 +120,39 @@ public partial class PlayerActionState : State
         // For future reference: CanvasModulate Node for day/night cycle
         // Might also check out object pooling for the fishing line (or maybe not, cuz it's just one node)
         // But yeah for best practices, why not?!
+    }
+
+    // fish idle duration - aggresiveness?
+    private void StartFishingItemAction()
+    {
+        lineLength++; // Increase length per physics tick 
+                      // Add the point to the Line2D so that the line is extending
+        if (player.FacingDirection == Vector2.Up)
+        {
+            fishingLine.AddPoint(new(0, -lineLength));
+            castMarker.Position += new Vector2(0, -lineLength / 4);
+        }
+        else if (player.FacingDirection == Vector2.Down)
+        {
+            fishingLine.AddPoint(new(0, lineLength));
+            castMarker.Position += new Vector2(0, lineLength / 4);
+        }
+        else if (player.FacingDirection == Vector2.Right)
+        {
+            fishingLine.AddPoint(new(lineLength, 0));
+            castMarker.Position += new Vector2(lineLength / 4, 0);
+        }
+        else
+        {
+            fishingLine.AddPoint(new(-lineLength, 0));
+            castMarker.Position += new Vector2(-lineLength / 4, 0);
+        }
+    }
+
+    private void EndFishingItemAction()
+    {
+        lineLength = 0; // reset length
+        castMarker.Position = new Vector2(0, 0);
+        castMarker.Visible = false;
     }
 }
