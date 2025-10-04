@@ -47,7 +47,7 @@ public partial class World : Node2D
 	private Player PPlayer;
 
 	private const int TileNeighbourhoodSize = 4;
-	
+
 
 	// Array of the 4 neighbourhood calculation vectors
 	// Used for calculating (converting) world coordinate to display coordinate and vice versa
@@ -125,7 +125,7 @@ public partial class World : Node2D
 				PopulateDisplayTile(worldCoord);
 			}
 
-			PPlayer.PositionChange = WorldCoordToTileType;
+			PPlayer.PositionChange = OnPlayerPositionChange;
 		}
 	}
 
@@ -165,7 +165,7 @@ public partial class World : Node2D
 		Vector2I[] displayLayerNeighbourCoords = new Vector2I[4]; // Shoudl I use NEIGHBOURS.Length or 4? Hmm
 		for (int i = 0; i < displayLayerNeighbourCoords.Length; i++)
 			displayLayerNeighbourCoords[i] = worldLayerCoordinate + NEIGHBOURS[i];
-		
+
 		return displayLayerNeighbourCoords;
 	}
 
@@ -174,7 +174,7 @@ public partial class World : Node2D
 		TileType[] cornerTileTypes = new TileType[4];
 		for (int i = 0; i < cornerTileTypes.Length; i++)
 			cornerTileTypes[i] = WorldCoordToTileType(displayLayerCoordinate - NEIGHBOURS[i]); // Also start from top left and go clockwise
-		
+
 		return cornerTileTypes;
 	}
 
@@ -201,7 +201,7 @@ public partial class World : Node2D
 		TileType primaryTile = cornerTileTypes.Max();
 		TileType secondaryTile = cornerTileTypes.Min();
 
-		return tileCombinationSource[new (primaryTile,secondaryTile)];
+		return tileCombinationSource[new(primaryTile, secondaryTile)];
 	}
 
 	/*
@@ -233,6 +233,12 @@ public partial class World : Node2D
 			return MountainLayer3;
 		else
 			return Grass;
+	}
+
+	private TileType OnPlayerPositionChange(Vector2 worldCoord)
+	{
+		Vector2I tileCoord = WorldLayer.LocalToMap(worldCoord);
+		return WorldCoordToTileType(tileCoord);
 	}
 
 }

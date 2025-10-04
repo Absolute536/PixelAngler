@@ -11,21 +11,17 @@ public partial class Player : CharacterBody2D
 {
 	[Export] public AnimatedSprite2D AnimationPlayer;
 	[Export] public AudioStreamPlayer2D AudioPlayer;
+	[Export] public float Speed = 60.0f;
+	
+	// FOR DEBUG USE: REMOVE LATER OR HIDE IT
 	[Export] Label DebugText;
 
-	[Export] public float Speed = 60.0f;
-
-	private Vector2 oldPosition;
-	private Vector2 oldInputVector;
-	// Testing
 	public override void _Ready()
 	{
-		oldPosition = Position;
-		oldInputVector = Vector2.Zero;
-		// Relocate();
+
 	}
 
-	public delegate TileType PositionChangedEventHandler(Vector2I worldCoordinate);
+	public delegate TileType PositionChangedEventHandler(Vector2 worldCoordinate);
 	public PositionChangedEventHandler PositionChange;
 
 	public void Relocate()
@@ -44,15 +40,18 @@ public partial class Player : CharacterBody2D
 
 		// BUG: Negative value on the y axis will cause misidentification by 1 tile downwards (x also?)
 		// Negative values were offset by 1 tile lower/left because of -0.0xxx values get truncated to 0
-		// So if -ve values, need to - 1 to move 1 tile upwards/left to ensure the coords point correctly
-		// Need to check the Position itself before casting, otherwise, -1 becomes 0
-		float x = Position.X / 16;
-		x = x < 0 ? x - 1 : x;
+		// So if -ve values, need to - 1 to move 1 tile upwards/left to ensure the coords point correctly (not point to zero)
+		// Need to check the Position itself before casting, otherwise, -1 (on the tile mpa) becomes 0 (when dividing here)
 
-		float y = Position.Y / 16;
-		y = y < 0 ? y - 1 : y;
+		// float x = Position.X / 16;
+		// x = x < 0 ? x - 1 : x;
 
-		DebugText.Text = PositionChange(new Vector2I((int) x, (int) y)).ToString();
+		// float y = Position.Y / 16;
+		// y = y < 0 ? y - 1 : y;
+		// DebugText.Text = PositionChange(new Vector2I((int) x, (int) y)).ToString();
+
+		// LMAO, don't even need to convert it myself, there's a built-in function
+		DebugText.Text = PositionChange(Position).ToString();
 	}
 
 
