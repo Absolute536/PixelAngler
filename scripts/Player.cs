@@ -3,24 +3,9 @@ namespace GamePlayer;
 using Godot;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Runtime.Serialization;
-using System.Text;
 using WorldInfo;
 // using WorldInfo;
-
-public class PositionArgs : EventArgs
-{
-	public Vector2I WorldCoordinate { get; }
-	public TileType Type { set; get; }
-	public PositionArgs(Vector2I worldCoordinate, TileType type)
-	{
-		WorldCoordinate = worldCoordinate;
-		Type = type;
-	}
-}
 
 public partial class Player : CharacterBody2D
 {
@@ -29,7 +14,6 @@ public partial class Player : CharacterBody2D
 	[Export] Label DebugText;
 
 	[Export] public float Speed = 60.0f;
-	// public const float JumpVelocity = -400.0f;
 
 	private Vector2 oldPosition;
 	private Vector2 oldInputVector;
@@ -46,6 +30,18 @@ public partial class Player : CharacterBody2D
 
 	public void Relocate()
 	{
+		/* Extracted from the removed methods for note-keeping
+		 * The root node of the player is at the same Position as the World (root) node in the main scene
+		 * So, the Position of the player and its Global Position is the same (idk if it's really like that)
+		 * So the Position of the playe can be rather naturally translated to the coordinates in the world tile map layer
+		 * A division of 16 pixel is needed because each tile is 16 by 16 pixels in the tile map layer
+		 * Player sprite is also 16 pixels wide
+		 * 1 pixel displacement in the world tile map = 16 pixel displacement in the global scene
+		 * Opposite: 1 displacement in global scene = 1 / 16 displacement in world tile map coordinate
+		 * So need to divide the Position by 16 to map the global coordinate to the internal coordinate of the tile map layer
+		 * Then we can use the internal coordinate to obtain tile information, etc...
+		 */
+
 		// BUG: Negative value on the y axis will cause misidentification by 1 tile downwards (x also?)
 		// Negative values were offset by 1 tile lower/left because of -0.0xxx values get truncated to 0
 		// So if -ve values, need to - 1 to move 1 tile upwards/left to ensure the coords point correctly
@@ -115,9 +111,9 @@ public partial class Player : CharacterBody2D
 	 - If camera moves with the player, the camera itself will shake instead (due to the above reason)
 	 
 	 SO, WE DO THESE
-	 - Get refresh rate on game start, set max fps to refresh rate + 60 (or just refresh rate?) or multiples of 60
+	 - Get refresh rate on game start, set max fps to refresh rate or 120 fps if the ScreenGetRefreshRate() fails
 	 - Enable Physics Interpolation -> to ensure physics tick and fps difference won't cause jitter
-	 - Rounding the position (according to Reddit solution) to eliminate jitter because of the sub-pixel position
+	 - Rounding the position (according to Reddit solution) to eliminate jitter because of the sub-pixel position on diagonal movement
 
 	 https://www.reddit.com/r/godot/comments/16lft93/fix_for_pixelperfect_diagonal_movement_causing/
 	 https://www.reddit.com/r/godot/comments/157z5ok/how_do_i_make_diagonal_kinrmaticbody2d_movement/
@@ -125,180 +121,10 @@ public partial class Player : CharacterBody2D
 	 Lerp Smoothing is broken video
 	 */
 
-	// delta from _PhysicsProcess
-	private void ProcessPlayerInput(double delta)
-	{
-		// Move and slide moves the node (CharacterBody2D) based on the Velocity property
-		// So we need to modify that property per physics tick to move the node
-		Vector2 direction = Input.GetVector("Left", "Right", "Up", "Down");
-		Vector2 velocity = Velocity;
-
-		// If there is directional input
-		if (direction != Vector2.Zero)
-		{
-			// velocity.X = Mathf.Round(direction.X * Speed);
-			// velocity.Y = Mathf.Round(direction.Y * Speed);
-			velocity.X = direction.X * Speed;
-			velocity.Y = direction.Y * Speed;
-
-			if (direction == Vector2.Left)
-				AnimationPlayer.Play("walk_left");
-			else if (direction == Vector2.Right)
-				AnimationPlayer.Play("walk_right");
-			else if (direction == Vector2.Up)
-				AnimationPlayer.Play("walk_back");
-			else if (direction == Vector2.Down)
-				AnimationPlayer.Play("walk_front");
-
-		}
-		else
-		{
-			AnimationPlayer.Stop();
-			velocity.X = Mathf.MoveToward(Velocity.X, 0, Speed);
-			velocity.Y = Mathf.MoveToward(Velocity.Y, 0, Speed);
-			// velocity.X = 0;
-			// velocity.Y = 0;
-		}
-
-		Velocity = velocity;
-		bool hasCollision = MoveAndSlide();
-		// Console.WriteLine("Collision status: " + hasCollision + "\n");
-
-		if (!oldPosition.IsEqualApprox(Position))
-		{
-			Relocate();
-			oldPosition = Position;
-		}
-
-		// Attempt the reddit Jitter solution
-		if (oldInputVector != direction)
-		{
-			oldInputVector = direction;
-			if (direction != Vector2.Zero)
-				GlobalPosition = GlobalPosition.Round();
-
-			Console.WriteLine("After Jitter fix: " + Position);
-		}
-		Console.WriteLine("Position: " + Position);
-		
-		// Position = Position.Round();
-		// camera.GlobalPosition = GlobalPosition.Round();
-
-		// Console.WriteLine("Position Changed.");
-		// Console.WriteLine("Position: " + Position);
-		// Console.WriteLine("Velociy: " + Velocity);
-		// Console.WriteLine("Camera Position: " + camera.GlobalPosition);
-
-	}
-
-	StringBuilder stringBuilder = new StringBuilder();
 	public override void _PhysicsProcess(double delta)
 	{
-
-		// ProcessPlayerInput(delta);
-
-		// Move the location detection prototype here first to test the state machine
-		// if (!oldPosition.IsEqualApprox(Position))
-		// {
-		// 	Relocate();
-		// 	oldPosition = Position;
-		// }
-
-		// Vector2 velocity = Velocity;
-
-		// // Add the gravity.
-		// // if (!IsOnFloor())
-		// // {
-		// // 	velocity += GetGravity() * (float)delta;
-		// // }
-
-		// // Handle Jump.
-		// // if (Input.IsActionJustPressed("ui_accept") && IsOnFloor())
-		// // {
-		// // 	velocity.Y = JumpVelocity;
-		// // }
-
-		// // Get the input direction and handle the movement/deceleration.
-		// // As good practice, you should replace UI actions with custom gameplay actions.
-		// Vector2 direction = Input.GetVector("Left", "Right", "Up", "Down");
-
-		// stringBuilder.Clear();
-		// // stringBuilder.Append("Directional Vector: " + direction + "\n");
-		// // Console.WriteLine(direction);
-
-		// if (direction != Vector2.Zero)
-		// {
-		// 	velocity.X = direction.X * Speed;
-		// 	velocity.Y = direction.Y * Speed;
-
-		// 	// stringBuilder.Append("Velocity X: " + velocity.X + "\n");
-		// 	// stringBuilder.Append("Velocity Y: " + velocity.Y + "\n");
-		// 	// stringBuilder.Append("Position: " + Position + "\n");
-		// 	// stringBuilder.Append("Global: " + GlobalPosition);
-		// 	// Testing out branching again
-		// 	// testing 2
-		// 	/*
-		// 	 * The root node of the player is at the same Position as the World node in the main scene
-		// 	 * So, the Position of the player and its Global Position is the same (idk if it's really like that)
-		// 	 * So the Position of the playe can be rather naturally translated to the coordinates in the world tile map layer
-		// 	 * A division of 16 pixel is needed because each tile is 16 by 16 pixels in the tile map layer
-		// 	 * Player sprite is also 16 pixels wide
-		// 	 * 1 pixel displacement in the world tile map = 16 pixel displacement in the global scene
-		// 	 * Opposite: 1 displacement in global scene = 1 / 16 displacement in world tile map coordinate
-		// 	 * So need to divide the Position by 16 to map the global coordinate to the internal coordinate of the tile map layer
-		// 	 * Then we can use the internal coordinate to obtain tile information, etc...
-		// 	 */
-
-		// 	// var input = new Vector2I((int)Position.X / 16, (int)Position.Y / 16);
-		// 	// var test = GetTree().CurrentScene.GetNode("World").GetNode("WorldLayer").Call("LocalToMap", input);
-
-		// 	//TESTING!!!
-		// 	// stringBuilder.Append("Location: " + GetTree().CurrentScene.GetNode("World").Call("WorldCoordToTileType", input));
-
-		// 	switch (direction)
-		// 	{
-		// 		case Vector2(1, 0):
-		// 			_spriteAnimation.Play("walk_right");
-		// 			break;
-		// 		case Vector2(-1, -0):
-		// 			_spriteAnimation.Play("walk_left");
-		// 			break;
-		// 		case Vector2(0, 1):
-		// 			_spriteAnimation.Play("walk_front");
-		// 			break;
-		// 		case Vector2(0, -1):
-		// 			_spriteAnimation.Play("walk_back");
-		// 			break;
-		// 	}
-		// 	// Console.WriteLine("Velocity X: " + velocity.X);
-		// 	// Console.WriteLine("Velocity Y: " + velocity.Y);
-		// }
-		// else
-		// {
-		// 	// velocity.X = Mathf.MoveToward(Velocity.X, 0, Speed);
-		// 	// velocity.Y = Mathf.MoveToward(Velocity.Y, 0, Speed);
-		// 	velocity.X = 0;
-		// 	velocity.Y = 0;
-		// 	_spriteAnimation.Stop();
-		// }
-
-		// // DebugText.Text = stringBuilder.ToString();
-		// if (!oldPosition.IsEqualApprox(Position))
-		// {
-		// 	Relocate();
-		// 	oldPosition = Position;
-		// 	Console.WriteLine("Position Changed.");
-		// 	Console.WriteLine("Position: " + Position);
-		// 	Console.WriteLine("Velociy: " + Velocity);
-		// 	Console.WriteLine("Camera Position: " + camera.GlobalPosition);
-
-		// }
-		// Velocity = velocity;
-		// // Position += velocity * (float) delta;
-
-		// MoveAndSlide();
-		// Position = Position.Round();
-		// CastLine();
+		// Removed the duplicated old stuffs
+		// Leave it empty without commenting it out first, just in case there're things to be done here
 	}
 
 	List<Vector2> polyPoints = [new Vector2(0, 0)];
@@ -344,6 +170,5 @@ public partial class Player : CharacterBody2D
 			// fishInstance.Position = l.Points[l.Points.Length - 1];
 			// AddChild(fishInstance);
 		}
-
 	}
 }

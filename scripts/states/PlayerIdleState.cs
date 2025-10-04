@@ -56,7 +56,7 @@ public partial class PlayerIdleState : State
         Vector2 movementVector = Input.GetVector("Left", "Right", "Up", "Down");
 
         // If has movement input, transition to walking state
-        if (movementVector != Vector2.Zero)
+        if (movementVector != Vector2.Zero && !Input.IsMouseButtonPressed(MouseButton.Left))
             OnTransitionedEventHandler("PlayerWalkingState");
         // If not movement input and ItemAction is clicked, transition to fishing state(?)
         else if (Input.IsActionPressed("ItemAction"))

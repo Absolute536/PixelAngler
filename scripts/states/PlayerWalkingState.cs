@@ -13,7 +13,7 @@ public partial class PlayerWalkingState : State
 
     // public PlayerWalkingState()
     // {
-        
+
     // }
 
     public override void _Ready()
@@ -55,7 +55,7 @@ public partial class PlayerWalkingState : State
         Vector2 velocity = player.Velocity;
 
         // If there is movement input
-        if (movementVector != Vector2.Zero)
+        if (movementVector != Vector2.Zero && !Input.IsMouseButtonPressed(MouseButton.Left))
         {
             // velocity.X = Mathf.Round(direction.X * Speed);
             // velocity.Y = Mathf.Round(direction.Y * Speed);
@@ -64,22 +64,23 @@ public partial class PlayerWalkingState : State
             velocity.X = movementVector.X * MovementSpeed;
             velocity.Y = movementVector.Y * MovementSpeed;
 
-            // Play corresponding animation (hmm.. should it be here?)
-            if (movementVector == Vector2.Left)
-                player.AnimationPlayer.Play("walk_left");
-            else if (movementVector == Vector2.Right)
-                player.AnimationPlayer.Play("walk_right");
-            else if (movementVector == Vector2.Up)
-                player.AnimationPlayer.Play("walk_back");
-            else if (movementVector == Vector2.Down)
-                player.AnimationPlayer.Play("walk_front");
+            PlayWalkingAnimation(movementVector);
         }
         else if (movementVector == Vector2.Zero || Input.IsActionJustPressed("ItemAction"))
         {
             // Use MoveToward for the x & y component of velocity to smooth stopping movement (? look into this further)
             // Cuz it's generated automatically
-            velocity.X = Mathf.MoveToward(player.Velocity.X, 0, MovementSpeed);
-            velocity.Y = Mathf.MoveToward(player.Velocity.Y, 0, MovementSpeed);
+            // yeah we need these, or else there will be pixel snapping upon stopping the movement
+            // Actually there still is, but the effects are less noticable
+
+            // MoveToward moves the "from" towards "to" by the "delta" specified
+            // So MoveToward(10, 60, 10) returns 20
+            // MoveToward(10, 30, 50) returns 50 - it won't exceed the "to" value
+            
+            // velocity.X = Mathf.MoveToward(player.Velocity.X, 0, MovementSpeed);
+            // velocity.Y = Mathf.MoveToward(player.Velocity.Y, 0, MovementSpeed);
+
+            velocity = velocity.MoveToward(Vector2.Zero, MovementSpeed);
 
             // Transition to idle state
             OnTransitionedEventHandler("PlayerIdleState");
@@ -111,4 +112,17 @@ public partial class PlayerWalkingState : State
         // But then, fishing is only possible when idling, so probably need to be called once on enter in idle
         // and it should be enough
     }
+
+    private void PlayWalkingAnimation(Vector2 direction)
+    {
+        if (direction == Vector2.Up)
+            player.AnimationPlayer.Play("Up");
+        else if (direction == Vector2.Down)
+            player.AnimationPlayer.Play("Down");
+        else if (direction.X > 0)
+            player.AnimationPlayer.Play("Right");
+        else
+            player.AnimationPlayer.Play("Left");
+    }
+    
 }

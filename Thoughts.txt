@@ -1,0 +1,18 @@
+Let's organise our thoughts here.
+
+Future reference for implementing other functionalities
+- CanvasModulate Node for day/night cycle
+- Object pooling for the fishing line or other objects (maybe not the fishing line cuz it's only one)
+
+State Management
+- So state machine has a collection of states and transitions between each of them
+- And the logic for the behaviours in each state should be contained within the implemented State scripts
+
+IDLE -- directional movement --> WALKING
+IDLE -- left mouse --> ITEM_ACTION
+WALKING -- left mouse --> IDLE (then immediately IDLE detects the left mouse and transitions to ITEM_ACTION)
+
+Walking State
+- Directional movement
+- If no movement, transitions to Idle
+- If mouse click, transitions to Idle, then to ItemAction (or straight away to Item Action)?

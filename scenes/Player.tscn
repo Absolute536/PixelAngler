@@ -2,7 +2,7 @@
 
 [ext_resource type="SpriteFrames" uid="uid://chi3wqli78166" path="res://resources/Player.tres" id="1_p0vlq"]
 [ext_resource type="Script" uid="uid://dwkgu7hv8ofdd" path="res://scripts/Player.cs" id="1_v6fml"]
-[ext_resource type="AudioStream" uid="uid://df2su45hulwfh" path="res://assets/audio/soundEffects/KeySound2.mp3" id="3_cw2d6"]
+[ext_resource type="AudioStream" uid="uid://df2su45hulwfh" path="res://assets/audio/sound_effects/KeySound2.mp3" id="3_cw2d6"]
 [ext_resource type="Script" uid="uid://bakg405h3gvhu" path="res://scripts/states/StateMachine.cs" id="3_mdl7e"]
 [ext_resource type="Script" uid="uid://c3nbul0aiq2h4" path="res://scripts/states/PlayerIdleState.cs" id="4_qu4a1"]
 [ext_resource type="Script" uid="uid://bt2i3d64duevn" path="res://scripts/states/PlayerWalkingState.cs" id="5_qu4a1"]
@@ -26,7 +26,7 @@ shape = SubResource("CapsuleShape2D_p0vlq")
 
 [node name="PlayerAnimation" type="AnimatedSprite2D" parent="."]
 sprite_frames = ExtResource("1_p0vlq")
-animation = &"walk_front"
+animation = &"Right"
 offset = Vector2(0, -16)
 
 [node name="DebugText" type="Label" parent="."]

@@ -2,22 +2,6 @@
 
 [ext_resource type="Texture2D" uid="uid://b0gibcpb3s8eo" path="res://assets/player/RabbitPlayer_Small.png" id="1_l55pv"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_unxd7"]
-atlas = ExtResource("1_l55pv")
-region = Rect2(0, 32, 16, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_cu6nv"]
-atlas = ExtResource("1_l55pv")
-region = Rect2(16, 32, 16, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_72qri"]
-atlas = ExtResource("1_l55pv")
-region = Rect2(32, 32, 16, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_h7u7i"]
-atlas = ExtResource("1_l55pv")
-region = Rect2(48, 32, 16, 32)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_rdogn"]
 atlas = ExtResource("1_l55pv")
 region = Rect2(0, 0, 16, 32)
@@ -66,25 +50,24 @@ region = Rect2(32, 96, 16, 32)
 atlas = ExtResource("1_l55pv")
 region = Rect2(48, 96, 16, 32)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_unxd7"]
+atlas = ExtResource("1_l55pv")
+region = Rect2(0, 32, 16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cu6nv"]
+atlas = ExtResource("1_l55pv")
+region = Rect2(16, 32, 16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_72qri"]
+atlas = ExtResource("1_l55pv")
+region = Rect2(32, 32, 16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h7u7i"]
+atlas = ExtResource("1_l55pv")
+region = Rect2(48, 32, 16, 32)
+
 [resource]
 animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_unxd7")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_cu6nv")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_72qri")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_h7u7i")
-}],
-"loop": true,
-"name": &"walk_back",
-"speed": 5.0
-}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_rdogn")
@@ -99,7 +82,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_qplek")
 }],
 "loop": true,
-"name": &"walk_front",
+"name": &"Down",
 "speed": 5.0
 }, {
 "frames": [{
@@ -116,7 +99,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_oalw7")
 }],
 "loop": true,
-"name": &"walk_left",
+"name": &"Left",
 "speed": 5.0
 }, {
 "frames": [{
@@ -133,6 +116,23 @@ animations = [{
 "texture": SubResource("AtlasTexture_m8c7t")
 }],
 "loop": true,
-"name": &"walk_right",
+"name": &"Right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_unxd7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cu6nv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_72qri")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h7u7i")
+}],
+"loop": true,
+"name": &"Up",
 "speed": 5.0
 }]
