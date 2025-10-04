@@ -1,3 +1,5 @@
+using System.Reflection.Metadata.Ecma335;
+
 namespace GamePlayer;
 
 using Godot;
@@ -12,6 +14,22 @@ public partial class Player : CharacterBody2D
 	[Export] public AnimatedSprite2D AnimationPlayer;
 	[Export] public AudioStreamPlayer2D AudioPlayer;
 	[Export] public float Speed = 60.0f;
+
+	// FOR FUTURE USE
+	private int _money = 0;
+	public int Money
+	{
+		set => _money = value;
+		get =>  _money;
+	}
+
+	// Hmm, kinda fishy.
+	private int _strength = 0;
+	public int Strength
+	{
+		set => _strength = value;
+		get => _strength;
+	}
 	
 	// FOR DEBUG USE: REMOVE LATER OR HIDE IT
 	[Export] Label DebugText;
@@ -23,6 +41,9 @@ public partial class Player : CharacterBody2D
 
 	public delegate TileType PositionChangedEventHandler(Vector2 worldCoordinate);
 	public PositionChangedEventHandler PositionChange;
+
+	public delegate string LocationChangedEventHandler(Vector2 worldCoordinate);
+	public LocationChangedEventHandler LocationChange;
 
 	public void Relocate()
 	{
@@ -51,7 +72,7 @@ public partial class Player : CharacterBody2D
 		// DebugText.Text = PositionChange(new Vector2I((int) x, (int) y)).ToString();
 
 		// LMAO, don't even need to convert it myself, there's a built-in function
-		DebugText.Text = PositionChange(Position).ToString();
+		DebugText.Text = PositionChange(Position).ToString() + "\n" +  LocationChange(Position);
 	}
 
 

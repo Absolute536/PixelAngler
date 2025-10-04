@@ -87,6 +87,9 @@ public partial class World : Node2D
 	};
 
 	// aMaZiNg HaCk TAT AHHHHHHHHHHHHHHHHHHHHHHHH!!!!
+	// Because I want to have everything inside a single TileMapLayer, so we had to use MoUnTaInLaYeR{#}
+	// And manually specify the tile combination of each level with the higher/lower level
+	// AND THEY ALL POINT TO THE SAME TILE SOURCE (aMaZiNg)
 	readonly Dictionary<(TileType primaryTile, TileType secondaryTile), int> tileCombinationSource = new()
 	{
 		{new (Grass, Water), 0},
@@ -126,6 +129,7 @@ public partial class World : Node2D
 			}
 
 			PPlayer.PositionChange = OnPlayerPositionChange;
+			PPlayer.LocationChange = OnPlayerLocationChange;
 		}
 	}
 
@@ -239,6 +243,17 @@ public partial class World : Node2D
 	{
 		Vector2I tileCoord = WorldLayer.LocalToMap(worldCoord);
 		return WorldCoordToTileType(tileCoord);
+	}
+
+	private string OnPlayerLocationChange(Vector2 worldCoord)
+	{
+		Vector2I tileCoord = WorldLayer.LocalToMap(worldCoord);
+		TileData tileData = WorldLayer.GetCellTileData(tileCoord);
+		if (tileData != null)
+			if (tileData.HasCustomData("Location"))
+				return tileData.GetCustomData("Location").ToString();
+
+		return "Location Not Found.";
 	}
 
 }
