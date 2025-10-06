@@ -59,9 +59,9 @@ public partial class PlayerIdleState : State
         if (movementVector != Vector2.Zero && !Input.IsMouseButtonPressed(MouseButton.Left))
             OnTransitionedEventHandler("PlayerWalkingState");
         // If not movement input and ItemAction is clicked, transition to fishing state(?)
-        else if (Input.IsActionPressed("ItemAction"))
+        else if (Input.IsActionPressed("Action"))
         {
-            GD.Print(Name + ": " + "ItemAction");
+            GD.Print(Name + ": " + "Action");
             OnTransitionedEventHandler("PlayerActionState"); // ~ like this? or a fishing state?
         }
     }

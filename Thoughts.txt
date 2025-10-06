@@ -16,3 +16,16 @@ Walking State
 - Directional movement
 - If no movement, transitions to Idle
 - If mouse click, transitions to Idle, then to ItemAction (or straight away to Item Action)?
+- (07/10) Mouse click, transitions to Idle, then immediately to Action (renamed) if click is held down
+
+Action State
+- ok, let's clear things up here.
+- entering action state, check which item is selected
+- then invoke the selected item's action???
+  -> instantiate the scene/node?
+  -> add to player
+  -> OH, OK. because it's PLAYER'S state, so it must be tied to player
+  -> like player is the "target"
+  -> I think we can create an action manager to hold the player's reference and make it a child of the player.
+  -> then the manage shall manage the actions
+  -> ok, let's test it out.

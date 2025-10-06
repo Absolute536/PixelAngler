@@ -97,7 +97,7 @@ public partial class PlayerActionState : State
 
         // CREATE AND EXTEND CAST MARKER HERE (Fishing Rod as SelectedItem)
         
-        if (Input.IsActionPressed("ItemAction"))
+        if (Input.IsActionPressed("Action"))
         {
             
 
@@ -106,13 +106,11 @@ public partial class PlayerActionState : State
         }
 
         // Upon releasing the left mouse click
-        if (Input.IsActionJustReleased("ItemAction"))
+        if (Input.IsActionJustReleased("Action"))
         {
             EndFishingItemAction();
             
             OnTransitionedEventHandler("PlayerIdleState"); // if it's released, go back to idle
-
-            
 
         }
 
