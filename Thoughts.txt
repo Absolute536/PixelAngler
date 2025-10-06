@@ -27,5 +27,5 @@ Action State
   -> OH, OK. because it's PLAYER'S state, so it must be tied to player
   -> like player is the "target"
   -> I think we can create an action manager to hold the player's reference and make it a child of the player.
-  -> then the manage shall manage the actions
+  -> then the manager shall manage the actions
   -> ok, let's test it out.

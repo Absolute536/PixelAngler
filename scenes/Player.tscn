@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://bd2sgwdtpfwaj"]
 
 [ext_resource type="SpriteFrames" uid="uid://chi3wqli78166" path="res://resources/Player.tres" id="1_p0vlq"]
-[ext_resource type="Script" uid="uid://dwkgu7hv8ofdd" path="res://scripts/Player.cs" id="1_v6fml"]
+[ext_resource type="Script" uid="uid://dwkgu7hv8ofdd" path="res://scripts/player/Player.cs" id="1_v6fml"]
 [ext_resource type="AudioStream" uid="uid://df2su45hulwfh" path="res://assets/audio/sound_effects/KeySound2.mp3" id="3_cw2d6"]
 [ext_resource type="Script" uid="uid://bakg405h3gvhu" path="res://scripts/states/StateMachine.cs" id="3_mdl7e"]
 [ext_resource type="Script" uid="uid://c3nbul0aiq2h4" path="res://scripts/states/PlayerIdleState.cs" id="4_qu4a1"]
@@ -12,7 +12,7 @@
 radius = 5.0
 height = 26.0
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("AnimationPlayer", "AudioPlayer", "DebugText")]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("AnimationPlayer", "AudioPlayer", "DebugText") groups=["Player"]]
 motion_mode = 1
 script = ExtResource("1_v6fml")
 AnimationPlayer = NodePath("PlayerAnimation")
