@@ -8,6 +8,7 @@ using System.Linq;
 public partial class PlayerActionState : State
 {
     [Export] public CharacterBody2D Player;
+    [Export] public ActionManager PlayerActionManager;
 
     private Player player;
     private Sprite2D castMarker;
@@ -31,15 +32,15 @@ public partial class PlayerActionState : State
         // So we won't get Dictionary has the same key "" exception because the State Nodes hasn't initialised their name yet
         StateName = Name;
         player = (Player)Player;
-        castMarker = new Sprite2D();
+        // castMarker = new Sprite2D();
 
         // https://docs.godotengine.org/en/stable/tutorials/io/runtime_file_loading_and_saving.html
-        Image markerImg = Image.LoadFromFile("res://icon.svg");
-        castMarker.Texture = ImageTexture.CreateFromImage(markerImg);
-        castMarker.Visible = false;
-        castMarker.Name = "CastMarker";
-        castMarker.Scale = new Vector2(0.5f, 0.5f);
-        player.CallDeferred(MethodName.AddChild, castMarker);
+        // Image markerImg = Image.LoadFromFile("res://icon.svg");
+        // castMarker.Texture = ImageTexture.CreateFromImage(markerImg);
+        // castMarker.Visible = false;
+        // castMarker.Name = "CastMarker";
+        // castMarker.Scale = new Vector2(0.5f, 0.5f);
+        // player.CallDeferred(MethodName.AddChild, castMarker);
 
     }
 
@@ -54,22 +55,27 @@ public partial class PlayerActionState : State
         // On entering the state, add the fishing line to player (let's see)
 
         // Ok, so now we instance the line, and assign it to fishing line (hmm, can this work?)
-        Line2D line = new()
-        {
-            Width = 1,
-            DefaultColor = Colors.White,
-            Points = [new Vector2(0, 0)] // start at (0, 0)
-        };
-        fishingLine = line;
+        // Line2D line = new()
+        // {
+        //     Width = 1,
+        //     DefaultColor = Colors.White,
+        //     Points = [new Vector2(0, 0)] // start at (0, 0)
+        // };
+        // fishingLine = line;
 
-        player.AddChild(fishingLine);
-        castMarker.Visible = true;
+        // player.AddChild(fishingLine);
+        // castMarker.Visible = true;
+
+        // PackedScene marker = GD.Load<PackedScene>("res://scenes/cast_marker.tscn");
+        // player.AddChild(marker.Instantiate());
+        GetNode<Sprite2D>("../../FishingAction/CastMarker").Visible = true;
     }
 
     public override void ExitState()
     {
         // Remove the fishing line on exiting the state (performance cost?)
-        fishingLine.QueueFree();
+        // fishingLine.QueueFree();
+        
     }
 
     public override void HandleInput(InputEvent inputEvent)
@@ -96,21 +102,27 @@ public partial class PlayerActionState : State
         // In this state, if the mouse is held,
 
         // CREATE AND EXTEND CAST MARKER HERE (Fishing Rod as SelectedItem)
-        
+
         if (Input.IsActionPressed("Action"))
         {
-            
-
+            // if LMB and Fishing Rod is selected
+            // we forward the selected item to the action manager
+            // action manager will call the respective functions to perform the operations.
             if (player.SelectedItem == "Fishing Rod")
-                StartFishingItemAction();
+            {
+                
+            }
+            
         }
 
         // Upon releasing the left mouse click
         if (Input.IsActionJustReleased("Action"))
         {
-            EndFishingItemAction();
-            
+            // player.GetChild(-1).QueueFree();
+            GetNode<Sprite2D>("../../FishingAction/CastMarker").Visible = false;
             OnTransitionedEventHandler("PlayerIdleState"); // if it's released, go back to idle
+
+            GD.Print("Back to idle");
 
         }
 

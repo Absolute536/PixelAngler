@@ -77,7 +77,7 @@ public partial class PlayerWalkingState : State
 
             // MoveToward moves the "from" towards "to" by the "delta" specified
             // So MoveToward(10, 60, 10) returns 20
-            // MoveToward(10, 30, 50) returns 50 - it won't exceed the "to" value
+            // MoveToward(10, 30, 50) returns 30 - it won't exceed the "to" value
 
             // velocity.X = Mathf.MoveToward(player.Velocity.X, 0, MovementSpeed);
             // velocity.Y = Mathf.MoveToward(player.Velocity.Y, 0, MovementSpeed);
@@ -96,7 +96,7 @@ public partial class PlayerWalkingState : State
         player.Velocity = velocity;
         // Call the player's MoveAndSlide to actually move the node
         player.MoveAndSlide();
-        GD.Print("Player Position: " + player.Position);
+        // GD.Print("Player Position: " + player.Position);
 
         // Hmm... Is this needed? Yeah I think we need this
 

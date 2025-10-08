@@ -15,6 +15,8 @@ public partial class ActionManager : Node
     {
         if (IsInsideTree())
             Target = GetTree().GetFirstNodeInGroup("Player") as Player; // Should be able to cast right?
+
+        ItemActions.Add("Fishing Rod", new FishingRodAction(Target));
     }
 
     // ActionManager
@@ -38,9 +40,9 @@ public partial class ActionManager : Node
     // create a cast marker, add it to player
     // copied from 
 
-    private void FishingRodAction()
+    public void StartItemAction(string itemAction, Node2D target)
     {
-
+        
     }
 
 }

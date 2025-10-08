@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://cwtba6wd0gfht"]
+
+[ext_resource type="Texture2D" uid="uid://v0rat11sxilo" path="res://icon.svg" id="1_ow74c"]
+[ext_resource type="Script" uid="uid://5b503ors8bhg" path="res://scripts/player/CastMarker.cs" id="2_i45yn"]
+
+[node name="CastMarker" type="Sprite2D" node_paths=PackedStringArray("castTimer")]
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("1_ow74c")
+script = ExtResource("2_i45yn")
+castTimer = NodePath("Timer")
+
+[node name="Timer" type="Timer" parent="."]
+process_callback = 0
+wait_time = 0.5

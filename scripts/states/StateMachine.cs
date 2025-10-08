@@ -47,7 +47,7 @@ public partial class StateMachine : Node
     public override void _PhysicsProcess(double delta)
     {
         currentState.PhysicsProcessUpdate(delta);
-        GD.Print("Current State: " + currentState.StateName);
+        // GD.Print("Current State: " + currentState.StateName);
     }
 
     public override void _UnhandledInput(InputEvent @event)
