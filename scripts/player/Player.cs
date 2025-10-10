@@ -29,6 +29,7 @@ public partial class Player : CharacterBody2D
 		get => _strength;
 	}
 
+	public string[] Items = ["Fishing Rod", "Bug Net"];
 	// TODO: Implement the different action based on selected item and cast according to facing direction
 	public string SelectedItem = "Fishing Rod"; // use string for now
 	private Vector2 _facingDirection = Vector2.Down; // by default face down?

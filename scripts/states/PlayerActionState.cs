@@ -8,9 +8,10 @@ using System.Linq;
 public partial class PlayerActionState : State
 {
     [Export] public CharacterBody2D Player;
-    [Export] public ActionManager PlayerActionManager;
+    [Export] public PlayerActionManager PlayerActionManager;
 
     private Player player;
+
     private Sprite2D castMarker;
 
     // public PlayerActionState()
@@ -68,7 +69,7 @@ public partial class PlayerActionState : State
 
         // PackedScene marker = GD.Load<PackedScene>("res://scenes/cast_marker.tscn");
         // player.AddChild(marker.Instantiate());
-        GetNode<Sprite2D>("../../FishingAction/CastMarker").Visible = true;
+        // GetNode<Sprite2D>("../../FishingAction/CastMarker").Visible = true;
     }
 
     public override void ExitState()
@@ -103,34 +104,49 @@ public partial class PlayerActionState : State
 
         // CREATE AND EXTEND CAST MARKER HERE (Fishing Rod as SelectedItem)
 
-        if (Input.IsActionPressed("Action"))
-        {
-            // if LMB and Fishing Rod is selected
-            // we forward the selected item to the action manager
-            // action manager will call the respective functions to perform the operations.
-            if (player.SelectedItem == "Fishing Rod")
-            {
-                
-            }
-            
-        }
+        // if (Input.IsActionPressed("Action"))
+        // {
+        //     // if LMB and Fishing Rod is selected
+        //     // we forward the selected item to the action manager
+        //     // action manager will call the respective functions to perform the operations.
+        //     PlayerActionManager.StartAction(player.SelectedItem);
 
-        // Upon releasing the left mouse click
-        if (Input.IsActionJustReleased("Action"))
-        {
-            // player.GetChild(-1).QueueFree();
-            GetNode<Sprite2D>("../../FishingAction/CastMarker").Visible = false;
-            OnTransitionedEventHandler("PlayerIdleState"); // if it's released, go back to idle
+        // }
 
-            GD.Print("Back to idle");
+        // // Upon releasing the left mouse click
+        // if (Input.IsActionJustReleased("Action"))
+        // {
+        //     // player.GetChild(-1).QueueFree();
+        //     // GetNode<Sprite2D>("../../FishingAction/CastMarker").Visible = false;
+        //     OnTransitionedEventHandler("PlayerIdleState"); // if it's released, go back to idle
 
-        }
+        //     GD.Print("Back to idle");
+
+        //     PlayerActionManager.EndAction(player.SelectedItem);
+
+        // }
 
 
         // For future reference: CanvasModulate Node for day/night cycle
         // Might also check out object pooling for the fishing line (or maybe not, cuz it's just one node)
         // But yeah for best practices, why not?!
     }
+
+    public override void _UnhandledInput(InputEvent @event)
+    {
+        if (@event.IsActionPressed("Action"))
+        {
+            PlayerActionManager.StartAction(player.SelectedItem);
+        }
+        
+        if (@event.IsActionReleased("Action"))
+        {
+            PlayerActionManager.EndAction(player.SelectedItem);
+            OnTransitionedEventHandler("PlayerIdleState");
+            GD.Print("Mouse release, go back to idle state");
+        }
+    }
+
 
     // fish idle duration - aggresiveness?
     private void StartFishingItemAction()

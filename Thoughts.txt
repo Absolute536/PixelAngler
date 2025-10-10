@@ -29,3 +29,23 @@ Action State
   -> I think we can create an action manager to hold the player's reference and make it a child of the player.
   -> then the manager shall manage the actions
   -> ok, let's test it out.
+
+Cast Marker
+- 2 options -> instantiate scene when needed or attach it to player from the very beginning
+- operations
+- start from player's position + 2 tile to whatever direction the player is facing
+- if LMB is held, move the marker's position by increments of 1 tile every t (seconds), up to a max
+- upon release, the marker either
+  -> reset position to the initial one and hide itself
+  -> queue free it
+- there is also the need of an indicator as well for the marker
+
+Extending from cast marker, we continue to the casting of the bobber and line itself
+- upon LMB release of the marker, the final position of the marker is recorded
+- depending on the facing direction, the bobber either
+  -> move in the opposite direction then to the specified position (vertical)
+  -> move in a parabolic curve according to the projectile motion (horizontal)
+- the fishing line should also be attached to the bobber as it moves according to:
+  -> quadratic beizer curve (complicated)
+  -> just a simple parabolic curve?
+  -> the built in setting for LineJointMode (idk if this works)

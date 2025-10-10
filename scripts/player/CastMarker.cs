@@ -4,10 +4,14 @@ using GamePlayer;
 
 public partial class CastMarker : Sprite2D
 {
-	private Player player;
+	private Player TargetPlayer;
 	[Export] public Timer castTimer;
+	[Export] public PlayerActionManager ActionManager;
 
-	private const int MaxLength = 80;
+	[Export] public int MaxCastingLength = 80;
+
+	private Vector2 castDirection;
+	private Vector2 initialPosition;
 	private int castLength = 0;
 
 	public CastMarker()
@@ -18,54 +22,76 @@ public partial class CastMarker : Sprite2D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		player = GetTree().GetFirstNodeInGroup("Player") as Player;
+		ActionManager.CastActionStart = CastingStart;
+		ActionManager.CastActionEnd = CastingEnd;
+
+		TargetPlayer = GetTree().GetFirstNodeInGroup("Player") as Player;
 		GD.Print("Ready is called when entering scene tree"); // So it works
 
-		GlobalPosition += player.FacingDirection * new Vector2(16, 16);
+		// GlobalPosition += TargetPlayer.FacingDirection * new Vector2(16, 16);
 
 		// So upon joining the scene tree, connect to Timeout signal and start the timer
-		castTimer.Timeout += CastingMarker;
-		castTimer.Start();
+		castTimer.Timeout += CastingProcess;
+		
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _PhysicsProcess(double delta)
 	{
-		if (Input.IsActionPressed("Action"))
-		{
-			CastingMarker();
-		}
+		// if (Input.IsActionPressed("Action"))
+		// {
+		// 	castTimer.Start(); 
+		// 	CastingMarker();
+		// }
 
-		if (Input.IsActionJustReleased("Action"))
-		{
-			GlobalPosition = player.GlobalPosition + player.FacingDirection * new Vector2(16, 16);
-			Visible = false;
-			castLength = 0;
-			castTimer.Stop();
-		}
+		// if (Input.IsActionJustReleased("Action"))
+		// {
+		// 	GlobalPosition = player.GlobalPosition + player.FacingDirection * new Vector2(16, 16);
+		// 	Visible = false;
+		// 	castLength = 0;
+		// 	castTimer.Stop();
+		// }
+	}
+	private void CastingStart()
+	{
+		castTimer.Start();
+		
+		castDirection = TargetPlayer.FacingDirection;
+		initialPosition = TargetPlayer.Position + (castDirection * new Vector2(16, 16) * 2); // initial position 3 tiles away from the facing direction of the player
+		Position = initialPosition;
+		Visible = true;
 	}
 
-	private void CastingMarker()
+	private void CastingEnd()
 	{
-		if (player != null && castLength < MaxLength)
+		castLength = 0; // reset cast length
+		castTimer.Stop();
+		Visible = false;
+		Position = TargetPlayer.Position; // reset position back to origin of parent (Player node)
+	}
+
+	private void CastingProcess()
+    {
+        if (TargetPlayer != null && castLength < MaxCastingLength)
 		{
 			castLength += 16; // 16 pixels per 0.5s (1 tile)
+			// Right. Cuz I compound the castLenght per call, so the marker extension increases
+			// Need to start from origin
 
-			if (player.FacingDirection == Vector2.Up)
-				GlobalPosition = player.GlobalPosition.Round() + new Vector2(0, -castLength);
-			else if (player.FacingDirection == Vector2.Down)
-				GlobalPosition = player.GlobalPosition.Round() + new Vector2(0, castLength);
-			else if (player.FacingDirection == Vector2.Right)
-				GlobalPosition = player.GlobalPosition.Round() + new Vector2(castLength, 0);
+			if (castDirection == Vector2.Up)
+				Position = initialPosition + new Vector2(0, -castLength);
+			else if (castDirection == Vector2.Down)
+				Position = initialPosition + new Vector2(0, castLength);
+			else if (castDirection == Vector2.Right)
+				Position = initialPosition + new Vector2(castLength, 0);
 			else
-				GlobalPosition = player.GlobalPosition.Round() + new Vector2(-castLength, 0);
+				Position = initialPosition + new Vector2(-castLength, 0);
 
-			GlobalPosition += player.FacingDirection * new Vector2(16, 16);
+			// Position += castDirection * new Vector2(16, 16);
 		}
-		GD.Print("Direction: " + player.FacingDirection);
-		GD.Print("Player: " + player.Position);
+		GD.Print("Direction: " + TargetPlayer.FacingDirection);
+		GD.Print("Player: " + TargetPlayer.Position);
 		GD.Print("Marker: " + Position);
-	}
-
+    }
 
 }

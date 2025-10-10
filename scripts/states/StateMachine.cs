@@ -67,9 +67,9 @@ public partial class StateMachine : Node
             currentState.ExitState();
             currentState = targetState;
         }
-
-        Console.WriteLine("Specified next state not found");
-        return;
+        else
+            GD.PushError("Specified next state not found on state transition");
+        
     }
 
 }

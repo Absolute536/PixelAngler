@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using GamePlayer;
+using System.Reflection.Metadata;
 
 [GlobalClass]
 public partial class PlayerWalkingState : State
@@ -26,13 +27,15 @@ public partial class PlayerWalkingState : State
     {
         // Nothing cuz we need to check the animation on enter first
         // Hmm, what to do for walking then?
-        player.AudioPlayer.Play();
+
+        // player.AudioPlayer.Play();
     }
 
     public override void ExitState()
     {
         // Nothing on exit yet
-        player.AudioPlayer.Stop();
+
+        // player.AudioPlayer.Stop();
     }
 
     public override void HandleInput(InputEvent inputEvent)
@@ -125,6 +128,7 @@ public partial class PlayerWalkingState : State
             player.AnimationPlayer.Play("Right");
         else
             player.AnimationPlayer.Play("Left");
+
     }
 
 }
