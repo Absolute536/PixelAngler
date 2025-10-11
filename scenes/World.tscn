@@ -5,7 +5,7 @@
 [ext_resource type="TileSet" uid="uid://du35ilwys81fd" path="res://resources/DisplayLayer.tres" id="3_d1c63"]
 [ext_resource type="PackedScene" uid="uid://bd2sgwdtpfwaj" path="res://scenes/player.tscn" id="4_d1c63"]
 
-[node name="World" type="Node2D" node_paths=PackedStringArray("DisplayLayer", "WorldLayer")]
+[node name="World" type="Node2D" node_paths=PackedStringArray("DisplayLayer", "WorldLayer") groups=["World"]]
 script = ExtResource("1_7g83o")
 DisplayLayer = NodePath("DisplayLayer")
 WorldLayer = NodePath("WorldLayer")

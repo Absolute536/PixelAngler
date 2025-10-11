@@ -92,7 +92,7 @@ public partial class PlayerActionState : State
     // We'll put things here first just for experiment
     // Perhaps we should define separate behaviours for each itemAction (hmm???)
 
-    private Line2D fishingLine;
+    // private Line2D fishingLine;
 
     private int lineLength = 0;
 
@@ -149,36 +149,36 @@ public partial class PlayerActionState : State
 
 
     // fish idle duration - aggresiveness?
-    private void StartFishingItemAction()
-    {
-        lineLength++; // Increase length per physics tick 
-                      // Add the point to the Line2D so that the line is extending
-        if (player.FacingDirection == Vector2.Up)
-        {
-            fishingLine.AddPoint(new(0, -lineLength));
-            castMarker.Position += new Vector2(0, -lineLength / 4);
-        }
-        else if (player.FacingDirection == Vector2.Down)
-        {
-            fishingLine.AddPoint(new(0, lineLength));
-            castMarker.Position += new Vector2(0, lineLength / 4);
-        }
-        else if (player.FacingDirection == Vector2.Right)
-        {
-            fishingLine.AddPoint(new(lineLength, 0));
-            castMarker.Position += new Vector2(lineLength / 4, 0);
-        }
-        else
-        {
-            fishingLine.AddPoint(new(-lineLength, 0));
-            castMarker.Position += new Vector2(-lineLength / 4, 0);
-        }
-    }
+    // private void StartFishingItemAction()
+    // {
+    //     lineLength++; // Increase length per physics tick 
+    //                   // Add the point to the Line2D so that the line is extending
+    //     if (player.FacingDirection == Vector2.Up)
+    //     {
+    //         fishingLine.AddPoint(new(0, -lineLength));
+    //         castMarker.Position += new Vector2(0, -lineLength / 4);
+    //     }
+    //     else if (player.FacingDirection == Vector2.Down)
+    //     {
+    //         fishingLine.AddPoint(new(0, lineLength));
+    //         castMarker.Position += new Vector2(0, lineLength / 4);
+    //     }
+    //     else if (player.FacingDirection == Vector2.Right)
+    //     {
+    //         fishingLine.AddPoint(new(lineLength, 0));
+    //         castMarker.Position += new Vector2(lineLength / 4, 0);
+    //     }
+    //     else
+    //     {
+    //         fishingLine.AddPoint(new(-lineLength, 0));
+    //         castMarker.Position += new Vector2(-lineLength / 4, 0);
+    //     }
+    // }
 
-    private void EndFishingItemAction()
-    {
-        lineLength = 0; // reset length
-        castMarker.Position = new Vector2(0, 0);
-        castMarker.Visible = false;
-    }
+    // private void EndFishingItemAction()
+    // {
+    //     lineLength = 0; // reset length
+    //     castMarker.Position = new Vector2(0, 0);
+    //     castMarker.Visible = false;
+    // }
 }

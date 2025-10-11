@@ -39,6 +39,10 @@ Cast Marker
   -> reset position to the initial one and hide itself
   -> queue free it
 - there is also the need of an indicator as well for the marker
+- UPDATE: ok, the cast marker works now, and it's pretty clean, with the ActionManager
+- NEXT: implement location detection of the marker when the mouse button is released
+- on release: get position, get location (Tiletype), then the position will be the end point for bobber (start point - player origin + 32 or 16?)
+- to account for the player's height
 
 Extending from cast marker, we continue to the casting of the bobber and line itself
 - upon LMB release of the marker, the final position of the marker is recorded
@@ -49,3 +53,11 @@ Extending from cast marker, we continue to the casting of the bobber and line it
   -> quadratic beizer curve (complicated)
   -> just a simple parabolic curve?
   -> the built in setting for LineJointMode (idk if this works)
+
+  Autoload
+  - the singleton pattern
+  - the autoload objects (nodes) will be loaded to the scene tree [always]
+  - so we can either like
+  - signal bus [reddit idea] => have the subscriber subscribe to the relevant delegates
+  - OR master scene => contain wrapper methods for the necessary function within the nodes in scene
+  - OR just make World a autoload node

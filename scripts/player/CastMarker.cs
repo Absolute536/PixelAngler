@@ -1,6 +1,8 @@
 using Godot;
 using System;
 using GamePlayer;
+using GameWorld;
+using SignalBus;
 
 public partial class CastMarker : Sprite2D
 {
@@ -22,8 +24,8 @@ public partial class CastMarker : Sprite2D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		ActionManager.CastActionStart = CastingStart;
-		ActionManager.CastActionEnd = CastingEnd;
+		ActionManager.CastActionStart = CastMarkingStart;
+		ActionManager.CastActionEnd = CastMarkingEnd;
 
 		TargetPlayer = GetTree().GetFirstNodeInGroup("Player") as Player;
 		GD.Print("Ready is called when entering scene tree"); // So it works
@@ -31,9 +33,18 @@ public partial class CastMarker : Sprite2D
 		// GlobalPosition += TargetPlayer.FacingDirection * new Vector2(16, 16);
 
 		// So upon joining the scene tree, connect to Timeout signal and start the timer
-		castTimer.Timeout += CastingProcess;
-		
+		castTimer.Timeout += CastMarkingProcess;
+
+		// Experiment
+		SignalBus.SignalBus.Instance.PositionChanged += Experiment;
+
+
 	}
+	
+	private TileType Experiment(object sender, PositionEventArgs e)
+    {
+		return TileType.MountainLayer3;
+    }
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _PhysicsProcess(double delta)
@@ -52,7 +63,7 @@ public partial class CastMarker : Sprite2D
 		// 	castTimer.Stop();
 		// }
 	}
-	private void CastingStart()
+	private void CastMarkingStart()
 	{
 		castTimer.Start();
 		
@@ -62,21 +73,42 @@ public partial class CastMarker : Sprite2D
 		Visible = true;
 	}
 
-	private void CastingEnd()
+	private void CastMarkingEnd()
 	{
 		castLength = 0; // reset cast length
 		castTimer.Stop();
 		Visible = false;
+		// Record position first
+		// Find out if the end position is on water
+		// if it is, commence the casting animation
+		// else, do nothing (maybe pop up message)
+
+		Vector2 endPosition = Position;
+		
+		TileType tileType = SignalBus.SignalBus.Instance.InvokePositionChangedEvent(this, new PositionEventArgs() { Position = endPosition });
+
+		if (tileType != TileType.Water)
+        {
+			Label message = new Label()
+			{
+				Text = "Bobber not casted in water.",
+				Size = new Vector2(50, 50),
+				Visible = true
+			};
+
+			TargetPlayer.AddChild(message);
+        }	
+		GD.Print("Marker landed on " + tileType.ToString());
 		Position = TargetPlayer.Position; // reset position back to origin of parent (Player node)
 	}
 
-	private void CastingProcess()
+	private void CastMarkingProcess()
     {
-        if (TargetPlayer != null && castLength < MaxCastingLength)
+		if (TargetPlayer != null && castLength < MaxCastingLength)
 		{
 			castLength += 16; // 16 pixels per 0.5s (1 tile)
-			// Right. Cuz I compound the castLenght per call, so the marker extension increases
-			// Need to start from origin
+							  // Right. Cuz I compound the castLength per call, so the marker increases more and more (if not using assignment)
+							  // Need to start from origin
 
 			if (castDirection == Vector2.Up)
 				Position = initialPosition + new Vector2(0, -castLength);
@@ -89,6 +121,8 @@ public partial class CastMarker : Sprite2D
 
 			// Position += castDirection * new Vector2(16, 16);
 		}
+		
+		// Console Output
 		GD.Print("Direction: " + TargetPlayer.FacingDirection);
 		GD.Print("Player: " + TargetPlayer.Position);
 		GD.Print("Marker: " + Position);

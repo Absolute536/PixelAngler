@@ -72,6 +72,7 @@ metadata/_custom_type_script = "uid://xlq80rqmo0m"
 visible = false
 ActionManager = NodePath("../../PlayerActionManager")
 
-[node name="PlayerActionManager" type="Node" parent="."]
+[node name="PlayerActionManager" type="Node" parent="." node_paths=PackedStringArray("ActionBody")]
 script = ExtResource("9_ur7pv")
+ActionBody = NodePath("..")
 metadata/_custom_type_script = "uid://d1gq523rq3oq0"

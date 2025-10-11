@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://5b503ors8bhg" path="res://scripts/player/CastMarker.cs" id="2_i45yn"]
 
 [node name="CastMarker" type="Sprite2D" node_paths=PackedStringArray("castTimer")]
-scale = Vector2(0.5, 0.5)
+scale = Vector2(0.25, 0.25)
 texture = ExtResource("1_i45yn")
 script = ExtResource("2_i45yn")
 castTimer = NodePath("Timer")

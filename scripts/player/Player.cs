@@ -4,8 +4,8 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using WorldInfo;
-// using WorldInfo;
+using GameWorld;
+using SignalBus;
 
 public partial class Player : CharacterBody2D
 {
@@ -59,14 +59,14 @@ public partial class Player : CharacterBody2D
 
 	public override void _Ready()
 	{
-
+		
 	}
 
 	public delegate TileType PositionChangedEventHandler(Vector2 worldCoordinate);
-	public PositionChangedEventHandler PositionChange;
+	public PositionChangedEventHandler PositionChanged;
 
 	public delegate string LocationChangedEventHandler(Vector2 worldCoordinate);
-	public LocationChangedEventHandler LocationChange;
+	public LocationChangedEventHandler LocationChanged;
 
 	public void Relocate()
 	{
@@ -95,7 +95,12 @@ public partial class Player : CharacterBody2D
 		// DebugText.Text = PositionChange(new Vector2I((int) x, (int) y)).ToString();
 
 		// LMAO, don't even need to convert it myself, there's a built-in function
-		DebugText.Text = PositionChange(Position).ToString() + "\n" +  LocationChange(Position);
+		// DebugText.Text = PositionChanged(Position).ToString() + "\n" + LocationChanged(Position);
+		PositionEventArgs eventArgs = new PositionEventArgs()
+		{
+			Position = this.Position
+		};
+		DebugText.Text = SignalBus.Instance.InvokePositionChangedEvent(this, eventArgs).ToString() + "\n" + LocationChanged(Position);
 	}
 
 

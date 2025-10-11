@@ -1,4 +1,4 @@
-namespace WorldInfo;
+namespace GameWorld;
 
 using Godot;
 using System;
@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using static TileConfig;
 using static TileType;
 using GamePlayer;
+using SignalBus;
 
 // IMPORTANT!!!
 // Remember to have a 1-tile distance between > 2 different tile types 
@@ -26,7 +27,7 @@ public enum TileType
 	Dirt,
 	Grass,
 	Path,
-	// Damn these MountainLayer shites are hacky af
+	// Damn these MountainLayer shites are hacky af (cuz I insisted on using 1 TileMapLayer for the terrain) Why so stupid?
 	MountainLayer1,
 	MountainLayer2,
 	MountainLayer3
@@ -47,7 +48,6 @@ public partial class World : Node2D
 	private Player PPlayer;
 
 	private const int TileNeighbourhoodSize = 4;
-
 
 	// Array of the 4 neighbourhood calculation vectors
 	// Used for calculating (converting) world coordinate to display coordinate and vice versa
@@ -128,8 +128,8 @@ public partial class World : Node2D
 				PopulateDisplayTile(worldCoord);
 			}
 
-			PPlayer.PositionChange = OnPlayerPositionChange;
-			PPlayer.LocationChange = OnPlayerLocationChange;
+			SignalBus.Instance.PositionChanged += GetTileType;
+			PPlayer.LocationChanged = OnPlayerLocationChanged;
 		}
 	}
 
@@ -239,13 +239,20 @@ public partial class World : Node2D
 			return Grass;
 	}
 
-	private TileType OnPlayerPositionChange(Vector2 worldCoord)
+	// set to public temporarily
+	public TileType OnPlayerPositionChanged(Vector2 worldCoord)
 	{
 		Vector2I tileCoord = WorldLayer.LocalToMap(worldCoord);
 		return WorldCoordToTileType(tileCoord);
 	}
+	
+	public TileType GetTileTypeFromPosition(Vector2 position)
+    {
+		Vector2I worldCoord = WorldLayer.LocalToMap(position); // In this case, player's position == GlobalPosition (so no need to convert) kinda fragile though
+		return WorldCoordToTileType(worldCoord);
+    }
 
-	private string OnPlayerLocationChange(Vector2 worldCoord)
+	private string OnPlayerLocationChanged(Vector2 worldCoord)
 	{
 		Vector2I tileCoord = WorldLayer.LocalToMap(worldCoord);
 		TileData tileData = WorldLayer.GetCellTileData(tileCoord);
@@ -255,5 +262,22 @@ public partial class World : Node2D
 
 		return "Location Not Found.";
 	}
+
+	public string GetWorldLocationFromPosition(Vector2 position)
+	{
+		Vector2I worldCoord = WorldLayer.LocalToMap(position);
+		TileData tileData = WorldLayer.GetCellTileData(worldCoord);
+		if (tileData != null)
+			if (tileData.HasCustomData("Location"))
+				return tileData.GetCustomData("Location").ToString();
+
+		return "Location Not Found.";
+	}
+
+	private TileType GetTileType(object sender, PositionEventArgs e)
+    {
+		Vector2I worldCoord = WorldLayer.LocalToMap(e.Position);
+		return WorldCoordToTileType(worldCoord);
+    }
 
 }
