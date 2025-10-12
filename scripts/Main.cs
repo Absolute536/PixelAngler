@@ -1,4 +1,6 @@
+using GameWorld;
 using Godot;
+using SignalBus;
 using System;
 
 public partial class Main : Node2D
@@ -11,9 +13,9 @@ public partial class Main : Node2D
 		if (refreshRate < 0)
 			Engine.MaxFps = 120;
 		else
-			Engine.MaxFps = (int) refreshRate; // + 60 or not?
+			Engine.MaxFps = (int)refreshRate; // + 60 or not?
 	}
-
+	
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{

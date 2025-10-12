@@ -61,3 +61,8 @@ Extending from cast marker, we continue to the casting of the bobber and line it
   - signal bus [reddit idea] => have the subscriber subscribe to the relevant delegates
   - OR master scene => contain wrapper methods for the necessary function within the nodes in scene
   - OR just make World a autoload node
+
+Autoload Continuation
+- OK. Let's do it this way.
+- GlobalManager -> contain reference of World and provide wrapper methods for other classes to access the methods in World
+- SignalBus -> contain a series of events/delegates for when we need one to many notification to the subscribers

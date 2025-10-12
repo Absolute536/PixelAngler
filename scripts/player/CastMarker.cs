@@ -2,11 +2,12 @@ using Godot;
 using System;
 using GamePlayer;
 using GameWorld;
-using SignalBus;
+using SignalBusNS;
 
 public partial class CastMarker : Sprite2D
-{
-	private Player TargetPlayer;
+{	
+	// Since CastMarker is a part of Player (Player has-a CastMarker, we make it an exported property instead)
+	[Export] public Player TargetPlayer;
 	[Export] public Timer castTimer;
 	[Export] public PlayerActionManager ActionManager;
 
@@ -24,27 +25,16 @@ public partial class CastMarker : Sprite2D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		ActionManager.CastActionStart = CastMarkingStart;
-		ActionManager.CastActionEnd = CastMarkingEnd;
+		// Connect to action manager's cast action (Or can we try putting these in the SignalBus instead?)
+		// ActionManager.CastActionStart = CastMarkingStart;
+		SignalBus.Instance.CastActionStart += HandleCastActionStart;
+		SignalBus.Instance.CastActionEnd += HandleCastActionEnd;
+		// ActionManager.CastActionEnd = CastMarkingEnd;
 
-		TargetPlayer = GetTree().GetFirstNodeInGroup("Player") as Player;
-		GD.Print("Ready is called when entering scene tree"); // So it works
-
-		// GlobalPosition += TargetPlayer.FacingDirection * new Vector2(16, 16);
-
-		// So upon joining the scene tree, connect to Timeout signal and start the timer
+		// So upon joining the scene tree, connect to Timeout signal
 		castTimer.Timeout += CastMarkingProcess;
 
-		// Experiment
-		SignalBus.SignalBus.Instance.PositionChanged += Experiment;
-
-
 	}
-	
-	private TileType Experiment(object sender, PositionEventArgs e)
-    {
-		return TileType.MountainLayer3;
-    }
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _PhysicsProcess(double delta)
@@ -66,12 +56,51 @@ public partial class CastMarker : Sprite2D
 	private void CastMarkingStart()
 	{
 		castTimer.Start();
-		
+
 		castDirection = TargetPlayer.FacingDirection;
 		initialPosition = TargetPlayer.Position + (castDirection * new Vector2(16, 16) * 2); // initial position 3 tiles away from the facing direction of the player
 		Position = initialPosition;
 		Visible = true;
 	}
+
+	protected virtual void HandleCastActionStart(object sender, EventArgs e)
+	{
+		castTimer.Start();
+
+		castDirection = TargetPlayer.FacingDirection;
+		initialPosition = TargetPlayer.Position + (castDirection * new Vector2(16, 16) * 2); // initial position 3 tiles away from the facing direction of the player
+		Position = initialPosition;
+		Visible = true;
+	}
+	
+	protected virtual void HandleCastActionEnd(object sender, EventArgs e)
+    {
+        castLength = 0; // reset cast length
+		castTimer.Stop();
+		Visible = false;
+		// Record position first
+		// Find out if the end position is on water
+		// if it is, commence the casting animation
+		// else, do nothing (maybe pop up message)
+
+		Vector2 endPosition = Position;
+		
+		TileType tileType = GameInfo.Instance.GetTileType(endPosition);
+
+		if (tileType != TileType.Water)
+        {
+			Label message = new Label()
+			{
+				Text = "Bobber not casted in water.",
+				Size = new Vector2(50, 50),
+				Visible = true
+			};
+
+			TargetPlayer.AddChild(message);
+        }	
+		GD.Print("Marker landed on " + tileType.ToString());
+		Position = TargetPlayer.Position; // reset position back to origin of parent (Player node)
+    }
 
 	private void CastMarkingEnd()
 	{
@@ -85,7 +114,7 @@ public partial class CastMarker : Sprite2D
 
 		Vector2 endPosition = Position;
 		
-		TileType tileType = SignalBus.SignalBus.Instance.InvokePositionChangedEvent(this, new PositionEventArgs() { Position = endPosition });
+		TileType tileType = GameInfo.Instance.GetTileType(endPosition);
 
 		if (tileType != TileType.Water)
         {

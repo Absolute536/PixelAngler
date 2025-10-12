@@ -11,4 +11,4 @@ castTimer = NodePath("Timer")
 
 [node name="Timer" type="Timer" parent="."]
 process_callback = 0
-wait_time = 0.75
+wait_time = 0.6

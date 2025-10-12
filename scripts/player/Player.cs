@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using GameWorld;
-using SignalBus;
+using SignalBusNS;
 
 public partial class Player : CharacterBody2D
 {
@@ -96,11 +96,13 @@ public partial class Player : CharacterBody2D
 
 		// LMAO, don't even need to convert it myself, there's a built-in function
 		// DebugText.Text = PositionChanged(Position).ToString() + "\n" + LocationChanged(Position);
-		PositionEventArgs eventArgs = new PositionEventArgs()
-		{
-			Position = this.Position
-		};
-		DebugText.Text = SignalBus.Instance.InvokePositionChangedEvent(this, eventArgs).ToString() + "\n" + LocationChanged(Position);
+		// PositionEventArgs eventArgs = new PositionEventArgs()
+		// {
+		// 	Position = this.Position
+		// };
+		// DebugText.Text = SignalBus.Instance.InvokePositionChangedEvent(this, eventArgs).ToString() + "\n" + LocationChanged(Position);
+
+		DebugText.Text = GameInfo.Instance.GetTileType(Position).ToString() + "\n" + GameInfo.Instance.GetWorldLocation(Position).ToString();
 	}
 
 

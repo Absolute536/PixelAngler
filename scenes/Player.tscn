@@ -68,8 +68,9 @@ metadata/_custom_type_script = "uid://xlq80rqmo0m"
 
 [node name="ActionUI" type="Node" parent="."]
 
-[node name="CastMarker" parent="ActionUI" node_paths=PackedStringArray("ActionManager") instance=ExtResource("8_smehm")]
+[node name="CastMarker" parent="ActionUI" node_paths=PackedStringArray("TargetPlayer", "ActionManager") instance=ExtResource("8_smehm")]
 visible = false
+TargetPlayer = NodePath("../..")
 ActionManager = NodePath("../../PlayerActionManager")
 
 [node name="PlayerActionManager" type="Node" parent="." node_paths=PackedStringArray("ActionBody")]

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using static TileConfig;
 using static TileType;
 using GamePlayer;
-using SignalBus;
+using SignalBusNS;
 
 // IMPORTANT!!!
 // Remember to have a 1-tile distance between > 2 different tile types 
@@ -128,8 +128,8 @@ public partial class World : Node2D
 				PopulateDisplayTile(worldCoord);
 			}
 
-			SignalBus.Instance.PositionChanged += GetTileType;
-			PPlayer.LocationChanged = OnPlayerLocationChanged;
+			// SignalBus.Instance.PositionChanged += GetTileType;
+			// PPlayer.LocationChanged = OnPlayerLocationChanged;
 		}
 	}
 
@@ -238,30 +238,12 @@ public partial class World : Node2D
 		else
 			return Grass;
 	}
-
-	// set to public temporarily
-	public TileType OnPlayerPositionChanged(Vector2 worldCoord)
-	{
-		Vector2I tileCoord = WorldLayer.LocalToMap(worldCoord);
-		return WorldCoordToTileType(tileCoord);
-	}
 	
 	public TileType GetTileTypeFromPosition(Vector2 position)
     {
 		Vector2I worldCoord = WorldLayer.LocalToMap(position); // In this case, player's position == GlobalPosition (so no need to convert) kinda fragile though
 		return WorldCoordToTileType(worldCoord);
     }
-
-	private string OnPlayerLocationChanged(Vector2 worldCoord)
-	{
-		Vector2I tileCoord = WorldLayer.LocalToMap(worldCoord);
-		TileData tileData = WorldLayer.GetCellTileData(tileCoord);
-		if (tileData != null)
-			if (tileData.HasCustomData("Location"))
-				return tileData.GetCustomData("Location").ToString();
-
-		return "Location Not Found.";
-	}
 
 	public string GetWorldLocationFromPosition(Vector2 position)
 	{
@@ -273,11 +255,4 @@ public partial class World : Node2D
 
 		return "Location Not Found.";
 	}
-
-	private TileType GetTileType(object sender, PositionEventArgs e)
-    {
-		Vector2I worldCoord = WorldLayer.LocalToMap(e.Position);
-		return WorldCoordToTileType(worldCoord);
-    }
-
 }

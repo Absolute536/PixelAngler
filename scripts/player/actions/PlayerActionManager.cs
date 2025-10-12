@@ -1,5 +1,6 @@
 using GamePlayer;
 using Godot;
+using SignalBusNS;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -30,10 +31,10 @@ public partial class PlayerActionManager : Node
         switch (selectedItem)
         {
             case "Fishing Rod":
-                CastActionStart();
+                SignalBus.Instance.OnCastActionStart(this, EventArgs.Empty);
                 break;
             case "Bug Net":
-                NetActionStart();
+                SignalBus.Instance.OnCastActionEnd(this, EventArgs.Empty);
                 break;
             default:
                 throw new ArgumentException("No matching item type found");
@@ -45,10 +46,10 @@ public partial class PlayerActionManager : Node
         switch (selectedItem)
         {
             case "Fishing Rod":
-                CastActionEnd();
+                SignalBus.Instance.OnCastActionEnd(this, EventArgs.Empty);
                 break;
             case "Bug Net":
-                NetActionEnd();
+                SignalBus.Instance.OnNetActionEnd(this, EventArgs.Empty);
                 break;
             default:
                 throw new ArgumentException("No matching item type found");
