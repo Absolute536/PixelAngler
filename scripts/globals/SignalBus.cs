@@ -46,24 +46,36 @@ public partial class SignalBus : Node
 
     // Public "wrapper" methods for external class to invoke the events with the naming convention: "On<EventName>"
     // Methods for invoking events related to Player action -> only if sender is a PlayerActionManger (hmm... then, it is coupled? kinda inflexible). 
-    public void OnCastActionStart(PlayerActionManager sender, EventArgs e)
+    public void OnCastActionStart(object sender, EventArgs e)
     {
-        CastActionStart?.Invoke(sender, e);
+        if (sender is PlayerActionManager)
+            CastActionStart?.Invoke(sender, e);
+        else
+            GD.PushError("Cannot invoke player action related events if sender is not of type \"PlayerActionManager\"");
     }
 
     public void OnCastActionEnd(object sender, EventArgs e)
     {
-        CastActionEnd?.Invoke(sender, e);
+        if (sender is PlayerActionManager)
+            CastActionEnd?.Invoke(sender, e);
+        else
+           GD.PushError("Cannot invoke player action related events if sender is not of type \"PlayerActionManager\"");
     }
 
     public void OnNetActionStart(object sender, EventArgs e)
     {
-        NetActionStart?.Invoke(sender, e);
+        if (sender is PlayerActionManager)
+            NetActionStart?.Invoke(sender, e);
+        else
+            GD.PushError("Cannot invoke player action related events if sender is not of type \"PlayerActionManager\"");
     }
 
     public void OnNetActionEnd(object sender, EventArgs e)
     {
-        NetActionEnd?.Invoke(sender, e);
+        if (sender is PlayerActionManager)
+            NetActionEnd?.Invoke(sender, e);
+        else
+            GD.PushError("Cannot invoke player action related events if sender is not of type \"PlayerActionManager\"");
     }
 
     public void OnFishingActionStart(object sender, EventArgs e)

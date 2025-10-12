@@ -67,6 +67,10 @@ public partial class CastMarker : Sprite2D
 	{
 		castTimer.Start();
 
+		// Initial testing: if fishing line exist, free it
+		// if (TargetPlayer.GetChild(-1) is Line2D)
+		// 	TargetPlayer.GetChild(-1).QueueFree();
+
 		castDirection = TargetPlayer.FacingDirection;
 		initialPosition = TargetPlayer.Position + (castDirection * new Vector2(16, 16) * 2); // initial position 3 tiles away from the facing direction of the player
 		Position = initialPosition;
@@ -88,16 +92,31 @@ public partial class CastMarker : Sprite2D
 		TileType tileType = GameInfo.Instance.GetTileType(endPosition);
 
 		if (tileType != TileType.Water)
-        {
-			Label message = new Label()
+		{
+			// Label message = new Label()
+			// {
+			// 	Text = "Bobber not casted in water.",
+			// 	Size = new Vector2(50, 50),
+			// 	Visible = true
+			// };
+
+			// TargetPlayer.AddChild(message);
+		}
+		else // Experimenting with fishing line (simple line2d)
+		{
+			// If landed on Water, instantiate the fishing line I guess?
+			Line2D fishingLine = new Line2D()
 			{
-				Text = "Bobber not casted in water.",
-				Size = new Vector2(50, 50),
+				Name = "FishingLine",
+				Points = [new Vector2(0, 0), (endPosition - TargetPlayer.Position)], // start from (0, 0) instead of player's position, cuz you are a child of player, it will offset by the set position if you start from player's POS
+				// end position - player position to get the difference between the two (in terms of global position? cuz local = global in this case)
+				// then, we need to difference or else it will offest from the player by the specified vector
+				Width = 1.0f,
+				DefaultColor = Colors.White,
 				Visible = true
 			};
-
-			TargetPlayer.AddChild(message);
-        }	
+			TargetPlayer.AddChild(fishingLine);
+        }
 		GD.Print("Marker landed on " + tileType.ToString());
 		Position = TargetPlayer.Position; // reset position back to origin of parent (Player node)
     }
