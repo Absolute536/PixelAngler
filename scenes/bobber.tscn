@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://1w1wporxjcab"]
+
+[ext_resource type="Texture2D" uid="uid://v0rat11sxilo" path="res://icon.svg" id="1_rn3pg"]
+[ext_resource type="Script" uid="uid://d0lkcpxvl0v4c" path="res://scripts/Bobber.cs" id="2_1y8pg"]
+
+[node name="Bobber" type="Sprite2D"]
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("1_rn3pg")
+script = ExtResource("2_1y8pg")

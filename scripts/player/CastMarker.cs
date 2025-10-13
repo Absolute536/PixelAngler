@@ -108,7 +108,7 @@ public partial class CastMarker : Sprite2D
 			Line2D fishingLine = new Line2D()
 			{
 				Name = "FishingLine",
-				Points = [new Vector2(0, 0), (endPosition - TargetPlayer.Position)], // start from (0, 0) instead of player's position, cuz you are a child of player, it will offset by the set position if you start from player's POS
+				Points = [new Vector2(0, -16), (endPosition - TargetPlayer.Position)], // start from (0, 0) instead of player's position, cuz you are a child of player, it will offset by the set position if you start from player's POS
 				// end position - player position to get the difference between the two (in terms of global position? cuz local = global in this case)
 				// then, we need to difference or else it will offest from the player by the specified vector
 				Width = 1.0f,

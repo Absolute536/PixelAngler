@@ -31,10 +31,10 @@ public partial class PlayerActionManager : Node
         switch (selectedItem)
         {
             case "Fishing Rod":
-                SignalBus.Instance.OnCastActionStart(this, EventArgs.Empty);
+                SignalBus.Instance.OnActionStart(PlayerActionType.CastAction, this, EventArgs.Empty);
                 break;
             case "Bug Net":
-                SignalBus.Instance.OnCastActionEnd(this, EventArgs.Empty);
+                SignalBus.Instance.OnActionStart(PlayerActionType.NetAction, this, EventArgs.Empty);
                 break;
             default:
                 throw new ArgumentException("No matching item type found");
@@ -46,10 +46,10 @@ public partial class PlayerActionManager : Node
         switch (selectedItem)
         {
             case "Fishing Rod":
-                SignalBus.Instance.OnCastActionEnd(this, EventArgs.Empty);
+                SignalBus.Instance.OnActionEnd(PlayerActionType.CastAction, this, EventArgs.Empty);
                 break;
             case "Bug Net":
-                SignalBus.Instance.OnNetActionEnd(this, EventArgs.Empty);
+                SignalBus.Instance.OnActionEnd(PlayerActionType.NetAction, this, EventArgs.Empty);
                 break;
             default:
                 throw new ArgumentException("No matching item type found");

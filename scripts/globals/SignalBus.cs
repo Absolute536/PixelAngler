@@ -46,57 +46,104 @@ public partial class SignalBus : Node
 
     // Public "wrapper" methods for external class to invoke the events with the naming convention: "On<EventName>"
     // Methods for invoking events related to Player action -> only if sender is a PlayerActionManger (hmm... then, it is coupled? kinda inflexible). 
-    public void OnCastActionStart(object sender, EventArgs e)
+    // public void OnCastActionStart(object sender, EventArgs e)
+    // {
+    //     if (sender is PlayerActionManager)
+    //         CastActionStart?.Invoke(sender, e);
+    //     else
+    //         GD.PushError("Cannot invoke player action related events if sender is not of type \"PlayerActionManager\"");
+    // }
+
+    // public void OnCastActionEnd(object sender, EventArgs e)
+    // {
+    //     if (sender is PlayerActionManager)
+    //         CastActionEnd?.Invoke(sender, e);
+    //     else
+    //        GD.PushError("Cannot invoke player action related events if sender is not of type \"PlayerActionManager\"");
+    // }
+
+    // public void OnNetActionStart(object sender, EventArgs e)
+    // {
+    //     if (sender is PlayerActionManager)
+    //         NetActionStart?.Invoke(sender, e);
+    //     else
+    //         GD.PushError("Cannot invoke player action related events if sender is not of type \"PlayerActionManager\"");
+    // }
+
+    // public void OnNetActionEnd(object sender, EventArgs e)
+    // {
+    //     if (sender is PlayerActionManager)
+    //         NetActionEnd?.Invoke(sender, e);
+    //     else
+    //         GD.PushError("Cannot invoke player action related events if sender is not of type \"PlayerActionManager\"");
+    // }
+
+    // public void OnFishingActionStart(object sender, EventArgs e)
+    // {
+    //     FishingActionStart?.Invoke(sender, e);
+    // }
+
+    // public void OnFishingActionEnd(object sender, EventArgs e)
+    // {
+    //     FishingActionEnd?.Invoke(sender, e);
+    // }
+
+    // Well actually... perhaps we can consider using an "ItemType" enum instead of actionType for specifying which action to invoke (to align with the manager)
+    public void OnActionStart(PlayerActionType actionType, object sender, EventArgs e)
     {
-        if (sender is PlayerActionManager)
-            CastActionStart?.Invoke(sender, e);
-        else
+        if (sender is not PlayerActionManager)
+        {
             GD.PushError("Cannot invoke player action related events if sender is not of type \"PlayerActionManager\"");
-    }
+            return;
+        }
 
-    public void OnCastActionEnd(object sender, EventArgs e)
-    {
-        if (sender is PlayerActionManager)
-            CastActionEnd?.Invoke(sender, e);
-        else
-           GD.PushError("Cannot invoke player action related events if sender is not of type \"PlayerActionManager\"");
-    }
+        switch (actionType)
+        {
+            case PlayerActionType.CastAction:
+                CastActionStart?.Invoke(sender, e);
+                break;
+            case PlayerActionType.NetAction:
+                NetActionStart?.Invoke(sender, e);
+                break;
+            case PlayerActionType.FishingAction: // not sure if only action manager can invoke fishing yet
+                FishingActionStart?.Invoke(sender, e);
+                break;
+            default:
+                throw new ArgumentException("PlayerActionType argument provided is invalid");
+        }
 
-    public void OnNetActionStart(object sender, EventArgs e)
+    }
+    
+    public void OnActionEnd(PlayerActionType actionType, object sender, EventArgs e)
     {
-        if (sender is PlayerActionManager)
-            NetActionStart?.Invoke(sender, e);
-        else
+        if (sender is not PlayerActionManager)
+        {
             GD.PushError("Cannot invoke player action related events if sender is not of type \"PlayerActionManager\"");
-    }
+            return;
+        }
 
-    public void OnNetActionEnd(object sender, EventArgs e)
-    {
-        if (sender is PlayerActionManager)
-            NetActionEnd?.Invoke(sender, e);
-        else
-            GD.PushError("Cannot invoke player action related events if sender is not of type \"PlayerActionManager\"");
-    }
-
-    public void OnFishingActionStart(object sender, EventArgs e)
-    {
-        FishingActionStart?.Invoke(sender, e);
-    }
-
-    public void OnFishingActionEnd(object sender, EventArgs e)
-    {
-        FishingActionEnd?.Invoke(sender, e);
+        switch (actionType)
+        {
+            case PlayerActionType.CastAction:
+                CastActionEnd?.Invoke(sender, e);
+                break;
+            case PlayerActionType.NetAction:
+                NetActionEnd?.Invoke(sender, e);
+                break;
+            case PlayerActionType.FishingAction: // not sure if only action manager can invoke fishing yet
+                FishingActionEnd?.Invoke(sender, e);
+                break;
+            default:
+                throw new ArgumentException("PlayerActionType argument provided is invalid");
+        }
+            
     }
 
 }
 
-// public class PositionEventArgs : EventArgs
-// {
-//     public Vector2 Position { get; set; }
-// }
-
-// public enum EventName
-// {
-//     LocationChangedEvent,
-//     PositionChangedEvent
-// }
+public enum PlayerActionType
+{
+    CastAction,
+    NetAction,
+    FishingAction
+}
