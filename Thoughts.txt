@@ -66,3 +66,18 @@ Autoload Continuation
 - OK. Let's do it this way.
 - GlobalManager -> contain reference of World and provide wrapper methods for other classes to access the methods in World
 - SignalBus -> contain a series of events/delegates for when we need one to many notification to the subscribers
+
+Bobber Physics
+- Parabolic curve (quadratic graph) -> end point as a root, start point as the axis of symmetry, then find another root, derive function
+- problem: it is kinda static, since the start point is the maximum point, the bobber won't act like a projectile that much
+
+- Use projectile motion instead
+- calculate and set the position of bobber in each physics process frame
+- calculate displacement of x and y from the start point 
+- problem: can't fully align to end point and need to adjust gravity and initial velocity parameters to make it feel right
+- solution: manipulate the formula instead
+- calculate initial velocity from the end point
+- x is known, t is fixed as 0.5 (make the casting duration only 0.5)
+- rearrange them to get the initial velocity
+- then we do this for every cast to dynamically calculate the correct initial velocity (u) for ensuring the bobber will land at the end point AND follows the correct trajectory
+- welp, try it later Imma sleep now
