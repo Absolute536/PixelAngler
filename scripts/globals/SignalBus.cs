@@ -44,6 +44,10 @@ public partial class SignalBus : Node
     public event PlayerActionEventHandler FishingActionStart;
     public event PlayerActionEventHandler FishingActionEnd;
 
+    public delegate void BobberMovementEventHandler(object sender, PositionalEventArgs posArgs);
+
+    public event BobberMovementEventHandler BobberMovement;
+
     // Public "wrapper" methods for external class to invoke the events with the naming convention: "On<EventName>"
     // Methods for invoking events related to Player action -> only if sender is a PlayerActionManger (hmm... then, it is coupled? kinda inflexible). 
     // public void OnCastActionStart(object sender, EventArgs e)
@@ -113,7 +117,7 @@ public partial class SignalBus : Node
         }
 
     }
-    
+
     public void OnActionEnd(PlayerActionType actionType, object sender, EventArgs e)
     {
         if (sender is not PlayerActionManager)
@@ -136,7 +140,12 @@ public partial class SignalBus : Node
             default:
                 throw new ArgumentException("PlayerActionType argument provided is invalid");
         }
-            
+
+    }
+    
+    public void OnBobberMovement(object sender, PositionalEventArgs posArgs)
+    {
+        BobberMovement?.Invoke(sender, posArgs);
     }
 
 }
@@ -146,4 +155,9 @@ public enum PlayerActionType
     CastAction,
     NetAction,
     FishingAction
+}
+
+public class PositionalEventArgs: EventArgs
+{
+    public Vector2 CallerPosition { get; set; }
 }

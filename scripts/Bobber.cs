@@ -33,20 +33,34 @@ public partial class Bobber : Sprite2D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		// Simplified version because launch angle is zero
+		// Calculate initialVelocity and gravity parameters to ensure bobber will land at the specified EndPoint within the TimeLimit
+
+		// Simplified version for zero launch angle
 		// initialVelocity = EndPoint.X / TimeLimit;
 		// gravity = -2 * EndPoint.Y / (TimeLimit * TimeLimit);
-		GD.Print(Mathf.Cos(_launchAngle));
-		GD.Print(Mathf.Sin(_launchAngle));
+		
 		// Actual formula
 		initialVelocity = EndPoint.X / TimeLimit * (1 / Mathf.Cos(_launchAngle));
 		gravity = 2 * (initialVelocity * TimeLimit * Mathf.Sin(_launchAngle) - EndPoint.Y) / (TimeLimit * TimeLimit);
     }
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
+	public static Bobber GetBobberInstance(Vector2 endPoint)
 	{
+		PackedScene bobberScene = ResourceLoader.Load<PackedScene>("res://scene/bobber.tscn");
+		if (bobberScene is not null)
+        {
+			Bobber bobber = bobberScene.Instantiate() as Bobber;
+			bobber.EndPoint = endPoint;
+			return bobber;
+        }
+
+		return null;
 	}
+	
+	public static Bobber GetBobberInstance(float x, float y)
+    {
+		return GetBobberInstance(new Vector2(x, y));
+    }
 
 	/*
 	 * OK. Let's set down the parameters we know and what we need to find

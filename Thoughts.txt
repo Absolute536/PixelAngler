@@ -81,3 +81,4 @@ Bobber Physics
 - rearrange them to get the initial velocity
 - then we do this for every cast to dynamically calculate the correct initial velocity (u) for ensuring the bobber will land at the end point AND follows the correct trajectory
 - welp, try it later Imma sleep now
+- Yup. It works
