@@ -7,3 +7,4 @@
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("1_rn3pg")
 script = ExtResource("2_1y8pg")
+EndPoint = Vector2(300, 150)
