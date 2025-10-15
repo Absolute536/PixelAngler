@@ -53,15 +53,6 @@ public partial class CastMarker : Sprite2D
 		// 	castTimer.Stop();
 		// }
 	}
-	private void CastMarkingStart()
-	{
-		castTimer.Start();
-
-		castDirection = TargetPlayer.FacingDirection;
-		initialPosition = TargetPlayer.Position + (castDirection * new Vector2(16, 16) * 2); // initial position 3 tiles away from the facing direction of the player
-		Position = initialPosition;
-		Visible = true;
-	}
 
 	protected virtual void HandleCastActionStart(object sender, EventArgs e)
 	{
@@ -72,8 +63,8 @@ public partial class CastMarker : Sprite2D
 		// 	TargetPlayer.GetChild(-1).QueueFree();
 
 		castDirection = TargetPlayer.FacingDirection;
-		initialPosition = TargetPlayer.Position + (castDirection * new Vector2(16, 16) * 2); // initial position 3 tiles away from the facing direction of the player
-		Position = initialPosition;
+		initialPosition = TargetPlayer.GlobalPosition + (castDirection * new Vector2(16, 16) * 2); // initial position 3 tiles away from the facing direction of the player
+		GlobalPosition = initialPosition;
 		Visible = true;
 	}
 	
@@ -115,40 +106,16 @@ public partial class CastMarker : Sprite2D
 				DefaultColor = Colors.White,
 				Visible = true
 			};
-			TargetPlayer.AddChild(fishingLine);
+			Bobber bobber = Bobber.GetBobberInstance(endPosition);
+			
+			bobber.GlobalPosition = TargetPlayer.GlobalPosition;
+			TargetPlayer.AddChild(bobber);
+			bobber.Position = Vector2.Zero;
+			// TargetPlayer.AddChild(fishingLine);
         }
 		GD.Print("Marker landed on " + tileType.ToString());
-		Position = TargetPlayer.Position; // reset position back to origin of parent (Player node)
+		GlobalPosition = TargetPlayer.GlobalPosition; // reset position back to origin of parent (Player node)
     }
-
-	private void CastMarkingEnd()
-	{
-		castLength = 0; // reset cast length
-		castTimer.Stop();
-		Visible = false;
-		// Record position first
-		// Find out if the end position is on water
-		// if it is, commence the casting animation
-		// else, do nothing (maybe pop up message)
-
-		Vector2 endPosition = Position;
-		
-		TileType tileType = GameInfo.Instance.GetTileType(endPosition);
-
-		if (tileType != TileType.Water)
-        {
-			Label message = new Label()
-			{
-				Text = "Bobber not casted in water.",
-				Size = new Vector2(50, 50),
-				Visible = true
-			};
-
-			TargetPlayer.AddChild(message);
-        }	
-		GD.Print("Marker landed on " + tileType.ToString());
-		Position = TargetPlayer.Position; // reset position back to origin of parent (Player node)
-	}
 
 	private void CastMarkingProcess()
     {
@@ -159,13 +126,13 @@ public partial class CastMarker : Sprite2D
 							  // Need to start from origin
 
 			if (castDirection == Vector2.Up)
-				Position = initialPosition + new Vector2(0, -castLength);
+				GlobalPosition = initialPosition + new Vector2(0, -castLength);
 			else if (castDirection == Vector2.Down)
-				Position = initialPosition + new Vector2(0, castLength);
+				GlobalPosition = initialPosition + new Vector2(0, castLength);
 			else if (castDirection == Vector2.Right)
-				Position = initialPosition + new Vector2(castLength, 0);
+				GlobalPosition = initialPosition + new Vector2(castLength, 0);
 			else
-				Position = initialPosition + new Vector2(-castLength, 0);
+				GlobalPosition = initialPosition + new Vector2(-castLength, 0);
 
 			// Position += castDirection * new Vector2(16, 16);
 		}

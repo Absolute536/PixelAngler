@@ -46,10 +46,11 @@ public partial class Bobber : Sprite2D
 
 	public static Bobber GetBobberInstance(Vector2 endPoint)
 	{
-		PackedScene bobberScene = ResourceLoader.Load<PackedScene>("res://scene/bobber.tscn");
+		PackedScene bobberScene = ResourceLoader.Load<PackedScene>("res://scenes/bobber.tscn");
 		if (bobberScene is not null)
         {
 			Bobber bobber = bobberScene.Instantiate() as Bobber;
+			bobber.Name = "Bobber";
 			bobber.EndPoint = endPoint;
 			return bobber;
         }
@@ -75,20 +76,22 @@ public partial class Bobber : Sprite2D
 	public override void _PhysicsProcess(double delta)
 	{
 		TimeElapsed += delta; // Sample based on delta
-		// if (Position.X < endPoint.X && Position.Y < endPoint.Y)
-		if (Position != EndPoint) // actually, it probably won't cuz delta is 1 /60 = 0.0166 (won't coincide with the time limit)
+							  // if (Position.X < endPoint.X && Position.Y < endPoint.Y)
+		if (GlobalPosition != EndPoint) // actually, it probably won't cuz delta is 1 /60 = 0.0166 (won't coincide with the time limit)
 		{
 			Vector2 positionDuringMotion = Vector2.Zero;
 			float displacementX = (float)CalculateDisplacementX(TimeElapsed);
 			float displacementY = (float)CalculateDisplacementY(TimeElapsed);
-			
+
 			positionDuringMotion.X = displacementX;
 			// positionDuringMotion.Y = Mathf.Tan(LaunchAngle) * displacementX - (-100 / (2 * InitialVelocityMagnitude * InitialVelocityMagnitude * Mathf.Cos(LaunchAngle) * Mathf.Cos(LaunchAngle)) * displacementX * displacementX);
 			positionDuringMotion.Y = displacementY;
 
-			Position = positionDuringMotion;
+			GlobalPosition = positionDuringMotion;
 			GD.Print(Position);
-        }
+		}
+		// Oh yeah, also need to include a stopping condition.
+		// Else, if we move, the bobber's GlobalPosition will move and cause it to fall down (physics process still running)
 	}
 
 	public double CalculateDisplacementX(double time)
