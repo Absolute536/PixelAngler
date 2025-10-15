@@ -82,3 +82,9 @@ Bobber Physics
 - then we do this for every cast to dynamically calculate the correct initial velocity (u) for ensuring the bobber will land at the end point AND follows the correct trajectory
 - welp, try it later Imma sleep now
 - Yup. It works
+
+Input Related problem
+- The Input singleton bypasses the input event propagation hierarchy
+- SO, that's why moving the cast action to _UnhandledInput() didn't work
+- BECAUSE, some other part, in the PhysicsProcess() consumed it as it was checking for Input.IsActionPressed()
+- Example: in the IDLE state transition

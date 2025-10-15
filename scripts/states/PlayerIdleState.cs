@@ -52,8 +52,8 @@ public partial class PlayerIdleState : State
 
     public override void PhysicsProcessUpdate(double delta)
     {
-        GD.Print("Position: " + player.Position);
-        GD.Print("Global Position: " + player.GlobalPosition);
+        // GD.Print("Position: " + player.Position);
+        // GD.Print("Global Position: " + player.GlobalPosition);
         // Check input every physics tick
         Vector2 movementVector = Input.GetVector("Left", "Right", "Up", "Down");
 
@@ -66,6 +66,7 @@ public partial class PlayerIdleState : State
             GD.Print(Name + ": " + "Action");
             OnTransitionedEventHandler("PlayerActionState"); // ~ like this? or a fishing state?
         }
+
     }
 
 }

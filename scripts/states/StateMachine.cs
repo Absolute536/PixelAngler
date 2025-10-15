@@ -52,7 +52,7 @@ public partial class StateMachine : Node
 
     public override void _UnhandledInput(InputEvent @event)
     {
-        base._UnhandledInput(@event);
+        // base._UnhandledInput(@event);
         currentState.HandleInput(@event);
     }
 

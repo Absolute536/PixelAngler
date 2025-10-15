@@ -76,12 +76,25 @@ public partial class PlayerActionState : State
     {
         // Remove the fishing line on exiting the state (performance cost?)
         // fishingLine.QueueFree();
-        
+
     }
 
-    public override void HandleInput(InputEvent inputEvent)
+    // The Input callbacks will be triggered per InputEvent(?), NOT per frame
+    // Since we want to trigger it only once on certain input, put it here instead of the processes callbacks
+    public override void HandleInput(InputEvent @event)
     {
-        // Nothing here
+        if (@event.IsActionPressed("Action"))
+        {
+            GD.Print("In action state, detect LMB");
+            PlayerActionManager.StartAction(player.SelectedItem);
+        }
+        
+        if (@event.IsActionReleased("Action"))
+        {
+            PlayerActionManager.EndAction(player.SelectedItem);
+            OnTransitionedEventHandler("PlayerIdleState");
+            GD.Print("Mouse release, go back to idle state");
+        }
     }
 
     public override void ProcessUpdate(double delta)
@@ -130,21 +143,6 @@ public partial class PlayerActionState : State
         // For future reference: CanvasModulate Node for day/night cycle
         // Might also check out object pooling for the fishing line (or maybe not, cuz it's just one node)
         // But yeah for best practices, why not?!
-    }
-
-    public override void _UnhandledInput(InputEvent @event)
-    {
-        if (@event.IsActionPressed("Action"))
-        {
-            PlayerActionManager.StartAction(player.SelectedItem);
-        }
-        
-        if (@event.IsActionReleased("Action"))
-        {
-            PlayerActionManager.EndAction(player.SelectedItem);
-            OnTransitionedEventHandler("PlayerIdleState");
-            GD.Print("Mouse release, go back to idle state");
-        }
     }
 
 

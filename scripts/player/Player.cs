@@ -151,7 +151,6 @@ public partial class Player : CharacterBody2D
 	 - Player movement in PhysicsProcess
 	 - Camera interpolation in Process manually (goodbye time)
 
-
 	 IN CONCLUSION, this shit is kinda fucked
 	 - if refresh rate is low, there are some sort of jitter even if FPS matches
 	 - FPS higher than physics tick, there will be jitter, but can be solved by physics interpolation

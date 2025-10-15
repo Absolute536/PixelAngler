@@ -18,7 +18,7 @@ public abstract partial class State : Node, StateAction
 
     public abstract void ExitState();
 
-    public abstract void HandleInput(InputEvent inputEvent);
+    public abstract void HandleInput(InputEvent @event);
 
     public abstract void ProcessUpdate(double delta);
 

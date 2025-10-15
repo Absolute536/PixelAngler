@@ -12,13 +12,6 @@ public partial class PlayerActionManager : Node
 
     // Put a series of delegates for each of the selected items into the dictionary and query them for invocation in a method
 
-    public delegate void ActionEventHandler();
-
-    public ActionEventHandler CastActionStart;
-    public ActionEventHandler CastActionEnd;
-    public ActionEventHandler NetActionStart;
-    public ActionEventHandler NetActionEnd;
-
     // Ok, don't need library, we use pattern matching to check the selected item and invoke the respective delegate
 
     public override void _Ready()

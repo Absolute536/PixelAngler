@@ -9,8 +9,6 @@ public partial class CastMarker : Sprite2D
 	// Since CastMarker is a part of Player (Player has-a CastMarker, we make it an exported property instead)
 	[Export] public Player TargetPlayer;
 	[Export] public Timer castTimer;
-	[Export] public PlayerActionManager ActionManager;
-
 	[Export] public int MaxCastingLength = 80;
 
 	private Vector2 castDirection;
@@ -39,23 +37,13 @@ public partial class CastMarker : Sprite2D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _PhysicsProcess(double delta)
 	{
-		// if (Input.IsActionPressed("Action"))
-		// {
-		// 	castTimer.Start(); 
-		// 	CastingMarker();
-		// }
 
-		// if (Input.IsActionJustReleased("Action"))
-		// {
-		// 	GlobalPosition = player.GlobalPosition + player.FacingDirection * new Vector2(16, 16);
-		// 	Visible = false;
-		// 	castLength = 0;
-		// 	castTimer.Stop();
-		// }
 	}
 
 	protected virtual void HandleCastActionStart(object sender, EventArgs e)
 	{
+		GD.Print("Start casting");
+		Visible = true;
 		castTimer.Start();
 
 		// Initial testing: if fishing line exist, free it
@@ -63,7 +51,7 @@ public partial class CastMarker : Sprite2D
 		// 	TargetPlayer.GetChild(-1).QueueFree();
 
 		castDirection = TargetPlayer.FacingDirection;
-		initialPosition = TargetPlayer.GlobalPosition + (castDirection * new Vector2(16, 16) * 2); // initial position 3 tiles away from the facing direction of the player
+		initialPosition = TargetPlayer.GlobalPosition + (castDirection * new Vector2(16, 16) * 2); // initial position 2 tiles away from the facing direction of the player
 		GlobalPosition = initialPosition;
 		Visible = true;
 	}
