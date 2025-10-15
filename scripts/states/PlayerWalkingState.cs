@@ -1,7 +1,7 @@
 using Godot;
 using System;
 using GamePlayer;
-using System.Reflection.Metadata;
+using System.Collections.Generic;
 
 [GlobalClass]
 public partial class PlayerWalkingState : State
@@ -12,10 +12,15 @@ public partial class PlayerWalkingState : State
     private Player player;
     private Vector2 oldInputVector = Vector2.Zero; // Set old input vector to zeros cuz no input at start???
 
-    // public PlayerWalkingState()
-    // {
+    private readonly Dictionary<string, Vector2> directionMap = new()
+    {
+        {"Left", new Vector2(-1, 0)},
+        {"Right", new Vector2(1, 0)},
+        {"Up", new Vector2(0, -1)},
+        {"Down", new Vector2(0, 1)}
+    };
 
-    // }
+    private Vector2 direction = new Vector2(0, 1);
 
     public override void _Ready()
     {
@@ -40,7 +45,16 @@ public partial class PlayerWalkingState : State
 
     public override void HandleInput(InputEvent inputEvent)
     {
-        // Nothing here
+        Vector2 currentVelocity = player.Velocity;
+        if (inputEvent.IsAction("Left") || inputEvent.IsAction("Right") || inputEvent.IsAction("Up") || inputEvent.IsAction("Down"))
+        {
+            direction = Input.GetVector("Left", "Right", "Up", "Down");
+            player.FacingDirection = direction;
+            PlayWalkingAnimation(direction);
+
+        }
+        // else if (inputEvent.IsActionReleased("Left") || inputEvent.IsActionReleased("Right") || inputEvent.IsActionReleased("Up") || inputEvent.IsActionReleased("Down") || inputEvent.IsActionPressed("Action"))
+        //     direction = Vector2.Zero;
     }
 
     public override void ProcessUpdate(double delta)
@@ -52,6 +66,8 @@ public partial class PlayerWalkingState : State
     {
         // Mostly here
         // Let's just use the previous code and see if it works.
+
+        /*
 
         // Get movement vector for every physics tick
         Vector2 movementVector = Input.GetVector("Left", "Right", "Up", "Down");
@@ -88,7 +104,7 @@ public partial class PlayerWalkingState : State
             velocity = velocity.MoveToward(Vector2.Zero, MovementSpeed);
 
             // Transition to idle state
-            OnTransitionedEventHandler("PlayerIdleState");
+            OnStateTransitioned("PlayerIdleState");
             // GD.Print("Transition to idle");
             // velocity.X = 0;
             // velocity.Y = 0;
@@ -101,12 +117,29 @@ public partial class PlayerWalkingState : State
         player.MoveAndSlide();
         // GD.Print("Player Position: " + player.Position);
 
-        // Hmm... Is this needed? Yeah I think we need this
+        */
 
-        if (oldInputVector != movementVector)
+        // Experimental changes
+        Vector2 currentVelocity = player.Velocity;
+        if (direction != Vector2.Zero)
         {
-            oldInputVector = movementVector;
-            if (movementVector != Vector2.Zero)
+            currentVelocity.X = direction.X * MovementSpeed;
+            currentVelocity.Y = direction.Y * MovementSpeed;
+        }
+        else
+        {
+            currentVelocity = currentVelocity.MoveToward(Vector2.Zero, MovementSpeed);
+            OnStateTransitioned("PlayerIdleState");
+        }
+        player.Velocity = currentVelocity;
+        player.MoveAndSlide();
+
+
+        // Hmm... Is this needed? Yeah I think we need this
+        if (oldInputVector != direction)
+        {
+            oldInputVector = direction;
+            if (direction != Vector2.Zero)
                 player.GlobalPosition = player.GlobalPosition.Round();
 
             Console.WriteLine("After Jitter fix: " + player.Position);

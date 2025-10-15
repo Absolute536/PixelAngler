@@ -1,6 +1,7 @@
 using System;
 using Godot;
 using GamePlayer;
+using System.Collections.Generic;
 
 [GlobalClass]
 public partial class PlayerIdleState : State
@@ -42,7 +43,15 @@ public partial class PlayerIdleState : State
 
     public override void HandleInput(InputEvent inputEvent)
     {
-        // Nothing here
+        if (inputEvent.IsActionPressed("Left") || inputEvent.IsActionPressed("Right") || inputEvent.IsActionPressed("Up") || inputEvent.IsActionPressed("Down"))
+        {
+            OnStateTransitioned("PlayerWalkingState");
+        }
+        else if (inputEvent.IsActionPressed("Action"))
+        {
+            OnStateTransitioned("PlayerActionState");
+        }
+
     }
 
     public override void ProcessUpdate(double delta)
@@ -52,20 +61,28 @@ public partial class PlayerIdleState : State
 
     public override void PhysicsProcessUpdate(double delta)
     {
-        // GD.Print("Position: " + player.Position);
-        // GD.Print("Global Position: " + player.GlobalPosition);
-        // Check input every physics tick
-        Vector2 movementVector = Input.GetVector("Left", "Right", "Up", "Down");
+        /*
+         * If no directional input and no "Action" input
+         * - transition to walking state
+         * - we check for the LMB because we don't want the state transition to boomerang between IDLE and WALKING
+         * - since if you hold wasd, the first condition will be true -> transition to WALKING
+         * - then in WALKING "Action" is still pressed -> transition to IDLE
+         *
+         * If ONLY "Action" is pressed, transition to ACTION state
+         */
 
-        // If has movement input, transition to walking state
-        if (movementVector != Vector2.Zero && !Input.IsMouseButtonPressed(MouseButton.Left))
-            OnTransitionedEventHandler("PlayerWalkingState");
-        // If not movement input and ItemAction is clicked, transition to fishing state(?)
-        else if (Input.IsActionPressed("Action"))
-        {
-            GD.Print(Name + ": " + "Action");
-            OnTransitionedEventHandler("PlayerActionState"); // ~ like this? or a fishing state?
-        }
+        // Check input every physics tick
+        // Vector2 direction = Input.GetVector("Left", "Right", "Up", "Down");
+
+        // // If has movement input, transition to walking state
+        // if (direction != Vector2.Zero && !Input.IsActionPressed("Action"))
+        //     OnStateTransitioned("PlayerWalkingState");
+        // // If not movement input and ItemAction is clicked, transition to fishing state(?)
+        // else if (Input.IsActionPressed("Action"))
+        // {
+        //     GD.Print(Name + ": " + "Action");
+        //     OnStateTransitioned("PlayerActionState"); // ~ like this? or a fishing state?
+        // }
 
     }
 

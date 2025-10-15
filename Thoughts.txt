@@ -85,6 +85,44 @@ Bobber Physics
 
 Input Related problem
 - The Input singleton bypasses the input event propagation hierarchy
-- SO, that's why moving the cast action to _UnhandledInput() didn't work
+- SO, that's why moving the cast action to _UnhandledInput() didn't work [WRONG!]
 - BECAUSE, some other part, in the PhysicsProcess() consumed it as it was checking for Input.IsActionPressed()
 - Example: in the IDLE state transition
+- OK. The above statements are kinda wrong
+- Previously, in playeractionstate, we handled the mouse input to trigger the casting action through UnhandledInput()
+- BUT! Then, we moved it to the HandleInput function, which is received by the state machine, so the OnPressed mouse input is consumed at the state machine
+- It couldn't reach the playeractionstate to trigger the start of the casting action(?)
+- OK AGAIN!
+- Now I know why. When I pressed Action, the state is in idle, and it invokes the HandleInput of Idle, instead of Action, so the action state can't detect
+- the consumed input by the state machine
+- So, now when it's in the Action state, the mouse is held, but the input is already consumed, so it'll only detect the OnActionReleased.
+- DING DING DING DING DING
+- OKAYYYYYYYYYYYY~~~~~~
+- Now. We should organise it well from the very beginning huh ~
+- Let's try this.
+- Movement based input, we probably need polling, so into PhysicsProcess it goes
+- Mouse based input, it is event based, so maybe we put them in UnhandledInput
+- But then, the main problem is the input event being consumed in an unwanted state, so we need some way to circumvent that.
+- so we need some way to ensure the input event from the previous state persists into the next state
+- I mean, we can just use the Input singleton to make this work, but then it ignores input event propagation, so that's a problem as well
+- Yeah, so upon any input, the HandleInput() of the current state will be invoked because the Input singleton doesn't actually consume the input event
+- OKAYYYYY!!!!
+- there is an IsEcho() method for InputEvent
+- so we can check this for key hold (kinda I guess)
+- welp..... It doesn't really work
+- I guess the solution now is to go with using the Input singleton AND implement some pausing mechanism if when an UI element is focused.
+- That'll be more straight-forward
+- BUT, it can't be done.....
+- If I use the Input singleton, then what would happen if I want to use mouse button for selected item on the inventory tab
+- Input won't consume the input event, only when you are handling it using the Input Callbacks
+- FUCKKKKKK
+- Yeah, WhAtEvEr. Let's just use the Input singleton for now. Leave that to future me
+- one solution is to check if a particular UI node has focus when handling the input (but introduces dependency)
+- Oh, ok. There's a solution. Just create a new state, something like InUI or whatever, where you won't handle input, and transition to that state upon opening a menu or some shit.
+- OHHH, or another possible solution.
+- include the data parameter on enter state and state transition event, include something that can differentiate button held in PlayerActionState.
+
+- WHAT A FUCKING DUMBASS THAT I AM
+- Just make the PlayerActionState trigger StartAction() upon entering the state, PROBLEM SOLVED (you'd want this anyway)
+- Can't believe I wasted 3 hours looking up workarounds and shit.
+- Damn...

@@ -8,7 +8,7 @@ using Godot;
 [GlobalClass]
 public partial class StateMachine : Node
 {
-    public State initialState;
+    [Export] public State initialState;
     private State currentState;
     private Dictionary<string, State> availableStates = new();
 
@@ -18,7 +18,7 @@ public partial class StateMachine : Node
         foreach (State state in GetChildren().Cast<State>())
         {
             availableStates.Add(state.StateName, state);
-            state.TransitionedEventHandler += OnStateTransition;
+            state.StateTransitioned += HandleStateTransition;
             // We're subscribing to the state's transition event
             // Probably overkill cuz the only observer is the state machine, but we'll see
         }
@@ -53,10 +53,11 @@ public partial class StateMachine : Node
     public override void _UnhandledInput(InputEvent @event)
     {
         // base._UnhandledInput(@event);
+        GD.Print("Unhandled input detected in State Machine");
         currentState.HandleInput(@event);
     }
 
-    private void OnStateTransition(string nextState)
+    private void HandleStateTransition(string nextState)
     {
         // Basically, we check if next state is valid
         // If True, fetch it from dictionary, call its EnterState(), call the currentState's ExitState() and assign new state to currentState

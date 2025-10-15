@@ -70,6 +70,9 @@ public partial class PlayerActionState : State
         // PackedScene marker = GD.Load<PackedScene>("res://scenes/cast_marker.tscn");
         // player.AddChild(marker.Instantiate());
         // GetNode<Sprite2D>("../../FishingAction/CastMarker").Visible = true;
+        GD.Print("Entering PlayerActionState...");
+
+        PlayerActionManager.StartAction(player.SelectedItem);
     }
 
     public override void ExitState()
@@ -81,19 +84,13 @@ public partial class PlayerActionState : State
 
     // The Input callbacks will be triggered per InputEvent(?), NOT per frame
     // Since we want to trigger it only once on certain input, put it here instead of the processes callbacks
+    // wait, I might be able to use the input singleton here. Just need to mark it as consumed from the previous state?
     public override void HandleInput(InputEvent @event)
     {
-        if (@event.IsActionPressed("Action"))
-        {
-            GD.Print("In action state, detect LMB");
-            PlayerActionManager.StartAction(player.SelectedItem);
-        }
-        
         if (@event.IsActionReleased("Action"))
         {
             PlayerActionManager.EndAction(player.SelectedItem);
-            OnTransitionedEventHandler("PlayerIdleState");
-            GD.Print("Mouse release, go back to idle state");
+            OnStateTransitioned("PlayerIdleState");
         }
     }
 
@@ -111,6 +108,18 @@ public partial class PlayerActionState : State
 
     public override void PhysicsProcessUpdate(double delta)
     {
+        // if (Input.IsActionJustPressed("Action"))
+        // {
+        //     GD.Print("In action state, detect LMB");
+        //     PlayerActionManager.StartAction(player.SelectedItem);
+        // }
+        
+        // if (Input.IsActionJustReleased("Action"))
+        // {
+        //     PlayerActionManager.EndAction(player.SelectedItem);
+        //     OnTransitionedEventHandler("PlayerIdleState");
+        //     GD.Print("Mouse release, go back to idle state");
+        // }
         // Let's list out the steps
         // We transition from idle to action on left mouse click
         // In this state, if the mouse is held,

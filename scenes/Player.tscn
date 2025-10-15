@@ -44,8 +44,9 @@ process_callback = 0
 stream = ExtResource("3_cw2d6")
 volume_db = -6.0
 
-[node name="StateMachine" type="Node" parent="."]
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initialState")]
 script = ExtResource("3_mdl7e")
+initialState = NodePath("PlayerIdleState")
 metadata/_custom_type_script = "uid://bakg405h3gvhu"
 
 [node name="PlayerIdleState" type="Node" parent="StateMachine" node_paths=PackedStringArray("Player")]
