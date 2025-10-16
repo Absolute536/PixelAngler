@@ -126,3 +126,7 @@ Input Related problem
 - Just make the PlayerActionState trigger StartAction() upon entering the state, PROBLEM SOLVED (you'd want this anyway)
 - Can't believe I wasted 3 hours looking up workarounds and shit.
 - Damn...
+
+- Yep.... Me again.
+- It works, but not for the Walking state. It's a lot of extra work and workarounds.
+- Nvm then. I'll just use the Input singleton and create an extra flag or a new state when handling UI.

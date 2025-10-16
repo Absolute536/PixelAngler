@@ -72,17 +72,17 @@ public partial class PlayerIdleState : State
          */
 
         // Check input every physics tick
-        // Vector2 direction = Input.GetVector("Left", "Right", "Up", "Down");
+        Vector2 direction = Input.GetVector("Left", "Right", "Up", "Down");
 
-        // // If has movement input, transition to walking state
-        // if (direction != Vector2.Zero && !Input.IsActionPressed("Action"))
-        //     OnStateTransitioned("PlayerWalkingState");
-        // // If not movement input and ItemAction is clicked, transition to fishing state(?)
-        // else if (Input.IsActionPressed("Action"))
-        // {
-        //     GD.Print(Name + ": " + "Action");
-        //     OnStateTransitioned("PlayerActionState"); // ~ like this? or a fishing state?
-        // }
+        // If has movement input, transition to walking state
+        if (direction != Vector2.Zero && !Input.IsActionPressed("Action"))
+            OnStateTransitioned("PlayerWalkingState");
+        // If not movement input and ItemAction is clicked, transition to fishing state(?)
+        else if (Input.IsActionPressed("Action"))
+        {
+            GD.Print(Name + ": " + "Action");
+            OnStateTransitioned("PlayerActionState"); // ~ like this? or a fishing state?
+        }
 
     }
 

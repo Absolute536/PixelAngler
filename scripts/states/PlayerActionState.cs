@@ -70,8 +70,8 @@ public partial class PlayerActionState : State
         // PackedScene marker = GD.Load<PackedScene>("res://scenes/cast_marker.tscn");
         // player.AddChild(marker.Instantiate());
         // GetNode<Sprite2D>("../../FishingAction/CastMarker").Visible = true;
+        
         GD.Print("Entering PlayerActionState...");
-
         PlayerActionManager.StartAction(player.SelectedItem);
     }
 
@@ -87,11 +87,11 @@ public partial class PlayerActionState : State
     // wait, I might be able to use the input singleton here. Just need to mark it as consumed from the previous state?
     public override void HandleInput(InputEvent @event)
     {
-        if (@event.IsActionReleased("Action"))
-        {
-            PlayerActionManager.EndAction(player.SelectedItem);
-            OnStateTransitioned("PlayerIdleState");
-        }
+        // if (@event.IsActionReleased("Action"))
+        // {
+        //     PlayerActionManager.EndAction(player.SelectedItem);
+        //     OnStateTransitioned("PlayerIdleState");
+        // }
     }
 
     public override void ProcessUpdate(double delta)
@@ -108,46 +108,12 @@ public partial class PlayerActionState : State
 
     public override void PhysicsProcessUpdate(double delta)
     {
-        // if (Input.IsActionJustPressed("Action"))
-        // {
-        //     GD.Print("In action state, detect LMB");
-        //     PlayerActionManager.StartAction(player.SelectedItem);
-        // }
-        
-        // if (Input.IsActionJustReleased("Action"))
-        // {
-        //     PlayerActionManager.EndAction(player.SelectedItem);
-        //     OnTransitionedEventHandler("PlayerIdleState");
-        //     GD.Print("Mouse release, go back to idle state");
-        // }
-        // Let's list out the steps
-        // We transition from idle to action on left mouse click
-        // In this state, if the mouse is held,
-
-        // CREATE AND EXTEND CAST MARKER HERE (Fishing Rod as SelectedItem)
-
-        // if (Input.IsActionPressed("Action"))
-        // {
-        //     // if LMB and Fishing Rod is selected
-        //     // we forward the selected item to the action manager
-        //     // action manager will call the respective functions to perform the operations.
-        //     PlayerActionManager.StartAction(player.SelectedItem);
-
-        // }
-
-        // // Upon releasing the left mouse click
-        // if (Input.IsActionJustReleased("Action"))
-        // {
-        //     // player.GetChild(-1).QueueFree();
-        //     // GetNode<Sprite2D>("../../FishingAction/CastMarker").Visible = false;
-        //     OnTransitionedEventHandler("PlayerIdleState"); // if it's released, go back to idle
-
-        //     GD.Print("Back to idle");
-
-        //     PlayerActionManager.EndAction(player.SelectedItem);
-
-        // }
-
+        if (Input.IsActionJustReleased("Action"))
+        {
+            PlayerActionManager.EndAction(player.SelectedItem);
+            OnStateTransitioned("PlayerIdleState");
+            GD.Print("Mouse release, go back to idle state");
+        }
 
         // For future reference: CanvasModulate Node for day/night cycle
         // Might also check out object pooling for the fishing line (or maybe not, cuz it's just one node)

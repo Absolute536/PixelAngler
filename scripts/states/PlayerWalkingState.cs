@@ -2,6 +2,7 @@ using Godot;
 using System;
 using GamePlayer;
 using System.Collections.Generic;
+using System.IO;
 
 [GlobalClass]
 public partial class PlayerWalkingState : State
@@ -20,7 +21,7 @@ public partial class PlayerWalkingState : State
         {"Down", new Vector2(0, 1)}
     };
 
-    private Vector2 direction = new Vector2(0, 1);
+    // private Vector2 direction = new Vector2(0, 1);
 
     public override void _Ready()
     {
@@ -45,16 +46,24 @@ public partial class PlayerWalkingState : State
 
     public override void HandleInput(InputEvent inputEvent)
     {
-        Vector2 currentVelocity = player.Velocity;
-        if (inputEvent.IsAction("Left") || inputEvent.IsAction("Right") || inputEvent.IsAction("Up") || inputEvent.IsAction("Down"))
-        {
-            direction = Input.GetVector("Left", "Right", "Up", "Down");
-            player.FacingDirection = direction;
-            PlayWalkingAnimation(direction);
+        GD.Print("Detecting input in Walking State");
+        // Vector2 currentVelocity = player.Velocity;
+        // if (inputEvent.IsAction("Left") || inputEvent.IsAction("Right") || inputEvent.IsAction("Up") || inputEvent.IsAction("Down"))
+        // {
+        //     direction = Input.GetVector("Left", "Right", "Up", "Down");
+        //     if (direction == Vector2.Zero)
+        //         OnStateTransitioned("PlayerIdleState");
+        //     else
+        //     {
+        //         player.FacingDirection = direction;
+        //         PlayWalkingAnimation(direction);
+        //     }
 
-        }
-        // else if (inputEvent.IsActionReleased("Left") || inputEvent.IsActionReleased("Right") || inputEvent.IsActionReleased("Up") || inputEvent.IsActionReleased("Down") || inputEvent.IsActionPressed("Action"))
-        //     direction = Vector2.Zero;
+        // }
+
+
+
+
     }
 
     public override void ProcessUpdate(double delta)
@@ -67,27 +76,27 @@ public partial class PlayerWalkingState : State
         // Mostly here
         // Let's just use the previous code and see if it works.
 
-        /*
+        
 
         // Get movement vector for every physics tick
-        Vector2 movementVector = Input.GetVector("Left", "Right", "Up", "Down");
+        Vector2 direction = Input.GetVector("Left", "Right", "Up", "Down");
         Vector2 velocity = player.Velocity;
 
         // If there is movement input
-        if (movementVector != Vector2.Zero && !Input.IsMouseButtonPressed(MouseButton.Left))
+        if (direction != Vector2.Zero && !Input.IsMouseButtonPressed(MouseButton.Left))
         {
             // velocity.X = Mathf.Round(direction.X * Speed);
             // velocity.Y = Mathf.Round(direction.Y * Speed);
 
             // Set velocity x and y components to the movement vector * speed
-            velocity.X = movementVector.X * MovementSpeed;
-            velocity.Y = movementVector.Y * MovementSpeed;
+            velocity.X = direction.X * MovementSpeed;
+            velocity.Y = direction.Y * MovementSpeed;
 
-            player.FacingDirection = movementVector;
-            PlayWalkingAnimation(movementVector);
+            player.FacingDirection = direction;
+            PlayWalkingAnimation(direction);
         }
         // Stop and transition to IDLE when no direction input & lmb is pressed
-        else if (movementVector == Vector2.Zero || Input.IsActionJustPressed("Action"))
+        else if (direction == Vector2.Zero || Input.IsActionJustPressed("Action"))
         {
             // Use MoveToward for the x & y component of velocity to smooth stopping movement (? look into this further)
             // Cuz it's generated automatically
@@ -117,22 +126,21 @@ public partial class PlayerWalkingState : State
         player.MoveAndSlide();
         // GD.Print("Player Position: " + player.Position);
 
-        */
+        
 
         // Experimental changes
-        Vector2 currentVelocity = player.Velocity;
-        if (direction != Vector2.Zero)
-        {
-            currentVelocity.X = direction.X * MovementSpeed;
-            currentVelocity.Y = direction.Y * MovementSpeed;
-        }
-        else
-        {
-            currentVelocity = currentVelocity.MoveToward(Vector2.Zero, MovementSpeed);
-            OnStateTransitioned("PlayerIdleState");
-        }
-        player.Velocity = currentVelocity;
-        player.MoveAndSlide();
+        // Vector2 currentVelocity = player.Velocity;
+        // if (direction != Vector2.Zero)
+        // {
+        //     currentVelocity.X = direction.X * MovementSpeed;
+        //     currentVelocity.Y = direction.Y * MovementSpeed;
+        // }
+        // else
+        // {
+        //     currentVelocity = currentVelocity.MoveToward(Vector2.Zero, MovementSpeed);
+        // }
+        // player.Velocity = currentVelocity;
+        // player.MoveAndSlide();
 
 
         // Hmm... Is this needed? Yeah I think we need this
