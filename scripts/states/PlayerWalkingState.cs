@@ -7,26 +7,16 @@ using System.IO;
 [GlobalClass]
 public partial class PlayerWalkingState : State
 {
-    [Export] public CharacterBody2D Player;
+    [Export] public CharacterBody2D PlayerBody;
     [Export] public float MovementSpeed;
 
     private Player player;
-    private Vector2 oldInputVector = Vector2.Zero; // Set old input vector to zeros cuz no input at start???
-
-    private readonly Dictionary<string, Vector2> directionMap = new()
-    {
-        {"Left", new Vector2(-1, 0)},
-        {"Right", new Vector2(1, 0)},
-        {"Up", new Vector2(0, -1)},
-        {"Down", new Vector2(0, 1)}
-    };
-
-    // private Vector2 direction = new Vector2(0, 1);
+    private Vector2 oldInputVector = Vector2.Zero; // Initialise to (0, 0) cuz player is not moving at first (idle)
 
     public override void _Ready()
     {
         StateName = Name;
-        player = (Player)Player;
+        player = (Player) PlayerBody;
     }
 
     public override void EnterState(String previousState)
@@ -39,31 +29,12 @@ public partial class PlayerWalkingState : State
 
     public override void ExitState()
     {
-        // Nothing on exit yet
-
         // player.AudioPlayer.Stop();
     }
 
     public override void HandleInput(InputEvent inputEvent)
     {
-        GD.Print("Detecting input in Walking State");
-        // Vector2 currentVelocity = player.Velocity;
-        // if (inputEvent.IsAction("Left") || inputEvent.IsAction("Right") || inputEvent.IsAction("Up") || inputEvent.IsAction("Down"))
-        // {
-        //     direction = Input.GetVector("Left", "Right", "Up", "Down");
-        //     if (direction == Vector2.Zero)
-        //         OnStateTransitioned("PlayerIdleState");
-        //     else
-        //     {
-        //         player.FacingDirection = direction;
-        //         PlayWalkingAnimation(direction);
-        //     }
-
-        // }
-
-
-
-
+        // Input Handling in PhysicsProcess (Polling method)
     }
 
     public override void ProcessUpdate(double delta)
@@ -73,11 +44,6 @@ public partial class PlayerWalkingState : State
 
     public override void PhysicsProcessUpdate(double delta)
     {
-        // Mostly here
-        // Let's just use the previous code and see if it works.
-
-        
-
         // Get movement vector for every physics tick
         Vector2 direction = Input.GetVector("Left", "Right", "Up", "Down");
         Vector2 velocity = player.Velocity;
@@ -114,9 +80,6 @@ public partial class PlayerWalkingState : State
 
             // Transition to idle state
             OnStateTransitioned("PlayerIdleState");
-            // GD.Print("Transition to idle");
-            // velocity.X = 0;
-            // velocity.Y = 0;
         }
         // GD.Print("Will print if execute after transitioned to idle");
 
@@ -126,33 +89,16 @@ public partial class PlayerWalkingState : State
         player.MoveAndSlide();
         // GD.Print("Player Position: " + player.Position);
 
-        
-
-        // Experimental changes
-        // Vector2 currentVelocity = player.Velocity;
-        // if (direction != Vector2.Zero)
-        // {
-        //     currentVelocity.X = direction.X * MovementSpeed;
-        //     currentVelocity.Y = direction.Y * MovementSpeed;
-        // }
-        // else
-        // {
-        //     currentVelocity = currentVelocity.MoveToward(Vector2.Zero, MovementSpeed);
-        // }
-        // player.Velocity = currentVelocity;
-        // player.MoveAndSlide();
-
-
         // Hmm... Is this needed? Yeah I think we need this
-        if (oldInputVector != direction)
+        if (HasInputDirectionChanged(direction))
         {
             oldInputVector = direction;
             if (direction != Vector2.Zero)
                 player.GlobalPosition = player.GlobalPosition.Round();
-
-            Console.WriteLine("After Jitter fix: " + player.Position);
+            GD.Print("Apply Jitter Fix upon Input change"); // Solution from Reddit 
         }
-        Console.WriteLine("Position: " + player.Position);
+
+        GD.Print("Player Position: " + player.GlobalPosition);
 
         // Maybe can call the get location here to retrieve player's location when walking
         // But then, fishing is only possible when idling, so probably need to be called once on enter in idle
@@ -170,6 +116,19 @@ public partial class PlayerWalkingState : State
         else
             player.AnimationPlayer.Play("Left");
 
+    }
+
+    private bool HasInputDirectionChanged(Vector2 newDirection)
+    {
+        return oldInputVector != newDirection;
+    }
+
+    private Vector2 JitterFix(Vector2 direction)
+    {
+        if (direction != Vector2.Zero)
+            return player.GlobalPosition.Round();
+
+        return Vector2.Zero;
     }
 
 }

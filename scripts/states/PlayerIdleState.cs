@@ -43,15 +43,7 @@ public partial class PlayerIdleState : State
 
     public override void HandleInput(InputEvent inputEvent)
     {
-        if (inputEvent.IsActionPressed("Left") || inputEvent.IsActionPressed("Right") || inputEvent.IsActionPressed("Up") || inputEvent.IsActionPressed("Down"))
-        {
-            OnStateTransitioned("PlayerWalkingState");
-        }
-        else if (inputEvent.IsActionPressed("Action"))
-        {
-            OnStateTransitioned("PlayerActionState");
-        }
-
+        
     }
 
     public override void ProcessUpdate(double delta)
@@ -61,27 +53,18 @@ public partial class PlayerIdleState : State
 
     public override void PhysicsProcessUpdate(double delta)
     {
-        /*
-         * If no directional input and no "Action" input
-         * - transition to walking state
-         * - we check for the LMB because we don't want the state transition to boomerang between IDLE and WALKING
-         * - since if you hold wasd, the first condition will be true -> transition to WALKING
-         * - then in WALKING "Action" is still pressed -> transition to IDLE
-         *
-         * If ONLY "Action" is pressed, transition to ACTION state
-         */
-
         // Check input every physics tick
         Vector2 direction = Input.GetVector("Left", "Right", "Up", "Down");
 
-        // If has movement input, transition to walking state
+        // If has movement input AND Action is not pressed, transition to walking state
         if (direction != Vector2.Zero && !Input.IsActionPressed("Action"))
             OnStateTransitioned("PlayerWalkingState");
-        // If not movement input and ItemAction is clicked, transition to fishing state(?)
+        // If no movement input and Action is pressed (continuously as well), transition to action state
+        // So that it's gonna be like -> clicked -> action -> start casting or something
         else if (Input.IsActionPressed("Action"))
         {
             GD.Print(Name + ": " + "Action");
-            OnStateTransitioned("PlayerActionState"); // ~ like this? or a fishing state?
+            OnStateTransitioned("PlayerActionState");
         }
 
     }

@@ -42,7 +42,6 @@ public partial class CastMarker : Sprite2D
 
 	protected virtual void HandleCastActionStart(object sender, EventArgs e)
 	{
-		GD.Print("Start casting");
 		Visible = true;
 		castTimer.Start();
 

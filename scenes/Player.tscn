@@ -54,9 +54,9 @@ script = ExtResource("4_qu4a1")
 Player = NodePath("../..")
 metadata/_custom_type_script = "uid://c3nbul0aiq2h4"
 
-[node name="PlayerWalkingState" type="Node" parent="StateMachine" node_paths=PackedStringArray("Player")]
+[node name="PlayerWalkingState" type="Node" parent="StateMachine" node_paths=PackedStringArray("PlayerBody")]
 script = ExtResource("5_qu4a1")
-Player = NodePath("../..")
+PlayerBody = NodePath("../..")
 MovementSpeed = 100.0
 metadata/_custom_type_script = "uid://bt2i3d64duevn"
 

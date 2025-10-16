@@ -70,8 +70,8 @@ public partial class PlayerActionState : State
         // PackedScene marker = GD.Load<PackedScene>("res://scenes/cast_marker.tscn");
         // player.AddChild(marker.Instantiate());
         // GetNode<Sprite2D>("../../FishingAction/CastMarker").Visible = true;
-        
-        GD.Print("Entering PlayerActionState...");
+
+        // Immediately Start the specified action upon entering the state
         PlayerActionManager.StartAction(player.SelectedItem);
     }
 
@@ -87,11 +87,7 @@ public partial class PlayerActionState : State
     // wait, I might be able to use the input singleton here. Just need to mark it as consumed from the previous state?
     public override void HandleInput(InputEvent @event)
     {
-        // if (@event.IsActionReleased("Action"))
-        // {
-        //     PlayerActionManager.EndAction(player.SelectedItem);
-        //     OnStateTransitioned("PlayerIdleState");
-        // }
+
     }
 
     public override void ProcessUpdate(double delta)
@@ -99,20 +95,13 @@ public partial class PlayerActionState : State
         // Nothing per frame
     }
 
-    // We'll put things here first just for experiment
-    // Perhaps we should define separate behaviours for each itemAction (hmm???)
-
-    // private Line2D fishingLine;
-
-    private int lineLength = 0;
-
     public override void PhysicsProcessUpdate(double delta)
     {
+        // Check for Action Released event, if it does, end the action (for now) and go back to idle state
         if (Input.IsActionJustReleased("Action"))
         {
             PlayerActionManager.EndAction(player.SelectedItem);
             OnStateTransitioned("PlayerIdleState");
-            GD.Print("Mouse release, go back to idle state");
         }
 
         // For future reference: CanvasModulate Node for day/night cycle
@@ -122,36 +111,4 @@ public partial class PlayerActionState : State
 
 
     // fish idle duration - aggresiveness?
-    // private void StartFishingItemAction()
-    // {
-    //     lineLength++; // Increase length per physics tick 
-    //                   // Add the point to the Line2D so that the line is extending
-    //     if (player.FacingDirection == Vector2.Up)
-    //     {
-    //         fishingLine.AddPoint(new(0, -lineLength));
-    //         castMarker.Position += new Vector2(0, -lineLength / 4);
-    //     }
-    //     else if (player.FacingDirection == Vector2.Down)
-    //     {
-    //         fishingLine.AddPoint(new(0, lineLength));
-    //         castMarker.Position += new Vector2(0, lineLength / 4);
-    //     }
-    //     else if (player.FacingDirection == Vector2.Right)
-    //     {
-    //         fishingLine.AddPoint(new(lineLength, 0));
-    //         castMarker.Position += new Vector2(lineLength / 4, 0);
-    //     }
-    //     else
-    //     {
-    //         fishingLine.AddPoint(new(-lineLength, 0));
-    //         castMarker.Position += new Vector2(-lineLength / 4, 0);
-    //     }
-    // }
-
-    // private void EndFishingItemAction()
-    // {
-    //     lineLength = 0; // reset length
-    //     castMarker.Position = new Vector2(0, 0);
-    //     castMarker.Visible = false;
-    // }
 }

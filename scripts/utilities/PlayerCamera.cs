@@ -1,16 +1,18 @@
 using Godot;
 using System;
-using System.Security.Cryptography;
+using System.ComponentModel.DataAnnotations;
+
 
 public partial class PlayerCamera : Camera2D
 {
-	[Export] public CharacterBody2D target;
+	private CharacterBody2D target;
 	private Vector2 targetPosition = new Vector2();
 	private const float speed = 25.0f;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		TopLevel = true;
+		target = GetTree().GetFirstNodeInGroup("Player") as CharacterBody2D;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -39,6 +41,9 @@ public partial class PlayerCamera : Camera2D
 
 		// Lerp Smoothing is Broken video
 		GlobalPosition = lerpSmooth(GlobalPosition, target.GlobalPosition, (float)delta);
+
+		// Vector2 targetPos = GlobalPosition.Lerp(target.GlobalPosition, 1.0f);
+		// GlobalPosition = targetPos;
 
 	}
 

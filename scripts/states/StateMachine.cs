@@ -31,6 +31,7 @@ public partial class StateMachine : Node
         {
             initialState.EnterState(""); // previous state is an empty string since it's the very first state (might change it later?)
             currentState = initialState;
+            GD.Print("State Machine: Initial State " + initialState.StateName);
         }
         else
         {
@@ -47,7 +48,7 @@ public partial class StateMachine : Node
     public override void _PhysicsProcess(double delta)
     {
         currentState.PhysicsProcessUpdate(delta);
-        GD.Print("Current State: " + currentState.StateName);
+        // GD.Print("Current State: " + currentState.StateName);
     }
 
     public override void _UnhandledInput(InputEvent @event)
@@ -64,8 +65,12 @@ public partial class StateMachine : Node
         if (availableStates.Keys.Contains(nextState))
         {
             State targetState = availableStates[nextState];
-            targetState.EnterState(currentState.StateName); // Currently we use the name of the node (string) to specify the previous state and next state
+
             currentState.ExitState();
+            GD.Print("State Machine: Exit " + currentState.StateName);
+
+            targetState.EnterState(currentState.StateName); // Currently we use the name of the node (string) to specify the previous state and next state
+            GD.Print("State Machine: Enter " + targetState.StateName);
             currentState = targetState;
         }
         else
