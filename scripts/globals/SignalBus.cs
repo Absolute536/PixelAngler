@@ -1,8 +1,6 @@
 namespace SignalBusNS;
 
 using System;
-using System.Collections.Generic;
-using GamePlayer;
 using GameWorld;
 using Godot;
 
@@ -37,7 +35,7 @@ public partial class SignalBus : Node
     public delegate void PlayerActionEventHandler(object sender, EventArgs e);
 
     // Events of PlayerActionEventHandler
-    public event PlayerActionEventHandler CastActionStart;
+    public event PlayerActionEventHandler CastingStarted;
     public event PlayerActionEventHandler CastActionEnd;
     public event PlayerActionEventHandler NetActionStart;
     public event PlayerActionEventHandler NetActionEnd;
@@ -45,6 +43,30 @@ public partial class SignalBus : Node
     public event PlayerActionEventHandler FishingActionEnd;
 
     public delegate void BobberMovementEventHandler(object sender, PositionalEventArgs posArgs);
+
+    public delegate TileType TileTypeEventHandler(object sender, EventArgs e);
+    private TileTypeEventHandler CastingEnded;
+
+    public void SubscribeCastingEnded(object sender, TileTypeEventHandler method)
+    {
+        if (CastingEnded is not null)
+        {
+            GD.PushError("MarkerLanded can only have one subscriber");
+            return;
+        }
+
+        CastingEnded = method;
+        GD.Print("Callback successfully added to MarkerLanded by " + sender.GetType());
+    }
+
+    public TileType OnCastingEnded(object sender, EventArgs e)
+    {
+        // if (sender is PlayerCastingState)
+        TileType landedTile = CastingEnded.Invoke(sender, e);
+        return landedTile;
+
+    }
+
 
     public event BobberMovementEventHandler BobberMovement;
 
@@ -95,16 +117,16 @@ public partial class SignalBus : Node
     // Well actually... perhaps we can consider using an "ItemType" enum instead of actionType for specifying which action to invoke (to align with the manager)
     public void OnActionStart(PlayerActionType actionType, object sender, EventArgs e)
     {
-        if (sender is not PlayerActionManager)
-        {
-            GD.PushError("Cannot invoke player action related events if sender is not of type \"PlayerActionManager\"");
-            return;
-        }
+        // if (sender is not PlayerActionManager)
+        // {
+        //     GD.PushError("Cannot invoke player action related events if sender is not of type \"PlayerActionManager\"");
+        //     return;
+        // }
 
         switch (actionType)
         {
             case PlayerActionType.CastAction:
-                CastActionStart?.Invoke(sender, e);
+                CastingStarted?.Invoke(sender, e);
                 break;
             case PlayerActionType.NetAction:
                 NetActionStart?.Invoke(sender, e);
@@ -157,7 +179,12 @@ public enum PlayerActionType
     FishingAction
 }
 
-public class PositionalEventArgs: EventArgs
+public class PositionalEventArgs : EventArgs
 {
     public Vector2 CallerPosition { get; set; }
+}
+
+public class CastingEventArgs : EventArgs
+{
+    public TileType LandedOnTile { get; set; }
 }

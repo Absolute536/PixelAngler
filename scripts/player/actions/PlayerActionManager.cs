@@ -8,7 +8,7 @@ using System.Collections.Generic;
 [GlobalClass]
 public partial class PlayerActionManager : Node
 {
-    [Export] public Player ActionBody; // Obtains the Player node reference from exported property
+    // [Export] public Player ActionBody; // Obtains the Player node reference from exported property
 
     // Put a series of delegates for each of the selected items into the dictionary and query them for invocation in a method
 

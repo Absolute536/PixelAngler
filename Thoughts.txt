@@ -130,3 +130,16 @@ Input Related problem
 - Yep.... Me again.
 - It works, but not for the Walking state. It's a lot of extra work and workarounds.
 - Nvm then. I'll just use the Input singleton and create an extra flag or a new state when handling UI.
+
+- Refactor to Various action state instead
+- Why not remove the action state entirely and transition from idle to the respective state based on SelectedItem?
+
+- What we want:
+- on click, to casting state
+- start the casting action
+- end the casting action, 
+- instantiate line and bobber to end position
+- get TileType, if on water, transition to fishing state
+
+- bobber we also add to the player scene, but hide it first
+- maintain the current implementation, just that we disable the physics process once the end point is reached

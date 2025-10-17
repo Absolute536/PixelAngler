@@ -29,6 +29,7 @@ public partial class Bobber : Sprite2D
 	private double gravity;
 	public const double TimeLimit = 0.3; // At 0.5 second, must reach the specified end point
 	private double TimeElapsed = 0;
+	private bool HasStopped = false;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -38,8 +39,17 @@ public partial class Bobber : Sprite2D
 		// Simplified version for zero launch angle
 		// initialVelocity = EndPoint.X / TimeLimit;
 		// gravity = -2 * EndPoint.Y / (TimeLimit * TimeLimit);
-		
+		Visible = false;
+		TopLevel = true;
 		// Actual formula
+		initialVelocity = EndPoint.X / TimeLimit * (1 / Mathf.Cos(_launchAngle));
+		gravity = 2 * (initialVelocity * TimeLimit * Mathf.Sin(_launchAngle) - EndPoint.Y) / (TimeLimit * TimeLimit);
+	}
+
+	public void InitiateBobberAction(Vector2 startPosition)
+	{
+		GlobalPosition = startPosition;
+		SetPhysicsProcess(true);
 		initialVelocity = EndPoint.X / TimeLimit * (1 / Mathf.Cos(_launchAngle));
 		gravity = 2 * (initialVelocity * TimeLimit * Mathf.Sin(_launchAngle) - EndPoint.Y) / (TimeLimit * TimeLimit);
     }
@@ -52,6 +62,7 @@ public partial class Bobber : Sprite2D
 			Bobber bobber = bobberScene.Instantiate() as Bobber;
 			bobber.Name = "Bobber";
 			bobber.EndPoint = endPoint;
+			bobber.TopLevel = true;
 			return bobber;
         }
 
@@ -75,9 +86,12 @@ public partial class Bobber : Sprite2D
 
 	public override void _PhysicsProcess(double delta)
 	{
-		TimeElapsed += delta; // Sample based on delta
-							  // if (Position.X < endPoint.X && Position.Y < endPoint.Y)
-		if (GlobalPosition != EndPoint) // actually, it probably won't cuz delta is 1 /60 = 0.0166 (won't coincide with the time limit)
+		// Sample based on delta
+		// if (Position.X < endPoint.X && Position.Y < endPoint.Y)
+		// actually, it probably won't cuz delta is 1 /60 = 0.0166 (won't coincide with the time limit)
+		TimeElapsed += delta;
+
+		if (GlobalPosition != EndPoint && !HasStopped) 
 		{
 			Vector2 positionDuringMotion = Vector2.Zero;
 			float displacementX = (float)CalculateDisplacementX(TimeElapsed);
@@ -90,6 +104,9 @@ public partial class Bobber : Sprite2D
 			GlobalPosition = positionDuringMotion;
 			GD.Print(Position);
 		}
+		else
+			HasStopped = true;
+
 		// Oh yeah, also need to include a stopping condition.
 		// Else, if we move, the bobber's GlobalPosition will move and cause it to fall down (physics process still running)
 	}

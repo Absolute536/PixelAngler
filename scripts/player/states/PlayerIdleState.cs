@@ -31,7 +31,6 @@ public partial class PlayerIdleState : State
             player.AnimationPlayer.Stop();
             player.Relocate(); // only call when relocate cuz the default is idle and on initialised, player is not loaded yet
         }
-
         // Probably can call the get tile location function here to get player's location upon idling
 
         }
@@ -43,7 +42,7 @@ public partial class PlayerIdleState : State
 
     public override void HandleInput(InputEvent inputEvent)
     {
-        
+
     }
 
     public override void ProcessUpdate(double delta)
@@ -64,7 +63,22 @@ public partial class PlayerIdleState : State
         else if (Input.IsActionPressed("Action"))
         {
             GD.Print(Name + ": " + "Action");
-            OnStateTransitioned("PlayerActionState");
+
+            string currentSelectedItem = player.SelectedItem;
+            switch (currentSelectedItem)
+            {
+                case "Fishing Rod":
+                    OnStateTransitioned("PlayerCastingState");
+                    break;
+                case "Bug Net":
+                    OnStateTransitioned("PlayerNetState");
+                    break;
+                default:
+                    GD.Print("Selected Item Unidentified.");
+                    break;
+            }
+
+            // OnStateTransitioned("PlayerActionState");
         }
 
     }

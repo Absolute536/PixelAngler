@@ -25,8 +25,9 @@ public partial class CastMarker : Sprite2D
 	{
 		// Connect to action manager's cast action (Or can we try putting these in the SignalBus instead?)
 		// ActionManager.CastActionStart = CastMarkingStart;
-		SignalBus.Instance.CastActionStart += HandleCastActionStart;
-		SignalBus.Instance.CastActionEnd += HandleCastActionEnd;
+		SignalBus.Instance.CastingStarted += HandleCastActionStart;
+		// SignalBus.Instance.CastActionEnd += HandleCastActionEnd;
+		SignalBus.Instance.SubscribeCastingEnded(this, HandleCastActionEnd);
 		// ActionManager.CastActionEnd = CastMarkingEnd;
 
 		// So upon joining the scene tree, connect to Timeout signal
@@ -40,7 +41,7 @@ public partial class CastMarker : Sprite2D
 
 	}
 
-	protected virtual void HandleCastActionStart(object sender, EventArgs e)
+	private void HandleCastActionStart(object sender, EventArgs e)
 	{
 		Visible = true;
 		castTimer.Start();
@@ -55,7 +56,7 @@ public partial class CastMarker : Sprite2D
 		Visible = true;
 	}
 	
-	protected virtual void HandleCastActionEnd(object sender, EventArgs e)
+	private TileType HandleCastActionEnd(object sender, EventArgs e)
     {
         castLength = 0; // reset cast length
 		castTimer.Stop();
@@ -66,7 +67,7 @@ public partial class CastMarker : Sprite2D
 		// else, do nothing (maybe pop up message)
 
 		Vector2 endPosition = Position;
-		
+
 		TileType tileType = GameInfo.Instance.GetTileType(endPosition);
 
 		if (tileType != TileType.Water)
@@ -102,6 +103,8 @@ public partial class CastMarker : Sprite2D
         }
 		GD.Print("Marker landed on " + tileType.ToString());
 		GlobalPosition = TargetPlayer.GlobalPosition; // reset position back to origin of parent (Player node)
+
+		return tileType;
     }
 
 	private void CastMarkingProcess()

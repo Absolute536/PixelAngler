@@ -19,7 +19,10 @@ public partial class FishingLine : Line2D
 
     public override void _PhysicsProcess(double delta)
     {
-        base._PhysicsProcess(delta);
+        // every physics frame, we track the position of the TraceTarget
+        // and add the position as a new polypoint
+        // need to check against last point (should be the "largest" on one axis)
+        // and adjust the polypoints dynamically
     }
 
 }
