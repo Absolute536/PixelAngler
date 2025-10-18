@@ -69,11 +69,12 @@ metadata/_custom_type_script = "uid://bug1toj6bvtq3"
 script = ExtResource("8_d2wvv")
 metadata/_custom_type_script = "uid://b5c6xmf5euuwj"
 
-[node name="ActionUI" type="Node" parent="."]
+[node name="ActionUI" type="Node2D" parent="."]
 
-[node name="CastMarker" parent="ActionUI" node_paths=PackedStringArray("TargetPlayer") instance=ExtResource("8_smehm")]
+[node name="CastMarker" parent="ActionUI" node_paths=PackedStringArray("TargetPlayer", "Bobber") instance=ExtResource("8_smehm")]
 visible = false
 TargetPlayer = NodePath("../..")
+Bobber = NodePath("../Bobber")
 
 [node name="Bobber" parent="ActionUI" instance=ExtResource("9_ur7pv")]
 visible = false

@@ -4,6 +4,11 @@ using SignalBusNS;
 [GlobalClass]
 public partial class PlayerFishingState : State
 {
+    public override void _Ready()
+    {
+        StateName = Name;
+    }
+
     public override void EnterState(string previousState)
     {
         // On entering fishing state

@@ -41,17 +41,30 @@ public partial class PlayerCastingState : State
     {
         if (Input.IsActionJustReleased("Action"))
         {
+            // Ok, so on Action release, we need to cast the bobber and fishing line
+            // but if they don't land on water (marker not on water previously)
+            // hide them back and reset to initial state
+
+            // start bobber motion
+            // start casting animation
+
             TileType markerTile = SignalBus.Instance.OnCastingEnded(this, EventArgs.Empty);
             // ok maybe the event args can contain reference of nodes that were instantiated (like the line and bobber)
             // and then hide them or queue free them here based on markerTile?
             if (markerTile == TileType.Water)
             {
                 // if on water do sth
-                OnStateTransitioned("PlayerFishingState");
+                // OnStateTransitioned("PlayerFishingState");
+                OnStateTransitioned("PlayerIdleState");
                 // Go back to idle state for now
             }
             else
+            {
+                // reset the bobber and fishing line to initial state
+                // in-between can pop-up message or some other operations etc.
+                // transition back to idle state
                 OnStateTransitioned("PlayerIdleState");
+            }
         }
     }
 }
