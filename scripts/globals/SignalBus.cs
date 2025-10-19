@@ -35,7 +35,7 @@ public partial class SignalBus : Node
     public delegate void PlayerActionEventHandler(object sender, EventArgs e);
 
     // Events of PlayerActionEventHandler
-    public event PlayerActionEventHandler CastingStarted;
+    public event PlayerActionEventHandler CastMarkingStarted;
     public event PlayerActionEventHandler CastActionEnd;
     public event PlayerActionEventHandler NetActionStart;
     public event PlayerActionEventHandler NetActionEnd;
@@ -44,25 +44,31 @@ public partial class SignalBus : Node
 
     public delegate void BobberMovementEventHandler(object sender, PositionalEventArgs posArgs);
 
-    public delegate TileType TileTypeEventHandler(object sender, EventArgs e);
-    private TileTypeEventHandler CastingEnded;
+    public delegate TileType CastMarkingEndedEventHandler(object sender, EventArgs e);
+    private CastMarkingEndedEventHandler CastMarkingEnded;
 
-    public void SubscribeCastingEnded(object sender, TileTypeEventHandler method)
+    public void SubscribeToCastMarkingEnded(object sender, CastMarkingEndedEventHandler method)
     {
-        if (CastingEnded is not null)
+        if (CastMarkingEnded is not null)
         {
             GD.PushError("MarkerLanded can only have one subscriber");
             return;
         }
 
-        CastingEnded = method;
+        if (sender is not CastMarker)
+        {
+            GD.PushError("Subscriber is not CastMarker");
+            return;
+        }
+
+        CastMarkingEnded = method;
         GD.Print("Callback successfully added to MarkerLanded by " + sender.GetType());
     }
 
-    public TileType OnCastingEnded(object sender, EventArgs e)
+    public TileType OnCastMarkingEnded(object sender, EventArgs e)
     {
         // if (sender is PlayerCastingState)
-        TileType landedTile = CastingEnded.Invoke(sender, e);
+        TileType landedTile = CastMarkingEnded.Invoke(sender, e);
         return landedTile;
 
     }
@@ -126,7 +132,7 @@ public partial class SignalBus : Node
         switch (actionType)
         {
             case PlayerActionType.CastAction:
-                CastingStarted?.Invoke(sender, e);
+                CastMarkingStarted?.Invoke(sender, e);
                 break;
             case PlayerActionType.NetAction:
                 NetActionStart?.Invoke(sender, e);
@@ -139,7 +145,7 @@ public partial class SignalBus : Node
         }
 
     }
-
+    
     public void OnActionEnd(PlayerActionType actionType, object sender, EventArgs e)
     {
         if (sender is not PlayerActionManager)

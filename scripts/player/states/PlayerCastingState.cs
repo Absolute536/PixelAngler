@@ -7,13 +7,13 @@ using SignalBusNS;
 [GlobalClass]
 public partial class PlayerCastingState : State
 {
-    private Player player;
+    public Player Player;
 
     // Ok, instead of using the player action manager, we trasition into the respective state for each action based on SelectedItem
     public override void _Ready()
     {
         StateName = Name;
-        player = GetTree().GetFirstNodeInGroup("Player") as Player;
+        Player = GetTree().GetFirstNodeInGroup("Player") as Player;
     }
 
     public override void EnterState(string previousState)
@@ -48,7 +48,7 @@ public partial class PlayerCastingState : State
             // start bobber motion
             // start casting animation
 
-            TileType markerTile = SignalBus.Instance.OnCastingEnded(this, EventArgs.Empty);
+            TileType markerTile = SignalBus.Instance.OnCastMarkingEnded(this, EventArgs.Empty);
             // ok maybe the event args can contain reference of nodes that were instantiated (like the line and bobber)
             // and then hide them or queue free them here based on markerTile?
             if (markerTile == TileType.Water)
@@ -67,4 +67,5 @@ public partial class PlayerCastingState : State
             }
         }
     }
+
 }

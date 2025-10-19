@@ -143,3 +143,11 @@ Input Related problem
 
 - bobber we also add to the player scene, but hide it first
 - maintain the current implementation, just that we disable the physics process once the end point is reached
+
+- 19/10/2025 (4:42 am)
+- NOW! We need to refine the casting process to ensure it's seamless
+- Continue ~
+- Next steps
+- on click release - cast bobber & line
+- if not on water, go back to idle state, reset bobber and line as well
+- if on water, go to fishing state or angling state for the timing event?
