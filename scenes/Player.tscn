@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://bd2sgwdtpfwaj"]
+[gd_scene load_steps=13 format=3 uid="uid://bd2sgwdtpfwaj"]
 
 [ext_resource type="SpriteFrames" uid="uid://chi3wqli78166" path="res://resources/Player.tres" id="1_p0vlq"]
 [ext_resource type="Script" uid="uid://dwkgu7hv8ofdd" path="res://scripts/player/Player.cs" id="1_v6fml"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://cwtba6wd0gfht" path="res://scenes/cast_marker.tscn" id="8_smehm"]
 [ext_resource type="Script" uid="uid://bug1toj6bvtq3" path="res://scripts/player/states/PlayerCastingState.cs" id="8_y4r1p"]
 [ext_resource type="PackedScene" uid="uid://1w1wporxjcab" path="res://scenes/bobber.tscn" id="9_ur7pv"]
+[ext_resource type="PackedScene" uid="uid://d1r8eckfg8xw" path="res://scenes/fishing_line.tscn" id="11_d2wvv"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_p0vlq"]
 radius = 5.0
@@ -79,5 +80,10 @@ visible = false
 TargetPlayer = NodePath("../..")
 Bobber = NodePath("../Bobber")
 
-[node name="Bobber" parent="ActionUI" instance=ExtResource("9_ur7pv")]
+[node name="FishingLine" parent="ActionUI" node_paths=PackedStringArray("Player", "TraceTarget") instance=ExtResource("11_d2wvv")]
+Player = NodePath("../..")
+TraceTarget = NodePath("../Bobber")
+
+[node name="Bobber" parent="ActionUI" node_paths=PackedStringArray("FishingLine") instance=ExtResource("9_ur7pv")]
 visible = false
+FishingLine = NodePath("../FishingLine")

@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://dcwcvyphpsh56" path="res://scripts/FishingLine.cs" id="1_j4fxa"]
 
 [node name="FishingLine" type="Line2D"]
-width = 5.0
+width = 3.0
 joint_mode = 2
 round_precision = 10
 script = ExtResource("1_j4fxa")

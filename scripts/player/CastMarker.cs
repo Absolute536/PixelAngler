@@ -91,7 +91,7 @@ public partial class CastMarker : Sprite2D
 		// Console Output
 		GD.Print("Direction: " + TargetPlayer.FacingDirection);
 		GD.Print("Player: " + TargetPlayer.Position);
-		GD.Print("Marker: " + Position);
+		GD.Print("Marker Offset FROM Player: " + Position);
     }
 
 }

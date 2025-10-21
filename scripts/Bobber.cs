@@ -37,6 +37,8 @@ public partial class Bobber : Sprite2D
 	private const double TimeLimit = 0.3; // Must reach the _endPosition at TimeLimit (seconds)
 	private bool _inWater = true; // This one is a bit hacky, an extra flag to indicate whether to hide early or not
 
+	[Export] public FishingLine FishingLine;
+
 	public override void _Ready()
 	{
 		// Initialise _player
@@ -44,7 +46,7 @@ public partial class Bobber : Sprite2D
 
 		// Setup Bobber Properties
 		Visible = false;
-		TopLevel = true;
+		// TopLevel = true;
 		// Compute the Sin and Cos values of the launch angle on setup (cuz more expensive), instead of per Physics Frame
 		_sinLaunchAngle = Mathf.Sin(_launchAngle);
 		_cosineLaunchAngle = Mathf.Cos(_launchAngle);
@@ -117,6 +119,7 @@ public partial class Bobber : Sprite2D
 
 			// Set the (Global) Position per Physics Frame as the starting position + displacement vector
 			GlobalPosition = _startPosition + Displacement;
+			GD.Print("Bobber Global Position: " + GlobalPosition);
 		}
 		else
 		{
