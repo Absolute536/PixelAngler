@@ -44,34 +44,34 @@ public partial class SignalBus : Node
 
     public delegate void BobberMovementEventHandler(object sender, PositionalEventArgs posArgs);
 
-    public delegate TileType CastMarkingEndedEventHandler(object sender, EventArgs e);
-    private CastMarkingEndedEventHandler CastMarkingEnded;
+    // public delegate TileType CastMarkingEndedEventHandler(object sender, EventArgs e);
+    // private CastMarkingEndedEventHandler CastMarkingEnded;
 
-    public void SubscribeToCastMarkingEnded(object sender, CastMarkingEndedEventHandler method)
-    {
-        if (CastMarkingEnded is not null)
-        {
-            GD.PushError("MarkerLanded can only have one subscriber");
-            return;
-        }
+    // public void SubscribeToCastMarkingEnded(object sender, CastMarkingEndedEventHandler method)
+    // {
+    //     if (CastMarkingEnded is not null)
+    //     {
+    //         GD.PushError("MarkerLanded can only have one subscriber");
+    //         return;
+    //     }
 
-        if (sender is not CastMarker)
-        {
-            GD.PushError("Subscriber is not CastMarker");
-            return;
-        }
+    //     if (sender is not CastMarker)
+    //     {
+    //         GD.PushError("Subscriber is not CastMarker");
+    //         return;
+    //     }
 
-        CastMarkingEnded = method;
-        GD.Print("Callback successfully added to MarkerLanded by " + sender.GetType());
-    }
+    //     CastMarkingEnded = method;
+    //     GD.Print("Callback successfully added to MarkerLanded by " + sender.GetType());
+    // }
 
-    public TileType OnCastMarkingEnded(object sender, EventArgs e)
-    {
-        // if (sender is PlayerCastingState)
-        TileType landedTile = CastMarkingEnded.Invoke(sender, e);
-        return landedTile;
+    // public TileType OnCastMarkingEnded(object sender, EventArgs e)
+    // {
+    //     // if (sender is PlayerCastingState)
+    //     TileType landedTile = CastMarkingEnded.Invoke(sender, e);
+    //     return landedTile;
 
-    }
+    // }
 
 
     public event BobberMovementEventHandler BobberMovement;

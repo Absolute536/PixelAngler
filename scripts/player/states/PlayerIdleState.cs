@@ -7,19 +7,11 @@ using System.Collections.Generic;
 public partial class PlayerIdleState : State
 {
     // Property for Idle state here
-    [Export] public CharacterBody2D Player;
-
-    private Player player;
-
-    // public PlayerIdleState()
-    // {
-        
-    // }
+    [Export] public Player Player;
 
     public override void _Ready()
     {
         StateName = Name;
-        player = (Player)Player;
     }
 
     public override void EnterState(string previousState)
@@ -28,8 +20,8 @@ public partial class PlayerIdleState : State
         // player.AnimationPlayer.Play("Idle");
         if (previousState == "PlayerWalkingState")
         {
-            player.AnimationPlayer.Stop();
-            player.Relocate(); // only call when relocate cuz the default is idle and on initialised, player is not loaded yet
+            Player.AnimationPlayer.Stop();
+            Player.Relocate(); // only call when relocate cuz the default is idle and on initialised, player is not loaded yet
         }
         // Probably can call the get tile location function here to get player's location upon idling
 
@@ -64,7 +56,7 @@ public partial class PlayerIdleState : State
         {
             GD.Print(Name + ": " + "Action");
 
-            string currentSelectedItem = player.SelectedItem;
+            string currentSelectedItem = Player.SelectedItem;
             switch (currentSelectedItem)
             {
                 case "Fishing Rod":

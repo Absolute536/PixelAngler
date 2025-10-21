@@ -7,16 +7,13 @@ using System.IO;
 [GlobalClass]
 public partial class PlayerWalkingState : State
 {
-    [Export] public CharacterBody2D PlayerBody;
+    [Export] public Player Player;
     [Export] public float MovementSpeed;
-
-    private Player player;
     private Vector2 oldInputVector = Vector2.Zero; // Initialise to (0, 0) cuz player is not moving at first (idle)
 
     public override void _Ready()
     {
         StateName = Name;
-        player = (Player) PlayerBody;
     }
 
     public override void EnterState(String previousState)
@@ -46,7 +43,7 @@ public partial class PlayerWalkingState : State
     {
         // Get movement vector for every physics tick
         Vector2 direction = Input.GetVector("Left", "Right", "Up", "Down");
-        Vector2 velocity = player.Velocity;
+        Vector2 velocity = Player.Velocity;
 
         // If there is movement input
         if (direction != Vector2.Zero && !Input.IsMouseButtonPressed(MouseButton.Left))
@@ -58,7 +55,7 @@ public partial class PlayerWalkingState : State
             velocity.X = direction.X * MovementSpeed;
             velocity.Y = direction.Y * MovementSpeed;
 
-            player.FacingDirection = direction;
+            Player.FacingDirection = direction;
             PlayWalkingAnimation(direction);
         }
         // Stop and transition to IDLE when no direction input & lmb is pressed
@@ -84,9 +81,9 @@ public partial class PlayerWalkingState : State
         // GD.Print("Will print if execute after transitioned to idle");
 
         // Set player's actual Velocity property to the configured one
-        player.Velocity = velocity;
+        Player.Velocity = velocity;
         // Call the player's MoveAndSlide to actually move the node
-        player.MoveAndSlide();
+        Player.MoveAndSlide();
         // GD.Print("Player Position: " + player.Position);
 
         // Hmm... Is this needed? Yeah I think we need this
@@ -94,11 +91,11 @@ public partial class PlayerWalkingState : State
         {
             oldInputVector = direction;
             if (direction != Vector2.Zero)
-                player.GlobalPosition = player.GlobalPosition.Round();
+                Player.GlobalPosition = Player.GlobalPosition.Round();
             GD.Print("Apply Jitter Fix upon Input change"); // Solution from Reddit 
         }
 
-        GD.Print("Player Position: " + player.GlobalPosition);
+        GD.Print("Player Position: " + Player.GlobalPosition);
 
         // Maybe can call the get location here to retrieve player's location when walking
         // But then, fishing is only possible when idling, so probably need to be called once on enter in idle
@@ -108,27 +105,19 @@ public partial class PlayerWalkingState : State
     private void PlayWalkingAnimation(Vector2 direction)
     {
         if (direction == Vector2.Up)
-            player.AnimationPlayer.Play("Up");
+            Player.AnimationPlayer.Play("Up");
         else if (direction == Vector2.Down)
-            player.AnimationPlayer.Play("Down");
+            Player.AnimationPlayer.Play("Down");
         else if (direction.X > 0)
-            player.AnimationPlayer.Play("Right");
+            Player.AnimationPlayer.Play("Right");
         else
-            player.AnimationPlayer.Play("Left");
+            Player.AnimationPlayer.Play("Left");
 
     }
 
     private bool HasInputDirectionChanged(Vector2 newDirection)
     {
         return oldInputVector != newDirection;
-    }
-
-    private Vector2 JitterFix(Vector2 direction)
-    {
-        if (direction != Vector2.Zero)
-            return player.GlobalPosition.Round();
-
-        return Vector2.Zero;
     }
 
 }

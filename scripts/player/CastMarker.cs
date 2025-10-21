@@ -66,12 +66,6 @@ public partial class CastMarker : Sprite2D
 		TileType tileType = GameInfo.Instance.GetTileType(GlobalPosition);
 
 		GD.Print("Marker landed on " + tileType.ToString());
-
-		// [IMPORTANT: only do this after we've gotten the position where the marker lands]
-		// Reset position back to origin of parent (Player node)
-		// Actually we don't really need this, because the Position is reset every time when we start the cast marking
-		// GlobalPosition = TargetPlayer.GlobalPosition;
-
 		return new (tileType, GlobalPosition);
     }
 

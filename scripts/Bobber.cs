@@ -1,6 +1,7 @@
 using GamePlayer;
 using Godot;
 using System;
+using System.Threading.Tasks;
 
 public partial class Bobber : Sprite2D
 {
@@ -34,6 +35,7 @@ public partial class Bobber : Sprite2D
 	private Vector2 _startPosition;
 	private Player _player;
 	private const double TimeLimit = 0.3; // Must reach the _endPosition at TimeLimit (seconds)
+	private bool _inWater = true; // This one is a bit hacky, an extra flag to indicate whether to hide early or not
 
 	public override void _Ready()
 	{
@@ -69,10 +71,11 @@ public partial class Bobber : Sprite2D
 	 * I forgor my Physics class content already RIP
 	 * Reference: https://phys.libretexts.org/Bookshelves/University_Physics/Physics_(Boundless)/3%3A_Two-Dimensional_Kinematics/3.3%3A_Projectile_Motion
 	 */
-	public void StartBobberMotion(Vector2 endPosition)
+	public void StartBobberMotion(Vector2 endPosition, bool inWater)
 	{
 		// Specify end position of the bobber (where it should land)
 		_endPosition = endPosition;
+		_inWater = inWater;
 		Visible = true;
 
 		// Calculation of _initialVelocity and _gravity parameters of the motion
@@ -94,6 +97,7 @@ public partial class Bobber : Sprite2D
 		GlobalPosition = _startPosition;
 		_timeElapsed = 0;
 		_hasStopped = false;
+		_inWater = true;
 	}
 
 	// PhysicsProcess to start the parabolic motion of the bobber
@@ -118,15 +122,21 @@ public partial class Bobber : Sprite2D
 		{
 			_hasStopped = true;
 			SetPhysicsProcess(false); // Stop the Physics Proces to stop the bobber motion (more towards to save CPU cycle?)
+
+			if (!_inWater)
+			{
+				Visible = false;
+				GD.Print("Bobber not landed in Water. Hide it back.");
+			}
 		}
 	}
 
-	public double CalculateDisplacementX(double time)
+	private double CalculateDisplacementX(double time)
 	{
 		return _initialVelocity * time * _cosineLaunchAngle;
 	}
 
-	public double CalculateDisplacementY(double time)
+	private double CalculateDisplacementY(double time)
 	{
 		return _initialVelocity * time * _sinLaunchAngle - (0.5 * _gravity * time * time);
 	}
