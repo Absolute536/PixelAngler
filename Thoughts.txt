@@ -151,3 +151,10 @@ Input Related problem
 - on click release - cast bobber & line
 - if not on water, go back to idle state, reset bobber and line as well
 - if on water, go to fishing state or angling state for the timing event?
+
+- OK!!!!
+- Now we set the ground rules(?)
+- For node references within the same scene (has a common ancestor) -> we use Exported properties to get the reference
+- For invoking methods of nodes in external scene -> we use the SignalBus OR Node Group
+- For SignalBus, it is better if the nodes we want to notify has no correlation
+- For Node Group, it is better when we want to notify multiple similar nodes (like notifying a bunch of enemy nodes in the scene during runtime) 

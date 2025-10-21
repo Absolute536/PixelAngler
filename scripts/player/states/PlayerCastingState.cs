@@ -7,19 +7,20 @@ using SignalBusNS;
 [GlobalClass]
 public partial class PlayerCastingState : State
 {
-    public Player Player;
+    [Export] public Player Player;
+    [Export] public CastMarker CastMarker;
+    [Export] public Bobber Bobber;
 
     // Ok, instead of using the player action manager, we trasition into the respective state for each action based on SelectedItem
     public override void _Ready()
     {
         StateName = Name;
-        Player = GetTree().GetFirstNodeInGroup("Player") as Player;
     }
 
     public override void EnterState(string previousState)
     {
         SignalBus.Instance.OnActionStart(PlayerActionType.CastAction, this, EventArgs.Empty);
-        // Can't just invoke start, we need something to return the location information for state transition
+        CastMarker.StartCastMarking();
     }
 
     public override void ExitState()
@@ -48,10 +49,15 @@ public partial class PlayerCastingState : State
             // start bobber motion
             // start casting animation
 
-            TileType markerTile = SignalBus.Instance.OnCastMarkingEnded(this, EventArgs.Empty);
+            // More accurately,
+            // Stop the cast marker on release (and start the bobber & fishing line motion)
+            // The bobber motion is invoked in StopCastMarking
+
+            Tuple<TileType, Vector2> castingInfo = CastMarker.StopCastMarking();
+            Bobber.StartBobberMotion(castingInfo.Item2);
             // ok maybe the event args can contain reference of nodes that were instantiated (like the line and bobber)
             // and then hide them or queue free them here based on markerTile?
-            if (markerTile == TileType.Water)
+            if (castingInfo.Item1 == TileType.Water)
             {
                 // if on water do sth
                 // OnStateTransitioned("PlayerFishingState");
@@ -63,6 +69,7 @@ public partial class PlayerCastingState : State
                 // reset the bobber and fishing line to initial state
                 // in-between can pop-up message or some other operations etc.
                 // transition back to idle state
+                Bobber.ResetBobberStatus();
                 OnStateTransitioned("PlayerIdleState");
             }
         }

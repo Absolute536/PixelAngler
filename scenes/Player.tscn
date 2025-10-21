@@ -61,8 +61,11 @@ PlayerBody = NodePath("../..")
 MovementSpeed = 100.0
 metadata/_custom_type_script = "uid://bt2i3d64duevn"
 
-[node name="PlayerCastingState" type="Node" parent="StateMachine"]
+[node name="PlayerCastingState" type="Node" parent="StateMachine" node_paths=PackedStringArray("Player", "CastMarker", "Bobber")]
 script = ExtResource("8_y4r1p")
+Player = NodePath("../..")
+CastMarker = NodePath("../../ActionUI/CastMarker")
+Bobber = NodePath("../../ActionUI/Bobber")
 metadata/_custom_type_script = "uid://bug1toj6bvtq3"
 
 [node name="PlayerFishingState" type="Node" parent="StateMachine"]

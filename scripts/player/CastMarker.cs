@@ -28,15 +28,15 @@ public partial class CastMarker : Sprite2D
 	public override void _Ready()
 	{
 		// Connect to CastingStarted/Ended signals
-		SignalBus.Instance.CastMarkingStarted += HandleCastMarkingStarted;
-		SignalBus.Instance.SubscribeToCastMarkingEnded(this, HandleCastMarkingEnded);
+		// SignalBus.Instance.CastMarkingStarted += HandleCastMarkingStarted;
+		// SignalBus.Instance.SubscribeToCastMarkingEnded(this, HandleCastMarkingEnded);
 
 		// Connect to Timeout signal of the marker's Timer
 		CastTimer.Timeout += CastMarkingProcess;
 		GlobalPosition = TargetPlayer.GlobalPosition;
 	}
 
-	private void HandleCastMarkingStarted(object sender, EventArgs e)
+	public void StartCastMarking()
 	{
 		Visible = true;
 		CastTimer.Start();
@@ -51,14 +51,14 @@ public partial class CastMarker : Sprite2D
 		// FishingLine.ResetLineStatus(); ~ something like this maybe
 	}
 	
-	private TileType HandleCastMarkingEnded(object sender, EventArgs e)
+	public Tuple<TileType, Vector2> StopCastMarking()
     {
         _castLength = 0; // reset cast length
 		CastTimer.Stop();
 		Visible = false;
 
 		// Note: use GlobalPosition instead of Position, else bobber's position will become the offset vector of marker
-		Bobber.StartBobberMotion(GlobalPosition);
+		// Bobber.StartBobberMotion(GlobalPosition);
 		// OK, now I see. I need it to reset on STARTING the action (click), not when the action ends (release)
 		// because now the Start action and resetting is on release
 
@@ -68,10 +68,11 @@ public partial class CastMarker : Sprite2D
 		GD.Print("Marker landed on " + tileType.ToString());
 
 		// [IMPORTANT: only do this after we've gotten the position where the marker lands]
-		// Reset position back to origin of parent (Player node) 
-		GlobalPosition = TargetPlayer.GlobalPosition; 
+		// Reset position back to origin of parent (Player node)
+		// Actually we don't really need this, because the Position is reset every time when we start the cast marking
+		// GlobalPosition = TargetPlayer.GlobalPosition;
 
-		return tileType;
+		return new (tileType, GlobalPosition);
     }
 
 	private void CastMarkingProcess()
