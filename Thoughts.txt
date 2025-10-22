@@ -157,4 +157,9 @@ Input Related problem
 - For node references within the same scene (has a common ancestor) -> we use Exported properties to get the reference
 - For invoking methods of nodes in external scene -> we use the SignalBus OR Node Group
 - For SignalBus, it is better if the nodes we want to notify has no correlation
-- For Node Group, it is better when we want to notify multiple similar nodes (like notifying a bunch of enemy nodes in the scene during runtime) 
+- For Node Group, it is better when we want to notify multiple similar nodes (like notifying a bunch of enemy nodes in the scene during runtime)
+
+- Fishing line time
+- using quadratic beizer curve (kinda difficult)
+- I plotted the line, but it doesn't "curve"
+- easier alternative, use a parabolic curve, with the bobber position as the minimum point

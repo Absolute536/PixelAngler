@@ -1,7 +1,6 @@
 using GamePlayer;
 using Godot;
 using System;
-using System.Linq;
 
 public partial class FishingLine : Line2D
 {
@@ -11,10 +10,15 @@ public partial class FishingLine : Line2D
 
     private Timer _addPointTimer = new Timer();
 
+    private float _tParameter = 0;
+    private const float LowLimit = 0;
+    private const float UpLimit = 1;
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
         SetProcess(false);
+        SetPhysicsProcess(false);
 
         _addPointTimer.WaitTime = 0.02; // every 0.02 we check and modify the line instead of every physics frame?
         AnchorPoint = new Vector2(0, -32);
@@ -33,10 +37,20 @@ public partial class FishingLine : Line2D
         // need to check against last point (should be the "largest" on one axis)
         // and adjust the polypoints dynamically
 
-        if (TraceTarget.IsPhysicsProcessing())
-        {
-            FishingLineAction();
-        }
+        // if (TraceTarget.IsPhysicsProcessing())
+        // {
+        //     FishingLineAction();
+        // }
+        _tParameter += (float)delta;
+        // _tParameter += 0.1f;
+        // if (_tParameter <= UpLimit)
+        // {
+            Vector2 point = DrawLine(_tParameter);
+            Vector2[] newArr = new Vector2[Points.Length + 1];
+            Points.CopyTo(newArr, 0);
+            newArr[Points.Length] = point;
+            Points = newArr;
+        // }
 
         // GD.Print("Fishing Line Points: " + GlobalPosition);
     }
@@ -55,13 +69,40 @@ public partial class FishingLine : Line2D
         Points = linePoints;
     }
 
-    private void DrawLine()
+    private Vector2 endP; // testing
+    private Vector2 DrawLine(float t)
     {
         // Control Point 1 = Anchor Point
         // Control Point 2 = Global(?) Position of the Bobber in every frame
-        // Control Point Centre = (CP2.X - 2, CP1.Y - 4) --> Idk how much of this is correct, but we'll see
+        // Control Point Centre = (abs(CP2.X - 2), CP1.Y - 4) --> Idk how much of this is correct, but we'll see
+        // Ok, it should be CP2.X - 2 and same Y as CP2.Y 
+        Vector2 controlPoint1 = AnchorPoint;
+        // Vector2 controlPoint2 = TraceTarget.Position;
+        Vector2 controlPoint2 = endP;
 
+        // Sketchy
+        float controlCentreX = controlPoint2.X < 0 ? controlPoint2.X + 64 : controlPoint2.X - 64;
+        Vector2 controlPointCentre = new Vector2(controlCentreX, controlPoint2.Y); // + 4 so that it goes down
+        GD.Print("P0: " + controlPoint1);
+        GD.Print("P2: " + controlPoint2);
+        GD.Print(controlPointCentre);
+        // Vector2 pointOnCurve = (1 - t) * ((1 - t) * controlPoint1 + t * controlPointCentre) + t * ((1 - t) * controlPointCentre + t * controlPoint2);
+        // Vector2 pointOnCurve = (1 - t) * (1 - t) * controlPoint1 + 2 * (1 - t) * t * controlPointCentre + t * t * controlPoint2;
 
+        // Try godot example
+        Vector2 q0 = controlPoint1.Lerp(controlPointCentre, t);
+        Vector2 q1 = controlPointCentre.Lerp(controlPoint2, t);
+        Vector2 pointOnCurve = q0.Lerp(q1, t);
+
+        // ok, I think it has sth to do with local position
+
+        return pointOnCurve; // let's make it static first to verify the idea
+    }
+
+    public void StartDraw(Vector2 end)
+    {
+        SetPhysicsProcess(true);
+        endP = end;
     }
 
     public void StartLineAction(Vector2 endPosition)

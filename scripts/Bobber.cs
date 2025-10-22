@@ -125,7 +125,7 @@ public partial class Bobber : Sprite2D
 		{
 			_hasStopped = true;
 			SetPhysicsProcess(false); // Stop the Physics Proces to stop the bobber motion (more towards to save CPU cycle?)
-
+			FishingLine.StartDraw(Position);
 			if (!_inWater)
 			{
 				Visible = false;

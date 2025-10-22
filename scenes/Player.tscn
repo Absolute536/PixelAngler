@@ -81,6 +81,7 @@ TargetPlayer = NodePath("../..")
 Bobber = NodePath("../Bobber")
 
 [node name="FishingLine" parent="ActionUI" node_paths=PackedStringArray("Player", "TraceTarget") instance=ExtResource("11_d2wvv")]
+width = 1.0
 Player = NodePath("../..")
 TraceTarget = NodePath("../Bobber")
 
