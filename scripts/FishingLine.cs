@@ -1,6 +1,7 @@
 using GamePlayer;
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public partial class FishingLine : Line2D
 {
@@ -41,16 +42,19 @@ public partial class FishingLine : Line2D
         // {
         //     FishingLineAction();
         // }
-        _tParameter += (float)delta;
+
+        // _tParameter += (float)delta;
         // _tParameter += 0.1f;
         // if (_tParameter <= UpLimit)
         // {
-            Vector2 point = DrawLine(_tParameter);
-            Vector2[] newArr = new Vector2[Points.Length + 1];
-            Points.CopyTo(newArr, 0);
-            newArr[Points.Length] = point;
-            Points = newArr;
+            // Vector2 point = DrawLine(_tParameter);
+            // Vector2[] newArr = new Vector2[Points.Length + 1];
+            // Points.CopyTo(newArr, 0);
+            // newArr[Points.Length] = point;
+            // Points = newArr;
         // }
+
+
 
         // GD.Print("Fishing Line Points: " + GlobalPosition);
     }
@@ -81,7 +85,7 @@ public partial class FishingLine : Line2D
         Vector2 controlPoint2 = endP;
 
         // Sketchy
-        float controlCentreX = controlPoint2.X < 0 ? controlPoint2.X + 64 : controlPoint2.X - 64;
+        float controlCentreX = controlPoint2.X < 0 ? controlPoint2.X + 64 : controlPoint2.X - 64; // (16 *) 4 tiles away from the landing point for the control centre
         Vector2 controlPointCentre = new Vector2(controlCentreX, controlPoint2.Y); // + 4 so that it goes down
         GD.Print("P0: " + controlPoint1);
         GD.Print("P2: " + controlPoint2);
@@ -110,6 +114,34 @@ public partial class FishingLine : Line2D
         Points = [Vector2.Zero, endPosition];
         GD.Print(Points[0] + ", " + Points[1]);
         // GD.Print("Global Line: " + GlobalPosition);
+    }
+
+    public void StartFishingLineMotion(Vector2 endPosition)
+    {
+        // Wait maybe we can take like half of every linear interpolate
+        // let's try every 0.1 t
+        float t = 0.0f;
+
+        Vector2 controlPointStart = AnchorPoint;
+        Vector2 controlPointEnd = endPosition;
+
+        float centreX = controlPointEnd.X < 0 ? controlPointEnd.X + 64 : controlPointEnd.X - 64;
+        Vector2 controlPointCentre = new Vector2(controlPointStart.X, controlPointEnd.Y);
+        // what if we made the X controlPointStart? Yep, I think that's correct
+
+        List<Vector2> pointsOnLine = new();
+
+        while (t <= 1)
+        {
+            Vector2 lerpStartToCentre = controlPointStart.Lerp(controlPointCentre, t);
+            Vector2 lerpCentreToEnd = controlPointCentre.Lerp(controlPointEnd, t);
+            Vector2 pointOnCurve = lerpStartToCentre.Lerp(lerpCentreToEnd, t);
+
+            pointsOnLine.Add(pointOnCurve);
+            t += 0.05f;
+        }
+
+        Points = pointsOnLine.ToArray();
     }
 
 }

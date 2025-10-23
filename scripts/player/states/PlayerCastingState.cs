@@ -60,6 +60,9 @@ public partial class PlayerCastingState : State
                 // if on water do sth
                 // OnStateTransitioned("PlayerFishingState");
                 Bobber.StartBobberMotion(castingInfo.Item2, true);
+                // cast fishing line, passing the landing position
+                // actually, we can't put it here if we want the line to "animate" with the bobber motion
+
                 OnStateTransitioned("PlayerIdleState");
                 // Go back to idle state for now
             }

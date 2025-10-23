@@ -120,12 +120,14 @@ public partial class Bobber : Sprite2D
 			// Set the (Global) Position per Physics Frame as the starting position + displacement vector
 			GlobalPosition = _startPosition + Displacement;
 			GD.Print("Bobber Global Position: " + GlobalPosition);
+
+			FishingLine.StartFishingLineMotion(Position);
 		}
 		else
 		{
 			_hasStopped = true;
 			SetPhysicsProcess(false); // Stop the Physics Proces to stop the bobber motion (more towards to save CPU cycle?)
-			FishingLine.StartDraw(Position);
+			
 			if (!_inWater)
 			{
 				Visible = false;
