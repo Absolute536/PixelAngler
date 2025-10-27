@@ -69,18 +69,21 @@ CastMarker = NodePath("../../ActionUI/CastMarker")
 Bobber = NodePath("../../ActionUI/Bobber")
 metadata/_custom_type_script = "uid://bug1toj6bvtq3"
 
-[node name="PlayerFishingState" type="Node" parent="StateMachine"]
+[node name="PlayerFishingState" type="Node" parent="StateMachine" node_paths=PackedStringArray("Bobber")]
 script = ExtResource("8_d2wvv")
+Bobber = NodePath("../../ActionUI/Bobber")
 metadata/_custom_type_script = "uid://b5c6xmf5euuwj"
 
 [node name="ActionUI" type="Node2D" parent="."]
 
-[node name="CastMarker" parent="ActionUI" node_paths=PackedStringArray("TargetPlayer", "Bobber") instance=ExtResource("8_smehm")]
+[node name="CastMarker" parent="ActionUI" node_paths=PackedStringArray("TargetPlayer", "Bobber", "FishingLine") instance=ExtResource("8_smehm")]
 visible = false
 TargetPlayer = NodePath("../..")
 Bobber = NodePath("../Bobber")
+FishingLine = NodePath("../FishingLine")
 
 [node name="FishingLine" parent="ActionUI" node_paths=PackedStringArray("Player", "TraceTarget") instance=ExtResource("11_d2wvv")]
+visible = false
 width = 1.0
 Player = NodePath("../..")
 TraceTarget = NodePath("../Bobber")

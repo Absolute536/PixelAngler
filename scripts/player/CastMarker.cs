@@ -13,6 +13,7 @@ public partial class CastMarker : Sprite2D
 
 	// Temporary might change later (to signal?)
 	[Export] public Bobber Bobber;
+	[Export] public FishingLine FishingLine;
 
 	private Vector2 _castDirection;
 	private Vector2 _initialPosition;
@@ -48,6 +49,7 @@ public partial class CastMarker : Sprite2D
 
 		// Reset bobber and fishing line statuses
 		Bobber.ResetBobberStatus();
+		FishingLine.TerminateFishingLine();
 		// FishingLine.ResetLineStatus(); ~ something like this maybe
 	}
 	

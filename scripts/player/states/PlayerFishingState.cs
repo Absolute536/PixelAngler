@@ -4,6 +4,8 @@ using SignalBusNS;
 [GlobalClass]
 public partial class PlayerFishingState : State
 {
+    [Export] public Bobber Bobber;
+
     public override void _Ready()
     {
         StateName = Name;
@@ -33,6 +35,12 @@ public partial class PlayerFishingState : State
 
     public override void PhysicsProcessUpdate(double delta)
     {
+        if (Input.IsActionJustPressed("Action"))
+        {
+            if (Bobber.InWater)
+                Bobber.ReverseBobberMotion();
 
+            OnStateTransitioned("PlayerIdleState");
+        }
     }
 }

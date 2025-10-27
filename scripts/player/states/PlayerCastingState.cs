@@ -11,6 +11,7 @@ public partial class PlayerCastingState : State
     [Export] public Player Player;
     [Export] public CastMarker CastMarker;
     [Export] public Bobber Bobber;
+    [Export] public FishingLine FishingLine;
 
     public override void _Ready()
     {
@@ -55,15 +56,16 @@ public partial class PlayerCastingState : State
 
             // ok maybe the event args can contain reference of nodes that were instantiated (like the line and bobber)
             // and then hide them or queue free them here based on markerTile?
-            if (castingInfo.Item1 == TileType.Water)
+            bool landedInWater = castingInfo.Item1 == TileType.Water;
+            if (landedInWater)
             {
                 // if on water do sth
                 // OnStateTransitioned("PlayerFishingState");
-                Bobber.StartBobberMotion(castingInfo.Item2, true);
+                Bobber.StartBobberMotion(castingInfo.Item2, landedInWater);
                 // cast fishing line, passing the landing position
                 // actually, we can't put it here if we want the line to "animate" with the bobber motion
 
-                OnStateTransitioned("PlayerIdleState");
+                OnStateTransitioned("PlayerFishingState");
                 // Go back to idle state for now
             }
             else
@@ -79,7 +81,7 @@ public partial class PlayerCastingState : State
                 // Ok, I see the problem. Cuz HasStopped() is called on the frame (at least within a few frame I suppose) click is released, we don't know when it stops
                 // and Has stoppped is called, before the bobber ends(???)
 
-                Bobber.StartBobberMotion(castingInfo.Item2, false);
+                Bobber.StartBobberMotion(castingInfo.Item2, landedInWater);
                 OnStateTransitioned("PlayerIdleState");
             }
         }

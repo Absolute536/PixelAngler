@@ -6,10 +6,22 @@ public partial class Testing : Node2D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		// Vector2 v = new Vector2(0, 1);
-		// GD.Print("Normalised: " + v.Normalized());
-		// v = new Vector2(1, 1);
-		// GD.Print("Normalised Again: " + v.Normalized());
+		Vector2 end = new(0.33333335f, 134);
+		Vector2 start = new(-62.199997f, 133.98222f);
+
+		double initialVelocity = (end.X - start.X) / 0.5 * (1 / Mathf.Cos(45));
+		double gravity = 2 * (initialVelocity * 0.5 * Mathf.Sin(45) - (end.Y - start.Y)) / 0.25;
+		GD.Print("Velocity: " + initialVelocity);
+		GD.Print("Gravity: " + gravity);
+
+		Vector2 temp = end;
+		end = start;
+		start = temp;
+
+		initialVelocity = (end.X - start.X) / 0.5 * (1 / Mathf.Cos(45));
+		gravity = 2 * (initialVelocity * 0.5 * Mathf.Sin(45) - (end.Y - start.Y)) / 0.25;
+		GD.Print("Velocity: " + initialVelocity);
+		GD.Print("Gravity: " + gravity);
 
 	}
 
@@ -28,6 +40,7 @@ public partial class Testing : Node2D
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
-	{
-	}
+    {
+
+    }
 }

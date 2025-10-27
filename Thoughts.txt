@@ -163,3 +163,14 @@ Input Related problem
 - using quadratic beizer curve (kinda difficult)
 - I plotted the line, but it doesn't "curve"
 - easier alternative, use a parabolic curve, with the bobber position as the minimum point
+
+- Both bobber and fishing line works now, just need to polish them
+- Bobber needs casting TOWARDS the destination and reeling BACK from the destination
+- Fishing line needs more decoupling (maybe). I would like to call it from the casting state, instead of couple it within the Bobber classes
+
+- Update for floating point value problem
+- The reverse path of the bobber projectile will not coincide if x is 0. or -1. or 1., where the fractional part is .3333 or .6777 (I think)
+- I suppose it is the same for the y axis as well, though I can't prove it
+- because when input change, we apply jitter fix, which will round the vector
+- I think rounding it will work, because we only sample per delta += 0.016666667....
+- so each "step" will have rather significant differences, and so they won't colide (I think)
