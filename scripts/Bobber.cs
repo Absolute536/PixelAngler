@@ -6,11 +6,14 @@ using System.Threading.Tasks;
 
 public partial class Bobber : Sprite2D
 {
+	[Export] Player Player;
+	[Export] public FishingLine FishingLine;
+
 	// OK. I know what's going on. Because of the difference in coordinate system (y axis positive on the usual is negative here)
 	// So, instead of doing this hacky thing, we just need to negate the Endpoint y?
 	// Nope, we need to do this
-	[Export]
-	public float LaunchAngle
+	[Export] public float SetLaunchAngle;
+	private float LaunchAngle
 	{
 		set
 		{
@@ -19,41 +22,38 @@ public partial class Bobber : Sprite2D
 			else
 				_launchAngle = value;
 		}
+
 		get
 		{
 			return _launchAngle;
 		}
-
 	}
-	private float _launchAngle = 0; // Launch angle is 0 because it starts horizonally from the starting point (only cos 0 = 1)
+	
+	// Bobber Projectile Motion Parameters
+	private float _launchAngle;
 	private float _sinLaunchAngle;
 	private float _cosineLaunchAngle;
+	private float _negativeSinLaunchAngle;
+	private float _negativeCosineLaunchAngle;
 	private double _initialVelocity;
 	private double _gravity;
+	private const double TimeLimit = 0.5; // Must reach the _endPosition at TimeLimit (seconds)
 	private double _timeElapsed = 0;
-	private bool _hasStopped = false; // Boolean flag to determine if the bobber has stopped (hmm ~)
 	private Vector2 _endPosition;
 	private Vector2 _startPosition;
-	private Player _player;
-	private const double TimeLimit = 0.5; // Must reach the _endPosition at TimeLimit (seconds)
-	private bool _inWater = true; // This one is a bit hacky, an extra flag to indicate whether to hide early or not
-	public bool InWater
-    {
-		get => _inWater;
-    }
-	[Export] public FishingLine FishingLine;
+
+	// Internal Flags
+
+	// Indicate if the bobber should land in water
+	// This one is a bit hacky, cuz we use it to decide whether to hide early or not
+	private bool _inWater = true; 
+	private bool _hasStopped = false; // Boolean flag to determine if the bobber has stopped (hmm ~)
+	private bool _reverseMotion = false; // Indicate if we are in reverse motion;
 
 	public override void _Ready()
 	{
-		// Initialise _player
-		_player = GetTree().GetFirstNodeInGroup("Player") as Player;
-
 		// Setup Bobber Properties
 		Visible = false;
-		// TopLevel = true;
-		// Compute the Sin and Cos values of the launch angle on setup (cuz more expensive), instead of per Physics Frame
-		_sinLaunchAngle = Mathf.Sin(_launchAngle);
-		_cosineLaunchAngle = Mathf.Cos(_launchAngle);
 
 		// Turn off Processes Callback on load
 		SetProcess(false);
@@ -84,41 +84,49 @@ public partial class Bobber : Sprite2D
 		_inWater = inWater;
 		Visible = true;
 
-		LaunchAngle = 0;
-		_sinLaunchAngle = Mathf.Sin(_launchAngle);
-		_cosineLaunchAngle = Mathf.Cos(_launchAngle);
-
 		// Calculation of _initialVelocity and _gravity parameters of the motion
 		// IMPORTANT: displacement = end - start
 		// Before this, we just used the end point, which is not actually correct.
-		// It worked because the starting point is (0, 0) - the origin 
+		// It worked because the starting point is (0, 0) - the origin
+
+		// Negate launch angle when facing left, because the formula is for launching towards the right (positive x)
+		// For up and down directions, there are no differences, cuz the velocity would be 0, only the gravity component matters
+		if (Player.FacingDirection == Vector2.Left)
+			LaunchAngle = -SetLaunchAngle;
+		else
+			LaunchAngle = SetLaunchAngle;
+        
+		// Precompute the Sin and Cos values of the launch angle on start (cuz more expensive), instead of per Physics Frame
+		// Previously, it was in _Ready(), but then that was pretty inflexible
+		_sinLaunchAngle = Mathf.Sin(_launchAngle);
+		_cosineLaunchAngle = Mathf.Cos(_launchAngle);
+		_negativeSinLaunchAngle = Mathf.Sin(-_launchAngle);
+		_negativeCosineLaunchAngle = Mathf.Cos(-_launchAngle);
+
 		_initialVelocity = (_endPosition.X - _startPosition.X) / TimeLimit * (1 / _cosineLaunchAngle);
 		_gravity = 2 * (_initialVelocity * TimeLimit * _sinLaunchAngle - (_endPosition.Y - _startPosition.Y)) / (TimeLimit * TimeLimit);
 
 		// Start Physics Process to initiate the bobber's motion
 		SetPhysicsProcess(true);
+
+		// Initiate the fishing line physics as well
 		FishingLine.InitiateFishingLine();
 	}
 
 	public void ReverseBobberMotion()
 	{
-		Vector2 tempStart = _startPosition;
-		_startPosition = _endPosition;
-		// _endPosition = _player.GlobalPosition + new Vector2(0, -16);
-		_endPosition = tempStart;
-
-		LaunchAngle = 0; // Ok, it probably have sth to do with the facing direction as well (O mean if we want to have some sort of angle)
-		// Update: maybe facing direction is an issue, but it's more towards the floating point values when not using 0, 90, 180 angles
-		// New Update: Ok, so if we use IsApproxEqual to compare the positions, it's ok for angle = 0. How about other angles
-		// _sinLaunchAngle = Mathf.Sin(_launchAngle);
-		// _cosineLaunchAngle = Mathf.Cos(_launchAngle);
-
-		_initialVelocity = (_endPosition.X - _startPosition.X) / TimeLimit * (1 / _cosineLaunchAngle);
-		_gravity = 2 * (_initialVelocity * TimeLimit * _sinLaunchAngle - (_endPosition.Y - _startPosition.Y)) / (TimeLimit * TimeLimit);
+		// Swap the starting and ending position
+		(_endPosition, _startPosition) = (_startPosition, _endPosition);
+		
+		// Recalculate parameters using the negative angle (values)
+        _initialVelocity = (_endPosition.X - _startPosition.X) / TimeLimit * (1 / _negativeCosineLaunchAngle);
+		_gravity = 2 * (_initialVelocity * TimeLimit * _negativeSinLaunchAngle - (_endPosition.Y - _startPosition.Y)) / (TimeLimit * TimeLimit);
 
 		_timeElapsed = 0;
 		_hasStopped = false;
+		_reverseMotion = true;
 		Visible = true;
+
 		SetPhysicsProcess(true);
     }
 
@@ -126,29 +134,38 @@ public partial class Bobber : Sprite2D
 	public void ResetBobberStatus()
 	{
 		Visible = false;
-		_startPosition = _player.GlobalPosition + new Vector2(0, -16); // starting position is the player's position + offset of 16 pixels upwards
+
+		_startPosition = Player.GlobalPosition + new Vector2(0, -16); // starting position is the player's position + offset of 16 pixels upwards
 		GlobalPosition = _startPosition;
+
 		_timeElapsed = 0;
 		_hasStopped = false;
 		_inWater = true;
+		_reverseMotion = false;
 	}
 
 	// PhysicsProcess to start the parabolic motion of the bobber
 	public override void _PhysicsProcess(double delta)
 	{
-		// Sample _timeElapsed based on delta
-		// instead of delta, maybe we can try some other value?
-		// Yep, cuz delta is 0.01666 sth, so for some values, it may not converge (in terms of the endPosition)
-		// 60 per second, so + 0.6 per second
-		// _timeElapsed += 0.05;
-		// Nvm it's so unstable
-		// I think it's because of floating point inaccuracies (might be)
-
-		// NEVERMIND, the problem is only at the reversal path, so something needs tweaking there
-		// yeah
+		/*
+		 * Summary of what's been happenning
+		 * We sample _timeElapsed based on delta
+		 * So it is incremented by 0.016666666...7 something like that
+		 * Initially, I thought the start and end position may not converge because of that, but it turns out ok
+		 *
+		 * Then, there are some discrepancy in the Vectors of the start and end positions when checking for the stop condition
+		 * Especially during the reverse motion
+		 * Actually there are some, like 0.00000x discrepancy on the forward motion as well, but we're using IsEqualApprox, so there's no problem
+		 * But on the reverse motion, the discrepancy increased, like +- 0.000002/3 differences
+		 * I don't know how it happened, it is because of the float imprecision or rounding error of the calculations?
+		 * Fortunately, we are able to clutch up by checking for the rounded position instead
+		 * Since we are sampling based on delta, and each position won't collide (as in the difference is >= 1 in integer)
+		 * So, rounding does work
+		 * HOWEVER, it feels kinda wrong. (Idk if this will come back and bite me later, but for now it works)
+		 */
 		_timeElapsed += delta;
 
-		if (!GlobalPosition.Snapped(0.00001f).IsEqualApprox(_endPosition.Snapped(0.00001f)) && !_hasStopped)
+		if (!GlobalPosition.Round().IsEqualApprox(_endPosition.Round()) && !_hasStopped)
 		{
 			Vector2 Displacement = CalculateBobberDisplacement(_timeElapsed);
 
@@ -159,8 +176,10 @@ public partial class Bobber : Sprite2D
 		else
 		{
 			_hasStopped = true;
-			SetPhysicsProcess(false); // Stop the Physics Proces to stop the bobber motion (more towards to save CPU cycle?)
-									  // Might need to remove this later, if we want to make it move?
+
+			// Stop the Physics Proces to stop the bobber motion (more towards to save CPU cycle?)
+			// Might need to remove this later, if we want to make it move? (Or... we can just adjust the position?)
+			SetPhysicsProcess(false); 
 
 			if (!_inWater)
 			{
@@ -170,10 +189,11 @@ public partial class Bobber : Sprite2D
 			}
 		}
 
-		if (GlobalPosition.Snapped(0.00001f).IsEqualApprox(_endPosition.Snapped(0.00001f)))
-			GD.Print("Bobber " + GlobalPosition.Snapped(0.00001f) + " overlapped with end position: " + _endPosition.Snapped(0.00001f));
+		// FOR DEBUG PURPOSES
+		if (GlobalPosition.Round().IsEqualApprox(_endPosition.Round()))
+			GD.Print("Bobber " + GlobalPosition + " overlapped with end position: " + _endPosition);
 		else
-			GD.Print("Bobber " + GlobalPosition.Snapped(0.00001f) + " not overlapped with end position: " + _endPosition.Snapped(0.00001f));
+			GD.Print("Bobber " + GlobalPosition + " not overlapped with end position: " + _endPosition);
 	}
 	
 	private Vector2 CalculateBobberDisplacement(double time)
@@ -186,12 +206,17 @@ public partial class Bobber : Sprite2D
 
 	private double CalculateDisplacementX(double time)
 	{
+		if (_reverseMotion)
+			return _initialVelocity * time * _negativeCosineLaunchAngle;
+
 		return _initialVelocity * time * _cosineLaunchAngle;
 	}
 
 	private double CalculateDisplacementY(double time)
 	{
+		if (_reverseMotion)
+			return _initialVelocity * time * _negativeSinLaunchAngle - (0.5 * _gravity * time * time);
+
 		return _initialVelocity * time * _sinLaunchAngle - (0.5 * _gravity * time * time);
 	}
-
 }

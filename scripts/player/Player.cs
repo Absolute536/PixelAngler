@@ -175,49 +175,4 @@ public partial class Player : CharacterBody2D
 		// Removed the duplicated old stuffs
 		// Leave it empty without commenting it out first, just in case there're things to be done here
 	}
-
-	List<Vector2> polyPoints = [new Vector2(0, 0)];
-	Line2D l = new();
-
-	private void CastLine()
-	{
-
-		if (Input.IsActionJustPressed("ItemAction"))
-		{
-			l.Name = "FishingLine";
-			l.Width = 1.0f;
-			l.DefaultColor = Colors.White;
-			l.Points = polyPoints.ToArray();
-			AddChild(l);
-			Console.WriteLine("FIshing Line created on pressed");
-
-		}
-
-		int count = 1;
-		if (Input.IsActionPressed("ItemAction"))
-		{
-			// Line2D line = new Line2D();
-			// Vector2[] points = [new Vector2(0, 0), new Vector2(10.0f, -10.0f), new Vector2(20.0f, -20.0f), new Vector2(30.0f, -10.0f), new Vector2(40.0f, -5.0f), new Vector2(-10.0f, 10.0f)];
-			// line.Points = points;
-			// line.DefaultColor = Colors.White;
-			// line.Width = 1.0f;
-			// line.JointMode = Line2D.LineJointMode.Round;
-			// AddChild(line);
-
-			polyPoints.Add(new Vector2(count, -count));
-			Line2D fishingLine = GetNode<Line2D>("FishingLine");
-			fishingLine.Points = polyPoints.ToArray();
-			count++;
-			Console.WriteLine("Fishing Line extending on hold");
-
-		}
-
-		if (Input.IsActionJustReleased("ItemAction"))
-		{
-			// var fish = GD.Load<PackedScene>("res://scenes/Fish.tscn");
-			// CharacterBody2D fishInstance = fish.Instantiate() as CharacterBody2D;
-			// fishInstance.Position = l.Points[l.Points.Length - 1];
-			// AddChild(fishInstance);
-		}
-	}
 }

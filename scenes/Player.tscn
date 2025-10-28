@@ -88,6 +88,8 @@ width = 1.0
 Player = NodePath("../..")
 TraceTarget = NodePath("../Bobber")
 
-[node name="Bobber" parent="ActionUI" node_paths=PackedStringArray("FishingLine") instance=ExtResource("9_ur7pv")]
+[node name="Bobber" parent="ActionUI" node_paths=PackedStringArray("Player", "FishingLine") instance=ExtResource("9_ur7pv")]
 visible = false
+Player = NodePath("../..")
 FishingLine = NodePath("../FishingLine")
+SetLaunchAngle = 45.0

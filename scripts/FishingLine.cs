@@ -22,13 +22,7 @@ public partial class FishingLine : Line2D
         SetPhysicsProcess(false);
         _addPointTimer.WaitTime = 0.02; // every 0.02 we check and modify the line instead of every physics frame?
         AnchorPoint = new Vector2(0, -32);
-        
 	}
-
-    // Called every frame. 'delta' is the elapsed time since the previous frame.
-    // public override void _Process(double delta)
-    // {
-    // }
 
     public override void _PhysicsProcess(double delta)
     {
@@ -59,6 +53,7 @@ public partial class FishingLine : Line2D
 
         List<Vector2> pointsOnLine = [];
 
+        // Increment t by 0.05 until 1, so there should be 20 points along the bezier curve
         while (t <= 1)
         {
             Vector2 lerpStartToCentre = controlPointStart.Lerp(controlPointCentre, t);

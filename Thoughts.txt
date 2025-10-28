@@ -174,3 +174,4 @@ Input Related problem
 - because when input change, we apply jitter fix, which will round the vector
 - I think rounding it will work, because we only sample per delta += 0.016666667....
 - so each "step" will have rather significant differences, and so they won't colide (I think)
+- yeap, rounding does work, but it FEELS kinda wrong

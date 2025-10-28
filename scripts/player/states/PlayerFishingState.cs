@@ -37,8 +37,8 @@ public partial class PlayerFishingState : State
     {
         if (Input.IsActionJustPressed("Action"))
         {
-            if (Bobber.InWater)
-                Bobber.ReverseBobberMotion();
+            // if (Bobber.InWater)
+            Bobber.ReverseBobberMotion();
 
             OnStateTransitioned("PlayerIdleState");
         }
