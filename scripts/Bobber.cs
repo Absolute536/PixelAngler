@@ -1,4 +1,5 @@
 using System;
+using System.Reflection.Metadata.Ecma335;
 using GamePlayer;
 using Godot;
 using SignalBusNS;
@@ -45,7 +46,12 @@ public partial class Bobber : Sprite2D
 
 	// Indicate if the bobber should land in water
 	// This one is a bit hacky, cuz we use it to decide whether to hide early or not
-	private bool _inWater = true; 
+	private bool _inWater = true;
+	public bool InWater
+    {
+		set => _inWater = value;
+		get => _inWater;
+    }
 	private bool _hasStopped = false; // Boolean flag to determine if the bobber has stopped (hmm ~)
 	private bool _reverseMotion = false; // Indicate if we are in reverse motion;
 
@@ -76,11 +82,11 @@ public partial class Bobber : Sprite2D
 	 * RIP my Physics class
 	 * Reference: https://phys.libretexts.org/Bookshelves/University_Physics/Physics_(Boundless)/3%3A_Two-Dimensional_Kinematics/3.3%3A_Projectile_Motion
 	 */
-	public void StartBobberMotion(Vector2 endPosition, bool inWater)
+	public void StartBobberMotion(Vector2 endPosition)
 	{
 		// Specify end position of the bobber (where it should land)
 		_endPosition = endPosition;
-		_inWater = inWater;
+		// _inWater = inWater;
 		Visible = true;
 
 		// Calculation of _initialVelocity and _gravity parameters of the motion

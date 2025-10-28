@@ -39,6 +39,7 @@ public partial class SignalBus : Node
      * OnForwardBobberMotionEnded -> trigger RNG to generate a fish object/scene, and initiate the fishing minigame
      * ReverseBobberMotionEnded -> cancel the fishing minigame
      * Additionally (actually the main reason), with this we can have more control over the state transitions
+     * especially to prevent movement when the bobber is still in motion, but already transition to walking state
      * Such as waiting until the motion ends, then we trigger the state transitions (especially from idle to casting, then fishing, etc.)
      *
      * Also we restrict the caller, such that only the Bobber can raise these events

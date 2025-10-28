@@ -50,11 +50,12 @@ public partial class PlayerCastingState : State
             Tuple<TileType, Vector2> castingInfo = CastMarker.StopCastMarking();
 
             _landedInWater = castingInfo.Item1 == TileType.Water;
+            Bobber.InWater = _landedInWater;
             if (_landedInWater)
             {
                 // if on water do sth
                 // OnStateTransitioned("PlayerFishingState");
-                Bobber.StartBobberMotion(castingInfo.Item2, _landedInWater);
+                Bobber.StartBobberMotion(castingInfo.Item2);
                 // cast fishing line, passing the landing position
                 // actually, we can't put it here if we want the line to "animate" with the bobber motion
 
@@ -73,7 +74,7 @@ public partial class PlayerCastingState : State
                 // Ok, I see the problem. Cuz HasStopped() is called on the frame (at least within a few frame I suppose) click is released, we don't know when it stops
                 // and Has stoppped is called, before the bobber ends(???)
 
-                Bobber.StartBobberMotion(castingInfo.Item2, _landedInWater);
+                Bobber.StartBobberMotion(castingInfo.Item2);
             }
         }
     }
