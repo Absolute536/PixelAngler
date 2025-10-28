@@ -1,3 +1,4 @@
+using System;
 using Godot;
 using SignalBusNS;
 
@@ -9,6 +10,7 @@ public partial class PlayerFishingState : State
     public override void _Ready()
     {
         StateName = Name;
+        SignalBus.Instance.ReverseBobberMotionEnded += HandleReverseBobberMotionEnded;
     }
 
     public override void EnterState(string previousState)
@@ -39,8 +41,11 @@ public partial class PlayerFishingState : State
         {
             // if (Bobber.InWater)
             Bobber.ReverseBobberMotion();
-
-            OnStateTransitioned("PlayerIdleState");
         }
+    }
+
+    private void HandleReverseBobberMotionEnded(object sender, EventArgs e)
+    {
+        OnStateTransitioned("PlayerIdleState");
     }
 }

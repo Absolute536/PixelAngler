@@ -1,8 +1,7 @@
+using System;
 using GamePlayer;
 using Godot;
-using System;
-using System.Reflection.Metadata.Ecma335;
-using System.Threading.Tasks;
+using SignalBusNS;
 
 public partial class Bobber : Sprite2D
 {
@@ -179,7 +178,7 @@ public partial class Bobber : Sprite2D
 
 			// Stop the Physics Proces to stop the bobber motion (more towards to save CPU cycle?)
 			// Might need to remove this later, if we want to make it move? (Or... we can just adjust the position?)
-			SetPhysicsProcess(false); 
+			SetPhysicsProcess(false);
 
 			if (!_inWater)
 			{
@@ -187,6 +186,12 @@ public partial class Bobber : Sprite2D
 				FishingLine.TerminateFishingLine();
 				GD.Print("Bobber not landed in Water. Hide it back.");
 			}
+
+			// Raise the corresponding BobberMotionEnded event
+			if (_reverseMotion)
+				SignalBus.Instance.OnReverseBobberMotionEnded(this, EventArgs.Empty);
+			else
+				SignalBus.Instance.OnForwardBobberMotionEnded(this, EventArgs.Empty);
 		}
 
 		// FOR DEBUG PURPOSES

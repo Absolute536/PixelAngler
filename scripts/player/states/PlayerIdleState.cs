@@ -52,7 +52,7 @@ public partial class PlayerIdleState : State
             OnStateTransitioned("PlayerWalkingState");
         // If no movement input and Action is pressed (continuously as well), transition to action state
         // So that it's gonna be like -> clicked -> action -> start casting or something
-        else if (Input.IsActionJustPressed("Action")) // if I use JustPressed, then we can't trasition from walking to this while holding LMB, wait, maybe we can use presed in walking
+        else if (Input.IsActionPressed("Action")) // if I use JustPressed, then we can't trasition from walking to this while holding LMB, wait, maybe we can use presed in walking
         {
             GD.Print(Name + ": " + "Action");
 

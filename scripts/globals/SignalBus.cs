@@ -31,150 +31,41 @@ public partial class SignalBus : Node
     //     return LocationChanged.Invoke(sender, e);
     // }
 
-    // PlayerActionEventHandler delegate signature
-    public delegate void PlayerActionEventHandler(object sender, EventArgs e);
+    /*
+     * NOW
+     * We placed the bobber motion event handler in the Signal Bus, instead of within the class itself,
+     * because we might want to notify some other observers/subscribers outside of the player's scene
+     * examples (for now):
+     * OnForwardBobberMotionEnded -> trigger RNG to generate a fish object/scene, and initiate the fishing minigame
+     * ReverseBobberMotionEnded -> cancel the fishing minigame
+     * Additionally (actually the main reason), with this we can have more control over the state transitions
+     * Such as waiting until the motion ends, then we trigger the state transitions (especially from idle to casting, then fishing, etc.)
+     *
+     * Also we restrict the caller, such that only the Bobber can raise these events
+     */
 
-    // Events of PlayerActionEventHandler
-    public event PlayerActionEventHandler CastMarkingStarted;
-    public event PlayerActionEventHandler CastActionEnd;
-    public event PlayerActionEventHandler NetActionStart;
-    public event PlayerActionEventHandler NetActionEnd;
-    public event PlayerActionEventHandler FishingActionStart;
-    public event PlayerActionEventHandler FishingActionEnd;
+    public delegate void BobberMotionEndedEventHandler(object sender, EventArgs e);
+    public event BobberMotionEndedEventHandler ForwardBobberMotionEnded;
+    public event BobberMotionEndedEventHandler ReverseBobberMotionEnded;
 
-    public delegate void BobberMovementEventHandler(object sender, PositionalEventArgs posArgs);
-
-    // public delegate TileType CastMarkingEndedEventHandler(object sender, EventArgs e);
-    // private CastMarkingEndedEventHandler CastMarkingEnded;
-
-    // public void SubscribeToCastMarkingEnded(object sender, CastMarkingEndedEventHandler method)
-    // {
-    //     if (CastMarkingEnded is not null)
-    //     {
-    //         GD.PushError("MarkerLanded can only have one subscriber");
-    //         return;
-    //     }
-
-    //     if (sender is not CastMarker)
-    //     {
-    //         GD.PushError("Subscriber is not CastMarker");
-    //         return;
-    //     }
-
-    //     CastMarkingEnded = method;
-    //     GD.Print("Callback successfully added to MarkerLanded by " + sender.GetType());
-    // }
-
-    // public TileType OnCastMarkingEnded(object sender, EventArgs e)
-    // {
-    //     // if (sender is PlayerCastingState)
-    //     TileType landedTile = CastMarkingEnded.Invoke(sender, e);
-    //     return landedTile;
-
-    // }
-
-
-    public event BobberMovementEventHandler BobberMovement;
-
-    // Public "wrapper" methods for external class to invoke the events with the naming convention: "On<EventName>"
-    // Methods for invoking events related to Player action -> only if sender is a PlayerActionManger (hmm... then, it is coupled? kinda inflexible). 
-    // public void OnCastActionStart(object sender, EventArgs e)
-    // {
-    //     if (sender is PlayerActionManager)
-    //         CastActionStart?.Invoke(sender, e);
-    //     else
-    //         GD.PushError("Cannot invoke player action related events if sender is not of type \"PlayerActionManager\"");
-    // }
-
-    // public void OnCastActionEnd(object sender, EventArgs e)
-    // {
-    //     if (sender is PlayerActionManager)
-    //         CastActionEnd?.Invoke(sender, e);
-    //     else
-    //        GD.PushError("Cannot invoke player action related events if sender is not of type \"PlayerActionManager\"");
-    // }
-
-    // public void OnNetActionStart(object sender, EventArgs e)
-    // {
-    //     if (sender is PlayerActionManager)
-    //         NetActionStart?.Invoke(sender, e);
-    //     else
-    //         GD.PushError("Cannot invoke player action related events if sender is not of type \"PlayerActionManager\"");
-    // }
-
-    // public void OnNetActionEnd(object sender, EventArgs e)
-    // {
-    //     if (sender is PlayerActionManager)
-    //         NetActionEnd?.Invoke(sender, e);
-    //     else
-    //         GD.PushError("Cannot invoke player action related events if sender is not of type \"PlayerActionManager\"");
-    // }
-
-    // public void OnFishingActionStart(object sender, EventArgs e)
-    // {
-    //     FishingActionStart?.Invoke(sender, e);
-    // }
-
-    // public void OnFishingActionEnd(object sender, EventArgs e)
-    // {
-    //     FishingActionEnd?.Invoke(sender, e);
-    // }
-
-    // Well actually... perhaps we can consider using an "ItemType" enum instead of actionType for specifying which action to invoke (to align with the manager)
-    public void OnActionStart(PlayerActionType actionType, object sender, EventArgs e)
+    public void OnForwardBobberMotionEnded(object sender, EventArgs e)
     {
-        // if (sender is not PlayerActionManager)
-        // {
-        //     GD.PushError("Cannot invoke player action related events if sender is not of type \"PlayerActionManager\"");
-        //     return;
-        // }
-
-        switch (actionType)
-        {
-            case PlayerActionType.CastAction:
-                CastMarkingStarted?.Invoke(sender, e);
-                break;
-            case PlayerActionType.NetAction:
-                NetActionStart?.Invoke(sender, e);
-                break;
-            case PlayerActionType.FishingAction: // not sure if only action manager can invoke fishing yet
-                FishingActionStart?.Invoke(sender, e);
-                break;
-            default:
-                throw new ArgumentException("PlayerActionType argument provided is invalid");
-        }
-
+        if (sender is Bobber)
+            ForwardBobberMotionEnded?.Invoke(sender, e);
+        else
+            GD.PushError("Cannot raise bobber motion event if caller is not of type \"Bobber\"");
     }
-    
-    public void OnActionEnd(PlayerActionType actionType, object sender, EventArgs e)
+
+        public void OnReverseBobberMotionEnded(object sender, EventArgs e)
     {
-        if (sender is not PlayerActionManager)
-        {
-            GD.PushError("Cannot invoke player action related events if sender is not of type \"PlayerActionManager\"");
-            return;
-        }
-
-        switch (actionType)
-        {
-            case PlayerActionType.CastAction:
-                CastActionEnd?.Invoke(sender, e);
-                break;
-            case PlayerActionType.NetAction:
-                NetActionEnd?.Invoke(sender, e);
-                break;
-            case PlayerActionType.FishingAction: // not sure if only action manager can invoke fishing yet
-                FishingActionEnd?.Invoke(sender, e);
-                break;
-            default:
-                throw new ArgumentException("PlayerActionType argument provided is invalid");
-        }
-
+        if (sender is Bobber)
+            ReverseBobberMotionEnded?.Invoke(sender, e);
+        else
+            GD.PushError("Cannot raise bobber motion event if caller is not of type \"Bobber\"");
     }
-    
-    public void OnBobberMovement(object sender, PositionalEventArgs posArgs)
-    {
-        BobberMovement?.Invoke(sender, posArgs);
-    }
+
+
+
 
 }
 

@@ -13,9 +13,12 @@ public partial class PlayerCastingState : State
     [Export] public Bobber Bobber;
     [Export] public FishingLine FishingLine;
 
+    private bool _landedInWater = true;
+
     public override void _Ready()
     {
         StateName = Name;
+        SignalBus.Instance.ForwardBobberMotionEnded += HandleForwardBobberMotionEnded;
     }
 
     public override void EnterState(string previousState)
@@ -42,30 +45,19 @@ public partial class PlayerCastingState : State
     {
         if (Input.IsActionJustReleased("Action"))
         {
-            // More accurately,
-            // Stop the cast marker on release
-            // Start the bobber motion & fishing line
+            // Stop cast marking on action release
+            // Get the casting info in the form of a Tuple (TileType of the landing tile, Position of the landing tile)
             Tuple<TileType, Vector2> castingInfo = CastMarker.StopCastMarking();
 
-            // Bobber.StartBobberMotion(castingInfo.Item2);
-            // Now the problem is if the bobber won't land on water, it won't be visible at all
-            // And what we want is to make it visible and hide it back when it lands
-            // A simple solution is to use a loop to wait before resetting the bobber status (it can work, but might be a bit dangerous)
-            // loop doesn't work, it will freeze
-            // use a flag instead
-
-            // ok maybe the event args can contain reference of nodes that were instantiated (like the line and bobber)
-            // and then hide them or queue free them here based on markerTile?
-            bool landedInWater = castingInfo.Item1 == TileType.Water;
-            if (landedInWater)
+            _landedInWater = castingInfo.Item1 == TileType.Water;
+            if (_landedInWater)
             {
                 // if on water do sth
                 // OnStateTransitioned("PlayerFishingState");
-                Bobber.StartBobberMotion(castingInfo.Item2, landedInWater);
+                Bobber.StartBobberMotion(castingInfo.Item2, _landedInWater);
                 // cast fishing line, passing the landing position
                 // actually, we can't put it here if we want the line to "animate" with the bobber motion
 
-                OnStateTransitioned("PlayerFishingState");
                 // Go back to idle state for now
             }
             else
@@ -81,10 +73,16 @@ public partial class PlayerCastingState : State
                 // Ok, I see the problem. Cuz HasStopped() is called on the frame (at least within a few frame I suppose) click is released, we don't know when it stops
                 // and Has stoppped is called, before the bobber ends(???)
 
-                Bobber.StartBobberMotion(castingInfo.Item2, landedInWater);
-                OnStateTransitioned("PlayerIdleState");
+                Bobber.StartBobberMotion(castingInfo.Item2, _landedInWater);
             }
         }
     }
 
+    public void HandleForwardBobberMotionEnded(object sender, EventArgs e)
+    {
+        if (_landedInWater)
+            OnStateTransitioned("PlayerFishingState");
+        else
+            OnStateTransitioned("PlayerIdleState");
+    }
 }

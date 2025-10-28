@@ -175,3 +175,12 @@ Input Related problem
 - I think rounding it will work, because we only sample per delta += 0.016666667....
 - so each "step" will have rather significant differences, and so they won't colide (I think)
 - yeap, rounding does work, but it FEELS kinda wrong
+
+- State transitions
+- idle to walk -> no lmb and movement
+- walk to idle -> lmb just pressed or no movement
+- idle to casting -> lmb pressed
+- casting to idle -> release (not on water)
+- casting to fishing -> release (on water)
+- fishing to idle -> lmb just pressed (this is where the problem's at, doable if we use some sort of signal to wait)
+- let's try using some sort of signal to wait until the bobber motion is done
