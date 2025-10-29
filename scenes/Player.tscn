@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://bd2sgwdtpfwaj"]
+[gd_scene load_steps=14 format=3 uid="uid://bd2sgwdtpfwaj"]
 
 [ext_resource type="SpriteFrames" uid="uid://chi3wqli78166" path="res://resources/Player.tres" id="1_p0vlq"]
 [ext_resource type="Script" uid="uid://dwkgu7hv8ofdd" path="res://scripts/player/Player.cs" id="1_v6fml"]
@@ -11,6 +11,7 @@
 [ext_resource type="Script" uid="uid://bug1toj6bvtq3" path="res://scripts/player/states/PlayerCastingState.cs" id="8_y4r1p"]
 [ext_resource type="PackedScene" uid="uid://1w1wporxjcab" path="res://scenes/bobber.tscn" id="9_ur7pv"]
 [ext_resource type="PackedScene" uid="uid://d1r8eckfg8xw" path="res://scenes/fishing_line.tscn" id="11_d2wvv"]
+[ext_resource type="Script" uid="uid://dp3ijpwnmjedy" path="res://scripts/game_mechanism/FishingQuickTimeEvent.cs" id="12_3v2ag"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_p0vlq"]
 radius = 5.0
@@ -69,9 +70,10 @@ CastMarker = NodePath("../../ActionUI/CastMarker")
 Bobber = NodePath("../../ActionUI/Bobber")
 metadata/_custom_type_script = "uid://bug1toj6bvtq3"
 
-[node name="PlayerFishingState" type="Node" parent="StateMachine" node_paths=PackedStringArray("Bobber")]
+[node name="PlayerFishingState" type="Node" parent="StateMachine" node_paths=PackedStringArray("Bobber", "FishingQTE")]
 script = ExtResource("8_d2wvv")
 Bobber = NodePath("../../ActionUI/Bobber")
+FishingQTE = NodePath("../../Miscellaneous/FishingQuickTimeEvent")
 metadata/_custom_type_script = "uid://b5c6xmf5euuwj"
 
 [node name="ActionUI" type="Node2D" parent="."]
@@ -93,3 +95,10 @@ visible = false
 Player = NodePath("../..")
 FishingLine = NodePath("../FishingLine")
 SetLaunchAngle = 45.0
+
+[node name="Miscellaneous" type="Node" parent="."]
+
+[node name="FishingQuickTimeEvent" type="Node" parent="Miscellaneous"]
+script = ExtResource("12_3v2ag")
+Duration = 0.7
+metadata/_custom_type_script = "uid://dp3ijpwnmjedy"

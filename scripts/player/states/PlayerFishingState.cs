@@ -7,17 +7,28 @@ public partial class PlayerFishingState : State
 {
     [Export] public Bobber Bobber;
 
+    [Export] public FishingQuickTimeEvent FishingQTE;
+
     public override void _Ready()
     {
         StateName = Name;
         SignalBus.Instance.ReverseBobberMotionEnded += HandleReverseBobberMotionEnded;
+
+
+        
+        
     }
 
     public override void EnterState(string previousState)
     {
-        // On entering fishing state
-        // cast the bobber + fishing line
-        // well, not really, we need to cast it on release
+        // On enter, we start the timer
+        // Or maybe on enter we add the QTE node to the scene tree (hold this one first)
+
+        // So, on enter, create scene tree timer
+        // subscribe to timeout
+        // you know what, let's make two nodes, one for controlling the QTE, another for controlling the fishing
+        FishingQTE.StartQTE();
+
     }
 
     public override void ExitState()
@@ -37,9 +48,8 @@ public partial class PlayerFishingState : State
 
     public override void PhysicsProcessUpdate(double delta)
     {
-        if (Input.IsActionJustPressed("Action"))
+        if (Input.IsActionJustPressed("Action") && !FishingQTE.IsActive)
         {
-            // if (Bobber.InWater)
             Bobber.ReverseBobberMotion();
         }
     }
@@ -48,4 +58,6 @@ public partial class PlayerFishingState : State
     {
         OnStateTransitioned("PlayerIdleState");
     }
+
+    
 }

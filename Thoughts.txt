@@ -184,3 +184,16 @@ Input Related problem
 - casting to fishing -> release (on water)
 - fishing to idle -> lmb just pressed (this is where the problem's at, doable if we use some sort of signal to wait)
 - let's try using some sort of signal to wait until the bobber motion is done
+- UPDATE: yeah it all works seamlessly now
+
+Now, on to the fishing gameplay
+- first the timing element.
+- bobber land in water -> FishingState
+- after (Fixed) seconds, a fish silhouette spawns
+- after spawnning in, start the strike timer with (Random) seconds
+- during this time, the fish will move randomly, trying to nibble on the bait
+- on striker timer timeout, fish moves into the bobber, biting it
+- after biting it, player has to LMB within (Fixed) second to actually start the minigame
+- success -> start minigame (maybe transition into game state?)
+- failure -> reset and repeat the above
+- Fishing State reel back: if not strike timer not yet timeout, can reel back, else, nope
