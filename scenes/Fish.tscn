@@ -30,4 +30,4 @@ script = ExtResource("4_pgks6")
 Fish = NodePath("../..")
 metadata/_custom_type_script = "uid://bqvg3v6abxftl"
 
-[connection signal="body_entered" from="." to="StateMachine/FishNibbleState" method="OnFishBodyEntered"]
+[connection signal="area_entered" from="." to="StateMachine/FishNibbleState" method="OnAreaEntered"]

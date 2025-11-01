@@ -12,6 +12,8 @@ public partial class PlayerFishingState : State
 
     private bool _IsFishing;
 
+    private Node _instancedFish;
+
     // private Timer _waitTimer = new (); // actually, we need to add it to scene tree for it to work, so let's try scene tree timer instead
     public override void _Ready()
     {
@@ -52,6 +54,9 @@ public partial class PlayerFishingState : State
         // I'll leave it like this for now (maybe not)
         // YEAH ~~, I think we'll do on click, or else the fish will still spawn when the bobber is reeling back if you time it well
         // _IsFishing = false;
+
+        if (_instancedFish is not null)
+            _instancedFish.QueueFree();
     }
 
     public override void HandleInput(InputEvent @event)
@@ -78,13 +83,20 @@ public partial class PlayerFishingState : State
         OnStateTransitioned("PlayerIdleState");
     }
 
+    // Kay~ so currently we're just instancing the fish scene directly, but later
+    // we probably would want a spawner or some other class to handle all the rng and shits for spawnning the fish
+    // then it'll return us a reference to the fish object from the scene here
     private void SpawnFish()
     {
         if (_IsFishing)
         {
-            GD.Print("Fish appears!");  
+            GD.Print("Fish appears!");
 
             // invoke signal bus? and pass the reference through there? I guess it works?
+            // SignalBus.Instance.OnAnglingStarted(this, EventArgs.Empty);
+            PackedScene fishScene = GD.Load<PackedScene>("res://scenes/fish.tscn");
+            _instancedFish = fishScene.Instantiate(); // so now we need some reference to queue free it on exit?
+            GetTree().Root.AddChild(_instancedFish);
         }
 
     }

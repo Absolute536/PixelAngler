@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using SignalBusNS;
 
 [GlobalClass]
 public partial class FishNibbleState : State
@@ -12,12 +13,25 @@ public partial class FishNibbleState : State
 
     private Bobber _bobber;
 
+    private bool _isActive;
+
     public override void _Ready()
     {
-        SetPhysicsProcess(false);
+        StateName = Name;
+
+        // wait this doesn't work cuz it's in the physics process of state machine
+        // let's try remeding with a flag
+        // SetPhysicsProcess(false);
+        _isActive = false;
+
+
+        // SignalBus.Instance.AnglingStarted += HandleAnglingStarted;
+        // wait.... it actually won't work
+        // because we are instancing the Fish scene during runtime dynamically
+        // so.... when the fishing state invokes the event, nothing is subscribed yet
     }
 
-    public override void EnterState(string previousState)
+    public override void EnterState(string previousState) // Quick note here regarding the statemachine initial state hehe
     {
         // set a random duration before starting the nibble (or we can have another WAITING/IDLE state?)
 
@@ -35,7 +49,9 @@ public partial class FishNibbleState : State
         // On enter, should also retrieve a reference to the bobber
         // WAIT
         // the bobber always exist, just hidden
-        
+        _bobber = GetNode<Bobber>("../../../Main/World/WorldEntities/Player/ActionUI/Bobber");
+        GD.Print(_bobber.GlobalPosition);
+        Fish.GlobalPosition = _bobber.GlobalPosition + new Vector2(-32, 0);
 
         // Fish.BodyEntered += OnFishBodyEntered;
         SceneTreeTimer waitTimer = GetTree().CreateTimer(2.0, true, true); // wait for 2 seconds for now
@@ -69,12 +85,22 @@ public partial class FishNibbleState : State
     public override void PhysicsProcessUpdate(double delta)
     {
         // set movement
+        // Tolol
+        // Cuz I didn't flip the _isActive flag upon area entered, so that's why the fish
+        // continues to move until both origins (bobber and fish) overlaps
+        if (_isActive)
+        {
+            Vector2 velocity = Fish.GlobalPosition.DirectionTo(_bobber.GlobalPosition) * _nibbleSpeed;
+            Fish.GlobalPosition = Fish.GlobalPosition.MoveToward(velocity, 0.5f);
+        }
 
     }
 
     private void StartNibble()
     {
-        SetPhysicsProcess(true);
+        // SetPhysicsProcess(true);
+        _isActive = true;
+        GD.Print("Nibble starts");
     }
 
     private void InitialiseNibbleParameters()
@@ -85,9 +111,17 @@ public partial class FishNibbleState : State
     }
 
     // Connected/Subscribed to the signal/event via the editor already
-    private void OnFishBodyEntered(Node2D area)
+    private void OnAreaEntered(Area2D area)
     {
+        GD.Print("Body entered detected");
+        _isActive = false;
+        SetPhysicsProcess(false); // try this first
+    }
 
+    public void HandleAnglingStarted(object sender, EventArgs e)
+    {
+        if (sender is Bobber)
+            _bobber = sender as Bobber;
     }
 
 }

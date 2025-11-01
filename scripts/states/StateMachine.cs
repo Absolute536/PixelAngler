@@ -33,7 +33,7 @@ public partial class StateMachine : Node
         }
         else
         {
-            currentState = availableStates["PlayerIdleState"]; // Set PlayerIdleState as the default as a fallback
+            currentState = availableStates["PlayerIdleState"]; // Set PlayerIdleState as the default as a fallback (about that ~)
             currentState.EnterState("");
         }
     }

@@ -57,12 +57,24 @@ public partial class SignalBus : Node
             GD.PushError("Cannot raise bobber motion event if caller is not of type \"Bobber\"");
     }
 
-        public void OnReverseBobberMotionEnded(object sender, EventArgs e)
+    public void OnReverseBobberMotionEnded(object sender, EventArgs e)
     {
         if (sender is Bobber)
             ReverseBobberMotionEnded?.Invoke(sender, e);
         else
             GD.PushError("Cannot raise bobber motion event if caller is not of type \"Bobber\"");
+    }
+
+    // Probably won't use this, but keep it for now
+    public delegate void AnglingStartedEventHandler(object sender, EventArgs e);
+    public event AnglingStartedEventHandler AnglingStarted;
+
+    public void OnAnglingStarted(object sender, EventArgs e)
+    {
+        if (sender is PlayerFishingState)
+            AnglingStarted?.Invoke(sender, e);
+        else
+            GD.PushError("Cannot raise angling started event if caller is not of type \"PlayerFishingState\"");
     }
 
 
