@@ -4,7 +4,7 @@ using GamePlayer;
 using Godot;
 using SignalBusNS;
 
-public partial class Bobber : Sprite2D
+public partial class Bobber : Area2D
 {
 	[Export] Player Player;
 	[Export] public FishingLine FishingLine;
@@ -100,7 +100,7 @@ public partial class Bobber : Sprite2D
 			LaunchAngle = -SetLaunchAngle;
 		else
 			LaunchAngle = SetLaunchAngle;
-        
+
 		// Precompute the Sin and Cos values of the launch angle on start (cuz more expensive), instead of per Physics Frame
 		// Previously, it was in _Ready(), but then that was pretty inflexible
 		_sinLaunchAngle = Mathf.Sin(_launchAngle);
@@ -118,6 +118,7 @@ public partial class Bobber : Sprite2D
 		FishingLine.InitiateFishingLine();
 	}
 
+	// Initiate reverse motion by recalculating all the motion parameters and resetting some flags
 	public void ReverseBobberMotion()
 	{
 		// Swap the starting and ending position
@@ -129,7 +130,7 @@ public partial class Bobber : Sprite2D
 
 		_timeElapsed = 0;
 		_hasStopped = false;
-		_reverseMotion = true;
+		_reverseMotion = true; // Flip the flag to indicate we're in reverse motion
 		Visible = true;
 
 		SetPhysicsProcess(true);
@@ -170,6 +171,7 @@ public partial class Bobber : Sprite2D
 		 */
 		_timeElapsed += delta;
 
+		// If current (global) position is not at the end position AND the bobber hasn't stopped, continue the motion
 		if (!GlobalPosition.Round().IsEqualApprox(_endPosition.Round()) && !_hasStopped)
 		{
 			Vector2 Displacement = CalculateBobberDisplacement(_timeElapsed);
@@ -186,6 +188,7 @@ public partial class Bobber : Sprite2D
 			// Might need to remove this later, if we want to make it move? (Or... we can just adjust the position?)
 			SetPhysicsProcess(false);
 
+			// If bobber is casted not into water, hide both the bobber and fishing line back
 			if (!_inWater)
 			{
 				Visible = false;
@@ -193,11 +196,17 @@ public partial class Bobber : Sprite2D
 				GD.Print("Bobber not landed in Water. Hide it back.");
 			}
 
-			// Raise the corresponding BobberMotionEnded event
+
+			// // Raise the corresponding BobberMotionEnded event if it is the end of the reverse motion
 			if (_reverseMotion)
+			{
 				SignalBus.Instance.OnReverseBobberMotionEnded(this, EventArgs.Empty);
-			else
+				Visible = false;
+				FishingLine.TerminateFishingLine();
+			}
+			else // For forward motion
 				SignalBus.Instance.OnForwardBobberMotionEnded(this, EventArgs.Empty);
+				
 		}
 
 		// FOR DEBUG PURPOSES

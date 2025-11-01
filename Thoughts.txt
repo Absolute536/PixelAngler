@@ -197,3 +197,16 @@ Now, on to the fishing gameplay
 - success -> start minigame (maybe transition into game state?)
 - failure -> reset and repeat the above
 - Fishing State reel back: if not strike timer not yet timeout, can reel back, else, nope
+
+QTE Elements
+- trigger condition: bobber land on water
+- input window: LMB within the specified duration
+- duration: 0.7s
+- on success: initiate minigame
+- on failure: repeat
+
+- no need to cancel
+- cast -> wait (for a random duration) -> start the fish spawnning animation/mechanism
+- reel back before fish bite -> cancel fish animation
+- fish bite -> start QTE -> success: start minigame, failure: repeat the fish spawnning animation
+- so no need for cancelling QTE, but the fish animation itself

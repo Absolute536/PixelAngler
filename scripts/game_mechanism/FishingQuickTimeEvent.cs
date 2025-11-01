@@ -31,7 +31,8 @@ public partial class FishingQuickTimeEvent : Node
             // raise success event
             GD.Print("Successful Reaction");
         }
-        else
+
+        if (!_isSuccessful)
         {
             // raise failure event
             GD.Print("Unsuccessful Reaction");

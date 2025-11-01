@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public partial class FishingLine : Line2D
 {
     [Export] public Player Player;
-	[Export] public Sprite2D TraceTarget; // End point of the line - the bobber
+	[Export] public Bobber TraceTarget; // End point of the line - the bobber
     [Export] public Vector2 AnchorPoint; // Anchor (First) point of the line - at the end of the fishing rod
 
     private Timer _addPointTimer = new Timer();
