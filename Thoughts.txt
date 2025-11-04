@@ -257,3 +257,7 @@ QTE Elements
 - you know what, nvm, let's just go with the original raycast, cuz with shapes, we can't exactly determine the direction.
 
 - additional: wander state first before nibble?
+
+= REVAMP FISH SPAWNNING =
+- use a spawn point that is placed in water (manually) instead
+- then the fish spawns from the point and enter into wander state, where they can move around and not onto grass or whatever

@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://eii05j1pdh14"]
+[gd_scene load_steps=8 format=3 uid="uid://eii05j1pdh14"]
 
 [ext_resource type="Texture2D" uid="uid://db8vn106q6tyc" path="res://assets/fish/Fish.png" id="1_n6yr6"]
 [ext_resource type="Script" uid="uid://cu4l4rhqag1e7" path="res://scripts/fish/Fish.cs" id="1_nub35"]
 [ext_resource type="Script" uid="uid://bakg405h3gvhu" path="res://scripts/states/StateMachine.cs" id="3_pgks6"]
 [ext_resource type="Script" uid="uid://bqvg3v6abxftl" path="res://scripts/states/FishNibbleState.cs" id="4_pgks6"]
+[ext_resource type="Script" uid="uid://d3qyypo0non2h" path="res://scripts/states/FishWanderState.cs" id="5_6lgmd"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_psuch"]
 size = Vector2(16, 9)
@@ -11,9 +12,10 @@ size = Vector2(16, 9)
 [sub_resource type="CircleShape2D" id="CircleShape2D_pgks6"]
 radius = 48.0
 
-[node name="Fish" type="Area2D"]
+[node name="Fish" type="CharacterBody2D"]
 collision_layer = 3
 collision_mask = 3
+motion_mode = 1
 script = ExtResource("1_nub35")
 
 [node name="FishCollisionShape" type="CollisionShape2D" parent="."]
@@ -24,7 +26,7 @@ texture = ExtResource("1_n6yr6")
 
 [node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initialState")]
 script = ExtResource("3_pgks6")
-initialState = NodePath("FishNibbleState")
+initialState = NodePath("FishWanderState")
 metadata/_custom_type_script = "uid://bakg405h3gvhu"
 
 [node name="FishNibbleState" type="Node" parent="StateMachine" node_paths=PackedStringArray("Fish")]
@@ -32,9 +34,16 @@ script = ExtResource("4_pgks6")
 Fish = NodePath("../..")
 metadata/_custom_type_script = "uid://bqvg3v6abxftl"
 
+[node name="FishWanderState" type="Node" parent="StateMachine" node_paths=PackedStringArray("Fish", "_movementTimer")]
+script = ExtResource("5_6lgmd")
+Fish = NodePath("../..")
+_movementTimer = NodePath("../../WanderTimer")
+metadata/_custom_type_script = "uid://d3qyypo0non2h"
+
 [node name="DetectionRadius" type="Area2D" parent="."]
 
 [node name="DetectionRadiusShape" type="CollisionShape2D" parent="DetectionRadius"]
 shape = SubResource("CircleShape2D_pgks6")
 
-[connection signal="area_entered" from="." to="StateMachine/FishNibbleState" method="OnAreaEntered"]
+[node name="WanderTimer" type="Timer" parent="."]
+process_callback = 0
