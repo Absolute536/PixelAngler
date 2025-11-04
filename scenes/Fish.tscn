@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://eii05j1pdh14"]
+[gd_scene load_steps=7 format=3 uid="uid://eii05j1pdh14"]
 
 [ext_resource type="Texture2D" uid="uid://db8vn106q6tyc" path="res://assets/fish/Fish.png" id="1_n6yr6"]
 [ext_resource type="Script" uid="uid://cu4l4rhqag1e7" path="res://scripts/fish/Fish.cs" id="1_nub35"]
@@ -8,13 +8,15 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_psuch"]
 size = Vector2(16, 9)
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_pgks6"]
+radius = 48.0
+
 [node name="Fish" type="Area2D"]
 collision_layer = 3
 collision_mask = 3
 script = ExtResource("1_nub35")
 
 [node name="FishCollisionShape" type="CollisionShape2D" parent="."]
-position = Vector2(0, -0.5)
 shape = SubResource("RectangleShape2D_psuch")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
@@ -29,5 +31,10 @@ metadata/_custom_type_script = "uid://bakg405h3gvhu"
 script = ExtResource("4_pgks6")
 Fish = NodePath("../..")
 metadata/_custom_type_script = "uid://bqvg3v6abxftl"
+
+[node name="DetectionRadius" type="Area2D" parent="."]
+
+[node name="DetectionRadiusShape" type="CollisionShape2D" parent="DetectionRadius"]
+shape = SubResource("CircleShape2D_pgks6")
 
 [connection signal="area_entered" from="." to="StateMachine/FishNibbleState" method="OnAreaEntered"]

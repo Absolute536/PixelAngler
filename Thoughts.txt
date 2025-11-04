@@ -213,3 +213,47 @@ QTE Elements
 
 - testing out enforce pull request
 - another
+
+- FishNibbleState
+- On Enter:
+- Get bobber reference
+- Set fish position at a random distance away from bobber --> need to account for facing direction
+- start the nibble timer
+- initialise the nibble parameters
+- total nibble required, current nibble count = 0, nibble speed (this one can be on each nibble start)
+- Nibble Timer Timeout:
+- start the motion by flipping isActive to true
+- On collision with bobber:
+- bounce(?) away from bobber until it reaches a specified random distance? and stops
+- upon stopping, restart the movement towards bobber with a randomised speed
+- So basically repeat until current nibble count == total nibble required
+- afterthat, repeat once more (or at total nibble required - 1?), and on area entered, start the qte
+- success: transition to game -> and then the fish would also need to register to an event raised by the bobber to follow its movement
+- failure: queue free the fish ---> wait random time for another fish to spawn to repeat the process
+
+- random idea: flip the fish sprite while in certain action (pull away flip, move towards, flip back)
+- yeah, just proceed with a simple one (follow straight line) for now. (no need for anything complex like A* search or whatever) can revisit if have extra time (Lol)
+- just made fish a child of bobber, so we can just manipulate bobber, and the fish will follow (once it's hooked)
+- potential solution, create area2d around bobber on landing, and check for collision based on the radius (distance)
+- if no collision with edges (as in water edges), then it's safe
+- holdddddd!!!! maybe raycast is a potential solution?
+- try raycasting to from bobber to the fish spawn location. If no collision reported, then we're safe (yeah, it works if there's a random patch of land as well)
+- YEAHHHHHH!!!! raycast WORKSSSSS!!
+- so we use raycast then
+- hmm... can't use a while loop to search for spawn point cuz of the engine right, it will cause suspension (try again)
+- potential soluion:
+- enforce spawn direction is facing direction along bobber (like before)
+- get angle, get spawn location (like before)
+- if fail, try another direction until all 4 directions are attempted
+- OR
+- use shapecast2D in a circle around bobber
+- set radius = random distance
+- if no collision, then can spawn anywhere within the circle minus a 1 tile radius (for safety)
+- also we set enabled = false by default, then only enabled = true when bobber lands on water (idk if this "saves" anything)
+- OK, let's go with this tmr (turu dulu bang)
+- hmm... unfortunately, it doesn't really work like I think would work
+- OR (new)
+- use another area2d in the bobber specifically for detecting collision with
+- you know what, nvm, let's just go with the original raycast, cuz with shapes, we can't exactly determine the direction.
+
+- additional: wander state first before nibble?

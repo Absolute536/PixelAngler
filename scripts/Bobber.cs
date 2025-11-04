@@ -13,6 +13,7 @@ public partial class Bobber : Area2D
 	// So, instead of doing this hacky thing, we just need to negate the Endpoint y?
 	// Nope, we need to do this
 	[Export] public float SetLaunchAngle;
+	[Export] public RayCast2D BobberRayCast;
 	private float LaunchAngle
 	{
 		set
@@ -206,7 +207,7 @@ public partial class Bobber : Area2D
 			}
 			else // For forward motion
 				SignalBus.Instance.OnForwardBobberMotionEnded(this, EventArgs.Empty);
-				
+
 		}
 
 		// FOR DEBUG PURPOSES
@@ -215,6 +216,14 @@ public partial class Bobber : Area2D
 		else
 			GD.Print("Bobber " + GlobalPosition + " not overlapped with end position: " + _endPosition);
 	}
+	
+	public bool IsSpawnPositionInvalid(Vector2 position)
+	{
+		BobberRayCast.TargetPosition = position;
+		BobberRayCast.ForceRaycastUpdate();
+
+		return BobberRayCast.IsColliding();
+    }
 	
 	private Vector2 CalculateBobberDisplacement(double time)
     {

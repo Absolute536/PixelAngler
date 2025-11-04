@@ -1,5 +1,5 @@
 using System;
-using System.Threading.Tasks;
+using GamePlayer;
 using Godot;
 using SignalBusNS;
 
@@ -8,11 +8,12 @@ public partial class PlayerFishingState : State
 {
     [Export] public Bobber Bobber;
 
-    [Export] public FishingQuickTimeEvent FishingQTE;
+    [Export] public FishingQuickTimeEvent FishingQTE; // hmm, nevermind, we need a node in scene tree for timer to work (I forgor)
+    [Export] public Player Player;
 
     private bool _IsFishing;
 
-    private Node _instancedFish;
+    private Fish _instancedFish;
 
     // private Timer _waitTimer = new (); // actually, we need to add it to scene tree for it to work, so let's try scene tree timer instead
     public override void _Ready()
@@ -20,6 +21,7 @@ public partial class PlayerFishingState : State
         StateName = Name;
 
         SignalBus.Instance.ReverseBobberMotionEnded += HandleReverseBobberMotionEnded;
+        SignalBus.Instance.FishBite += HandleFishBite;
 
         // _waitTimer.OneShot = true; // Well, I can either do it here, or during initialisation
         // _waitTimer.Timeout += SpawnFish;
@@ -33,7 +35,7 @@ public partial class PlayerFishingState : State
         // So, on enter, create scene tree timer
         // subscribe to timeout
         // you know what, let's make two nodes, one for controlling the QTE, another for controlling the fishing
-        FishingQTE.StartQTE();
+
         _IsFishing = true;
         // Correction, starting the QTE should be performed by the spawnning thingy
         // So here should be starting some timer to trigger to fish to spawn
@@ -56,7 +58,10 @@ public partial class PlayerFishingState : State
         // _IsFishing = false;
 
         if (_instancedFish is not null)
+        {
             _instancedFish.QueueFree();
+            _instancedFish = null; // set back to null after freeing the fish, because if we cancel the spawnning early, it will hold the previous instanced that is freed
+        }
     }
 
     public override void HandleInput(InputEvent @event)
@@ -75,12 +80,18 @@ public partial class PlayerFishingState : State
         {
             _IsFishing = false;
             Bobber.ReverseBobberMotion();
+            // _instancedFish.TopLevel = true;
         }
     }
 
     private void HandleReverseBobberMotionEnded(object sender, EventArgs e)
     {
         OnStateTransitioned("PlayerIdleState");
+    }
+
+    private void HandleFishBite(object sender, EventArgs e)
+    {
+        FishingQTE.StartQTE();
     }
 
     // Kay~ so currently we're just instancing the fish scene directly, but later
@@ -95,8 +106,10 @@ public partial class PlayerFishingState : State
             // invoke signal bus? and pass the reference through there? I guess it works?
             // SignalBus.Instance.OnAnglingStarted(this, EventArgs.Empty);
             PackedScene fishScene = GD.Load<PackedScene>("res://scenes/fish.tscn");
-            _instancedFish = fishScene.Instantiate(); // so now we need some reference to queue free it on exit?
-            GetTree().Root.AddChild(_instancedFish);
+            _instancedFish = fishScene.Instantiate() as Fish; // so now we need some reference to queue free it on exit?
+            _instancedFish.LatchTarget = Bobber;
+            _instancedFish.Player = this.Player;
+            Bobber.AddChild(_instancedFish);
         }
 
     }

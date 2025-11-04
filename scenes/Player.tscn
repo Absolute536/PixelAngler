@@ -14,8 +14,8 @@
 [ext_resource type="Script" uid="uid://dp3ijpwnmjedy" path="res://scripts/game_mechanism/FishingQuickTimeEvent.cs" id="12_3v2ag"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_p0vlq"]
-radius = 5.0
-height = 26.0
+radius = 4.0
+height = 8.0
 
 [node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("AnimationPlayer", "AudioPlayer", "DebugText") groups=["Player"]]
 motion_mode = 1
@@ -26,7 +26,7 @@ DebugText = NodePath("DebugText")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 y_sort_enabled = true
-position = Vector2(0, -12)
+position = Vector2(0, -3)
 shape = SubResource("CapsuleShape2D_p0vlq")
 
 [node name="PlayerAnimation" type="AnimatedSprite2D" parent="."]
@@ -71,10 +71,11 @@ Bobber = NodePath("../../ActionUI/Bobber")
 FishingLine = NodePath("../../ActionUI/FishingLine")
 metadata/_custom_type_script = "uid://bug1toj6bvtq3"
 
-[node name="PlayerFishingState" type="Node" parent="StateMachine" node_paths=PackedStringArray("Bobber", "FishingQTE")]
+[node name="PlayerFishingState" type="Node" parent="StateMachine" node_paths=PackedStringArray("Bobber", "FishingQTE", "Player")]
 script = ExtResource("8_d2wvv")
 Bobber = NodePath("../../ActionUI/Bobber")
 FishingQTE = NodePath("../../Miscellaneous/FishingQuickTimeEvent")
+Player = NodePath("../..")
 metadata/_custom_type_script = "uid://b5c6xmf5euuwj"
 
 [node name="ActionUI" type="Node2D" parent="."]

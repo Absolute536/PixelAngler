@@ -77,6 +77,13 @@ public partial class SignalBus : Node
             GD.PushError("Cannot raise angling started event if caller is not of type \"PlayerFishingState\"");
     }
 
+    public delegate void FishBiteEventHandler(object sender, EventArgs e);
+    public event FishBiteEventHandler FishBite;
+    public void OnFishBite(object sender, EventArgs e)
+    {
+        FishBite?.Invoke(sender, e);
+    }
+
 
 
 

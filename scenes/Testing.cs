@@ -23,17 +23,21 @@ public partial class Testing : Node2D
 		GD.Print("Velocity: " + initialVelocity);
 		GD.Print("Gravity: " + gravity);
 
+		Vector2 p1 = new Vector2(0, -19);
+		Vector2 p2 = new Vector2(10, -8);
+		GD.Print(Mathf.RadToDeg(p1.AngleToPoint(p2)));
+
 	}
 
     public override void _UnhandledInput(InputEvent @event)
     {
-		base._UnhandledInput(@event);
-		GD.Print("1 TICK.");
-		GD.Print("Event is pressed: " + @event.IsPressed()); // true if key press (because the callback is only invoked once per key press / sample period)
-		GD.Print("Event is released: " + @event.IsReleased());
-		GD.Print("Event is action: " + @event.IsAction("Left")); // true cuz the callback argument is the specified action
-		GD.Print("Is action pressed: " + (@event.IsActionPressed("Left") && @event.IsActionPressed("Up")));
-		GD.Print("Is action released: " + @event.IsActionReleased("Left"));
+		// base._UnhandledInput(@event);
+		// GD.Print("1 TICK.");
+		// GD.Print("Event is pressed: " + @event.IsPressed()); // true if key press (because the callback is only invoked once per key press / sample period)
+		// GD.Print("Event is released: " + @event.IsReleased());
+		// GD.Print("Event is action: " + @event.IsAction("Left")); // true cuz the callback argument is the specified action
+		// GD.Print("Is action pressed: " + (@event.IsActionPressed("Left") && @event.IsActionPressed("Up")));
+		// GD.Print("Is action released: " + @event.IsActionReleased("Left"));
 		// Ok, so if I don't allow echo, IsActionPressed will return true for only the "frame" / "tick" when I pressed the action key
     }
 

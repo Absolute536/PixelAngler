@@ -1,23 +1,22 @@
 [gd_scene load_steps=4 format=3 uid="uid://1w1wporxjcab"]
 
-[ext_resource type="Texture2D" uid="uid://v0rat11sxilo" path="res://icon.svg" id="1_rn3pg"]
 [ext_resource type="Script" uid="uid://d0lkcpxvl0v4c" path="res://scripts/Bobber.cs" id="2_1y8pg"]
+[ext_resource type="Texture2D" uid="uid://cc3t0oh11emj7" path="res://assets/fish/Bobber.png" id="2_rn3pg"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_rn3pg"]
-size = Vector2(120, 115)
+[sub_resource type="CircleShape2D" id="CircleShape2D_1y8pg"]
+radius = 7.0
 
-[node name="Bobber" type="Area2D"]
-scale = Vector2(0.2, 0.2)
+[node name="Bobber" type="Area2D" node_paths=PackedStringArray("BobberRayCast")]
 collision_layer = 3
 collision_mask = 3
 input_pickable = false
 script = ExtResource("2_1y8pg")
+BobberRayCast = NodePath("RayCast2D")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(1, 1)
-texture = ExtResource("1_rn3pg")
+texture = ExtResource("2_rn3pg")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(4.76837e-07, -2.38419e-07)
-scale = Vector2(1, 1)
-shape = SubResource("RectangleShape2D_rn3pg")
+shape = SubResource("CircleShape2D_1y8pg")
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
