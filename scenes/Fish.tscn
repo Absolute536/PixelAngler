@@ -1,27 +1,38 @@
-[gd_scene load_steps=8 format=3 uid="uid://eii05j1pdh14"]
+[gd_scene load_steps=11 format=3 uid="uid://eii05j1pdh14"]
 
 [ext_resource type="Texture2D" uid="uid://db8vn106q6tyc" path="res://assets/fish/Fish.png" id="1_n6yr6"]
 [ext_resource type="Script" uid="uid://cu4l4rhqag1e7" path="res://scripts/fish/Fish.cs" id="1_nub35"]
+[ext_resource type="Shader" uid="uid://dc5pxgc1k4cul" path="res://resources/shaders/fish.gdshader" id="2_wpvan"]
 [ext_resource type="Script" uid="uid://bakg405h3gvhu" path="res://scripts/states/StateMachine.cs" id="3_pgks6"]
 [ext_resource type="Script" uid="uid://bqvg3v6abxftl" path="res://scripts/states/FishNibbleState.cs" id="4_pgks6"]
 [ext_resource type="Script" uid="uid://d3qyypo0non2h" path="res://scripts/states/FishWanderState.cs" id="5_6lgmd"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_psuch"]
-size = Vector2(16, 9)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6lgmd"]
+height = 20.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_21k1a"]
+shader = ExtResource("2_wpvan")
+shader_parameter/blue = 1.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_pgks6"]
 radius = 48.0
 
-[node name="Fish" type="CharacterBody2D"]
-collision_layer = 3
-collision_mask = 3
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_wpvan"]
+radius = 3.0
+height = 18.0
+
+[node name="Fish" type="CharacterBody2D" node_paths=PackedStringArray("FishSprite")]
+collision_layer = 2
 motion_mode = 1
 script = ExtResource("1_nub35")
+FishSprite = NodePath("Sprite2D")
 
-[node name="FishCollisionShape" type="CollisionShape2D" parent="."]
-shape = SubResource("RectangleShape2D_psuch")
+[node name="FishMovementCollisionShape" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_6lgmd")
+debug_color = Color(0.79603, 0.410042, 0.299339, 0.42)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_21k1a")
 texture = ExtResource("1_n6yr6")
 
 [node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initialState")]
@@ -29,21 +40,32 @@ script = ExtResource("3_pgks6")
 initialState = NodePath("FishWanderState")
 metadata/_custom_type_script = "uid://bakg405h3gvhu"
 
-[node name="FishNibbleState" type="Node" parent="StateMachine" node_paths=PackedStringArray("Fish")]
-script = ExtResource("4_pgks6")
-Fish = NodePath("../..")
-metadata/_custom_type_script = "uid://bqvg3v6abxftl"
-
-[node name="FishWanderState" type="Node" parent="StateMachine" node_paths=PackedStringArray("Fish", "_movementTimer")]
+[node name="FishWanderState" type="Node" parent="StateMachine" node_paths=PackedStringArray("Fish", "MovementTimer", "DetectionRadius")]
 script = ExtResource("5_6lgmd")
 Fish = NodePath("../..")
-_movementTimer = NodePath("../../WanderTimer")
+MovementTimer = NodePath("../../WanderTimer")
+DetectionRadius = NodePath("../../DetectionRadius")
 metadata/_custom_type_script = "uid://d3qyypo0non2h"
 
+[node name="FishNibbleState" type="Node" parent="StateMachine" node_paths=PackedStringArray("Fish", "InteractionRaidus")]
+script = ExtResource("4_pgks6")
+Fish = NodePath("../..")
+InteractionRaidus = NodePath("../../InteractionRadius")
+metadata/_custom_type_script = "uid://bqvg3v6abxftl"
+
 [node name="DetectionRadius" type="Area2D" parent="."]
+visible = false
 
 [node name="DetectionRadiusShape" type="CollisionShape2D" parent="DetectionRadius"]
 shape = SubResource("CircleShape2D_pgks6")
 
 [node name="WanderTimer" type="Timer" parent="."]
 process_callback = 0
+
+[node name="InteractionRadius" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 2
+
+[node name="InteractionRadiusShape" type="CollisionShape2D" parent="InteractionRadius"]
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_wpvan")

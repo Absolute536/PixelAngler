@@ -14,6 +14,7 @@ public partial class Bobber : Area2D
 	// Nope, we need to do this
 	[Export] public float SetLaunchAngle;
 	[Export] public RayCast2D BobberRayCast;
+	[Export] public CollisionShape2D BobberCollisionShape;
 	private float LaunchAngle
 	{
 		set
@@ -149,6 +150,9 @@ public partial class Bobber : Area2D
 		_hasStopped = false;
 		_inWater = true;
 		_reverseMotion = false;
+
+		// try disabling the collision shape
+		BobberCollisionShape.SetDeferred(CollisionShape2D.PropertyName.Disabled, true);
 	}
 
 	// PhysicsProcess to start the parabolic motion of the bobber
@@ -192,7 +196,8 @@ public partial class Bobber : Area2D
 			// If bobber is casted not into water, hide both the bobber and fishing line back
 			if (!_inWater)
 			{
-				Visible = false;
+				// Visible = false;
+				ResetBobberStatus();
 				FishingLine.TerminateFishingLine();
 				GD.Print("Bobber not landed in Water. Hide it back.");
 			}
@@ -204,9 +209,14 @@ public partial class Bobber : Area2D
 				SignalBus.Instance.OnReverseBobberMotionEnded(this, EventArgs.Empty);
 				Visible = false;
 				FishingLine.TerminateFishingLine();
+				BobberCollisionShape.SetDeferred(CollisionShape2D.PropertyName.Disabled, true);
 			}
 			else // For forward motion
+            {
 				SignalBus.Instance.OnForwardBobberMotionEnded(this, EventArgs.Empty);
+				BobberCollisionShape.SetDeferred(CollisionShape2D.PropertyName.Disabled, false);
+            }
+
 
 		}
 

@@ -6,17 +6,20 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_1y8pg"]
 radius = 7.0
 
-[node name="Bobber" type="Area2D" node_paths=PackedStringArray("BobberRayCast")]
+[node name="Bobber" type="Area2D" node_paths=PackedStringArray("BobberRayCast", "BobberCollisionShape")]
+scale = Vector2(0.25, 0.25)
 collision_layer = 3
 collision_mask = 3
 input_pickable = false
 script = ExtResource("2_1y8pg")
 BobberRayCast = NodePath("RayCast2D")
+BobberCollisionShape = NodePath("CollisionShape2D")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_rn3pg")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_1y8pg")
+disabled = true
 
 [node name="RayCast2D" type="RayCast2D" parent="."]

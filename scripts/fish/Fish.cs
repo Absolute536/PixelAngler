@@ -4,6 +4,7 @@ using Godot;
 
 public partial class Fish : CharacterBody2D
 {
+    [Export] public Sprite2D FishSprite;
     private Bobber _bobber;
     public Bobber LatchTarget
     {
@@ -27,8 +28,11 @@ public partial class Fish : CharacterBody2D
     {
         // LookAt(LatchTarget.GlobalPosition); // rotate the +X transform so that it looks at the bobber
         // Transform2D current = GetTransform();
-        if (LatchTarget is not null)
-            LookAt(LatchTarget.GlobalPosition);
+        // if (LatchTarget is not null)
+        //     LookAt(LatchTarget.GlobalPosition);
+
+        if (GameInfo.Instance.GetTileType(GlobalPosition) != GameWorld.TileType.Water)
+            Velocity = Vector2.Zero;
         // maybe can change to if LatchTarget is not null, then proceed with the operations
     }
 

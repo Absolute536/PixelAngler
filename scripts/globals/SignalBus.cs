@@ -4,6 +4,21 @@ using System;
 using GameWorld;
 using Godot;
 
+// https://forum.godotengine.org/t/optimal-way-of-handling-custom-signals-in-godot-c-mono/122454/2
+// EventBus implementation
+// Smart and clean, but seems like you would need to create many concrete classes for each "event"
+// The properties of the event classes will act as input parameters to the delegate invocation I suppose
+// And since the subscription and publishing methods are based on the Type <T>, that is specify upon invocation, it is still safe
+// Subscribe<T>(Action<T> callback) 
+// --> try and get the list of delegate (or Action<T>s) from the dictionary
+// --> if fail, assign empty list to "value", add new entry with the type, T, as the key, and "value" as the value-pair
+// --> note that the keyword "out" is used, so "value" will contain the value associated with the key if success, if failure, it will be the defaul value of the Type of "value", which in this case, for List<T> is null
+// --> then, still with the reference to "value", Add the input argument callback, which is an Action<T> --> a method with one input parameter, but no return value
+// --> in this case, it is a method that matches the delegate (or Action) signature, which takes in an argument of type T, that will be the concrete event class that you specify when calling the method
+// Publish<T>(T event) and Unsubscribe<T>(Action<T> callback) methods work largely the same, but with different internal logic
+// Do I want to use this, hmm.....
+// Looks clean, but I think I'll stick with the current SignalBus first, else I'll get nothing done (>A< !!!)
+
 public partial class SignalBus : Node
 {
     public static SignalBus Instance { get; private set; }

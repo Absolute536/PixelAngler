@@ -7,6 +7,7 @@ using GamePlayer;
 public partial class FishNibbleState : State
 {
     [Export] Fish Fish;
+    [Export] Area2D InteractionRaidus;
     private Random _random = new Random();
 
     private int _nibbleCountRequired;
@@ -38,6 +39,7 @@ public partial class FishNibbleState : State
         // wait.... it actually won't work
         // because we are instancing the Fish scene during runtime dynamically
         // so.... when the fishing state invokes the event, nothing is subscribed yet
+        InteractionRaidus.AreaEntered += OnAreaEntered;
     }
 
     public override void EnterState(string previousState) // Quick note here regarding the statemachine initial state hehe
@@ -71,6 +73,56 @@ public partial class FishNibbleState : State
         // Also upon enter, check for the fish's stamina(?) NOPE ---> we probably don't neet yet, cuz we're planning on using a progress bar, but we'll see
         // For each of those states, we check for the "intended" input and raise events on correct input (like increase progress bar)
         // On full progress bar, raise event to switch fish to caught(?) state and trigger the animations?
+
+        /*
+         * REFRESH
+         * Nibble behaviour
+         * Enter State
+         * wait 1 ~ 2.xx seconds before starting to move towards the bobber
+         * get random nibble count required (how many times the fish needs to nibble)
+         
+         * Forward movement 
+         * Get direction to bobber, also flip the sprite if needed (for -ve X)
+         * Move in a straight line to bobber (I think)
+         * Upon area entered for the interaction radius, initiate bounce back movement
+         *
+         * Bounce Back movment (Reverse)
+         * From the forward direction, get the reverse direction by multiply the vector by (-1, -1) right?
+         * Rotate the reverse direction by a random angle (doesn't have to be too big)
+         * Get random bounce back distance, or rather duration(?) --> in case it reaches the water edge
+         * then initiate the bounce back movement
+         * when the distance is reached/ set duration is reached, initiate the forward movement again
+         * repeat until the current nibble count == nibble count required
+         * OR
+         * Nibble movement
+         * on area entered of the interaction radius, move back a small fixed distance in the opposite forward direction (also multiply by -1, -1)
+         * then initiate forward movement again
+         * and repeat until nibble count required is reached
+         * this is probably easier and more like the "nibble" behaviour(?)
+         
+         * ALSO
+         * need to have some sort of mechanism to ensure only one fish can bite at any time
+         * more than one can detect and nibble, but once a fish nibble count required is reached and it makes contact another time, a QTE will start
+         * then if success --> lead to bite, and the minigame
+         * if success, then other fish will need to transition back to the wander state, if it's currently in nibble (can work like this?)
+         * if failure, the failed fish go back to wander state, allowing other fish to "snatch" instead
+         * OR if failure, the bait is consumed (BUT THIS KINDA GO AGAINST WHAT WE SAID IN THE GDD) / all go back to wander, and player need to cast again(?)
+         * I think we try the first one first
+
+         * AND ALSO
+         * For a fish to detect the bobber AND transition to nibble state, the BAIT (or other equipment condition) must match its requirement
+         * and again... this can be specified using a custom resource or something (SEE BELOW)
+         
+         * Additional Ideas
+         * Every frame after the initial wait finishes, call LookAt() on the Fish (root) node, so that we orient the head towards the bobber
+         * Possible, but need some tinkering with the flipping of the sprite, based on the rotation angle and movement direction
+         
+         * The movment speed, nibble count, etc (if any) can be unique to each fish species?
+         * Use a fish stat custom Resource, and specify these parameters in there (will need to explore more first)
+         * Hmm, this sounds good. that way may be able to recognise the species based on the behaviour (TBF, probably can recognise it visually through the outline already)
+         * But this introduces some "dynamic?" behaviour (NAH), more like DIFFERENT behaviour for the fish based on its species
+         *
+         */
     }
 
     public override void ExitState()
@@ -134,14 +186,12 @@ public partial class FishNibbleState : State
     // Connected/Subscribed to the signal/event via the editor already
     private void OnAreaEntered(Area2D area)
     {
-        GD.Print("Body entered detected");
-
-        _currentNibbleCount += 1;
-        _isReverse = true;
         if (area is Bobber)
+        {
             GD.Print("Bobber entered");
-
-        SetPhysicsProcess(false); // try this first
+            _currentNibbleCount += 1;
+            _isReverse = true;
+        }
     }
 
     private void InitialiseForwardNibble()
