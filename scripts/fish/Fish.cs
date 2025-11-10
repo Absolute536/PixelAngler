@@ -15,10 +15,6 @@ public partial class Fish : CharacterBody2D
 
     private Random _random = new Random();
 
-    public Fish()
-    {
-    }
-
     public override void _Ready()
     {
         Position = new Vector2(_random.Next(4, 13), _random.Next(5, 15));
@@ -30,9 +26,6 @@ public partial class Fish : CharacterBody2D
         // Transform2D current = GetTransform();
         // if (LatchTarget is not null)
         //     LookAt(LatchTarget.GlobalPosition);
-
-        if (GameInfo.Instance.GetTileType(GlobalPosition) != GameWorld.TileType.Water)
-            Velocity = Vector2.Zero;
         // maybe can change to if LatchTarget is not null, then proceed with the operations
     }
 

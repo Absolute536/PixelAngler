@@ -8,7 +8,8 @@
 [ext_resource type="Script" uid="uid://d3qyypo0non2h" path="res://scripts/states/FishWanderState.cs" id="5_6lgmd"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6lgmd"]
-height = 20.0
+radius = 5.0
+height = 16.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_21k1a"]
 shader = ExtResource("2_wpvan")
@@ -18,8 +19,8 @@ shader_parameter/blue = 1.0
 radius = 48.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_wpvan"]
-radius = 3.0
-height = 18.0
+radius = 1.0
+height = 2.0
 
 [node name="Fish" type="CharacterBody2D" node_paths=PackedStringArray("FishSprite")]
 collision_layer = 2
@@ -28,12 +29,15 @@ script = ExtResource("1_nub35")
 FishSprite = NodePath("Sprite2D")
 
 [node name="FishMovementCollisionShape" type="CollisionShape2D" parent="."]
+position = Vector2(-8, 0)
+rotation = 1.5708
 shape = SubResource("CapsuleShape2D_6lgmd")
 debug_color = Color(0.79603, 0.410042, 0.299339, 0.42)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 material = SubResource("ShaderMaterial_21k1a")
 texture = ExtResource("1_n6yr6")
+offset = Vector2(-8, 0)
 
 [node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initialState")]
 script = ExtResource("3_pgks6")
@@ -47,14 +51,18 @@ MovementTimer = NodePath("../../WanderTimer")
 DetectionRadius = NodePath("../../DetectionRadius")
 metadata/_custom_type_script = "uid://d3qyypo0non2h"
 
-[node name="FishNibbleState" type="Node" parent="StateMachine" node_paths=PackedStringArray("Fish", "InteractionRaidus")]
+[node name="FishNibbleState" type="Node" parent="StateMachine" node_paths=PackedStringArray("Fish", "InteractionRaidus", "MovementCollisionShape")]
 script = ExtResource("4_pgks6")
 Fish = NodePath("../..")
 InteractionRaidus = NodePath("../../InteractionRadius")
+MovementCollisionShape = NodePath("../../FishMovementCollisionShape")
 metadata/_custom_type_script = "uid://bqvg3v6abxftl"
 
 [node name="DetectionRadius" type="Area2D" parent="."]
 visible = false
+position = Vector2(-8, 0)
+collision_layer = 2
+collision_mask = 2
 
 [node name="DetectionRadiusShape" type="CollisionShape2D" parent="DetectionRadius"]
 shape = SubResource("CircleShape2D_pgks6")

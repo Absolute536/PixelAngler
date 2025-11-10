@@ -261,3 +261,14 @@ QTE Elements
 = REVAMP FISH SPAWNNING =
 - use a spawn point that is placed in water (manually) instead
 - then the fish spawns from the point and enter into wander state, where they can move around and not onto grass or whatever
+
+- Fonts
+- https://openfontlicense.org/
+- https://www.dafont.com/press-start.font
+- https://www.zone38.net/font/
+- Use PressStart font currently (just for fun)
+- License information states it's free to use without accredition or including the license (only restriction is you can't claim copyright, or sell the font by itself I think)
+
+- let bobber have an InWater event
+- all fish subscribe to this event upon spawnning
+- if out of water, raise the event, and transition fish to wander state

@@ -1,8 +1,9 @@
-[gd_scene load_steps=14 format=3 uid="uid://bd2sgwdtpfwaj"]
+[gd_scene load_steps=15 format=3 uid="uid://bd2sgwdtpfwaj"]
 
 [ext_resource type="SpriteFrames" uid="uid://chi3wqli78166" path="res://resources/Player.tres" id="1_p0vlq"]
 [ext_resource type="Script" uid="uid://dwkgu7hv8ofdd" path="res://scripts/player/Player.cs" id="1_v6fml"]
 [ext_resource type="AudioStream" uid="uid://df2su45hulwfh" path="res://assets/audio/sound_effects/KeySound2.mp3" id="3_cw2d6"]
+[ext_resource type="FontFile" uid="uid://cibnl77dc0ji7" path="res://resources/fonts/prstartk.ttf" id="3_jej6c"]
 [ext_resource type="Script" uid="uid://bakg405h3gvhu" path="res://scripts/states/StateMachine.cs" id="3_mdl7e"]
 [ext_resource type="Script" uid="uid://c3nbul0aiq2h4" path="res://scripts/states/PlayerIdleState.cs" id="4_qu4a1"]
 [ext_resource type="Script" uid="uid://bt2i3d64duevn" path="res://scripts/states/PlayerWalkingState.cs" id="5_qu4a1"]
@@ -39,6 +40,7 @@ offset_left = -41.0
 offset_top = -46.0
 offset_right = 47.0
 offset_bottom = -5.0
+theme_override_fonts/font = ExtResource("3_jej6c")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 process_callback = 0

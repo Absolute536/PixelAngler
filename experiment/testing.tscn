@@ -1,0 +1,39 @@
+[gd_scene load_steps=7 format=3 uid="uid://c2brgccj0todv"]
+
+[ext_resource type="Script" uid="uid://dohkspsconokn" path="res://experiment/Testing.cs" id="1_ej3vy"]
+[ext_resource type="Script" uid="uid://bj3hkerbn1srw" path="res://experiment/TestButton.cs" id="2_yrykb"]
+[ext_resource type="Script" uid="uid://b2nnygbi76jng" path="res://experiment/TestCharacter.cs" id="3_l73g8"]
+[ext_resource type="Texture2D" uid="uid://v0rat11sxilo" path="res://icon.svg" id="4_ruj82"]
+[ext_resource type="Texture2D" uid="uid://cc3t0oh11emj7" path="res://assets/fish/Bobber.png" id="5_l73g8"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_cjj37"]
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_ej3vy")
+
+[node name="Button" type="Button" parent="."]
+offset_left = 16.0
+offset_top = 4.0
+offset_right = 80.0
+offset_bottom = 35.0
+text = "Testing"
+script = ExtResource("2_yrykb")
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="." node_paths=PackedStringArray("Bobber")]
+position = Vector2(304, 238)
+scale = Vector2(0.5, 0.5)
+motion_mode = 1
+script = ExtResource("3_l73g8")
+Bobber = NodePath("../Sprite2D")
+
+[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D"]
+texture = ExtResource("4_ruj82")
+offset = Vector2(-60, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+shape = SubResource("CircleShape2D_cjj37")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(168, 134)
+texture = ExtResource("5_l73g8")
+offset = Vector2(0, 8)

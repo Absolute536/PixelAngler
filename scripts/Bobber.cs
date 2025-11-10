@@ -13,7 +13,6 @@ public partial class Bobber : Area2D
 	// So, instead of doing this hacky thing, we just need to negate the Endpoint y?
 	// Nope, we need to do this
 	[Export] public float SetLaunchAngle;
-	[Export] public RayCast2D BobberRayCast;
 	[Export] public CollisionShape2D BobberCollisionShape;
 	private float LaunchAngle
 	{
@@ -227,13 +226,13 @@ public partial class Bobber : Area2D
 			GD.Print("Bobber " + GlobalPosition + " not overlapped with end position: " + _endPosition);
 	}
 	
-	public bool IsSpawnPositionInvalid(Vector2 position)
-	{
-		BobberRayCast.TargetPosition = position;
-		BobberRayCast.ForceRaycastUpdate();
+	// public bool IsSpawnPositionInvalid(Vector2 position)
+	// {
+	// 	BobberRayCast.TargetPosition = position;
+	// 	BobberRayCast.ForceRaycastUpdate();
 
-		return BobberRayCast.IsColliding();
-    }
+	// 	return BobberRayCast.IsColliding();
+    // }
 	
 	private Vector2 CalculateBobberDisplacement(double time)
     {

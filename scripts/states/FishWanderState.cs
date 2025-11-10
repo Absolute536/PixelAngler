@@ -40,7 +40,7 @@ public partial class FishWanderState : State
 
     public override void EnterState(string previousState)
     {
-        
+        // ok, so here if come from nibble state, disable the detection for some duration, then re-enable it back
     }
 
     public override void ExitState()
@@ -74,7 +74,7 @@ public partial class FishWanderState : State
         Fish.Velocity = velocity;
         Fish.MoveAndSlide();
 
-        if (_wanderDirection.Rotated(_wanderAngle).X < 0)
+        if (velocity.X < 0)
             Fish.FishSprite.FlipH = true;
         else
             Fish.FishSprite.FlipH = false;
@@ -150,6 +150,7 @@ public partial class FishWanderState : State
     private void HandleBobberEntered(Area2D area)
     {
         // Only respond if area is bobber
+        // AND also some other conditions (later)
         if (area is Bobber)
         {
             Fish.LatchTarget = area as Bobber;

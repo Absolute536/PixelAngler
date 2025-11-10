@@ -54,7 +54,9 @@ public partial class FishingLine : Line2D
         List<Vector2> pointsOnLine = [];
 
         // Increment t by 0.05 until 1, so there should be 20 points along the bezier curve
-        while (t <= 1)
+        // 09/11/2025: correction, should have 21 points instead (20 points + 1 at the end, at t = 1.00)
+        // replaced with a for-loop instead
+        for (int i = 0; i < 21; i++)
         {
             Vector2 lerpStartToCentre = controlPointStart.Lerp(controlPointCentre, t);
             Vector2 lerpCentreToEnd = controlPointCentre.Lerp(controlPointEnd, t);
