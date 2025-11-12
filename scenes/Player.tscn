@@ -73,10 +73,9 @@ Bobber = NodePath("../../ActionUI/Bobber")
 FishingLine = NodePath("../../ActionUI/FishingLine")
 metadata/_custom_type_script = "uid://bug1toj6bvtq3"
 
-[node name="PlayerFishingState" type="Node" parent="StateMachine" node_paths=PackedStringArray("Bobber", "FishingQTE", "Player")]
+[node name="PlayerFishingState" type="Node" parent="StateMachine" node_paths=PackedStringArray("Bobber", "Player")]
 script = ExtResource("8_d2wvv")
 Bobber = NodePath("../../ActionUI/Bobber")
-FishingQTE = NodePath("../../Miscellaneous/FishingQuickTimeEvent")
 Player = NodePath("../..")
 metadata/_custom_type_script = "uid://b5c6xmf5euuwj"
 

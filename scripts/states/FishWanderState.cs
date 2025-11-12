@@ -1,4 +1,5 @@
 using Godot;
+using SignalBusNS;
 using System;
 
 [GlobalClass]
@@ -7,12 +8,15 @@ public partial class FishWanderState : State
     [Export] public Fish Fish;
     [Export] public Timer MovementTimer;
     [Export] public Area2D DetectionRadius;
+    [Export] public CollisionShape2D MovementCollisionShape;
 
     private double _wanderSpeed;
     private float _wanderAngle;
     private Vector2 _wanderDirection;
-    private Random _random = new Random();
     private double _wanderDuration;
+    private Vector2 _velocity = Vector2.Zero;
+    
+    private Random _random = new Random();
 
     
 
@@ -41,6 +45,12 @@ public partial class FishWanderState : State
     public override void EnterState(string previousState)
     {
         // ok, so here if come from nibble state, disable the detection for some duration, then re-enable it back
+        if (previousState == "FishNibbleState" || previousState == "FishHookedState") // or other game state?
+        {
+            DetectionRadius.Monitoring = false;
+            SceneTreeTimer disableTimer = GetTree().CreateTimer(3.0f, true, true); // try 3 seconds first
+            disableTimer.Timeout += () => { DetectionRadius.Monitoring = true; };
+        }
     }
 
     public override void ExitState()
@@ -66,25 +76,10 @@ public partial class FishWanderState : State
         // maybe also need to track direction, namely if left to right (or vice versa), flip the sprite horizontally (vertical flip is for rotation)
         // I suppose we can skip the rotation
 
-        // Hold up, Player is a CharacterBody, so it works natually, but Fish is an Area2D
-        // WTH, I can't get the collision to work properly?!!!
-        // if (!MovementRaycast.IsColliding())
-        // {
-        Vector2 velocity = _wanderDirection.Rotated(_wanderAngle) * (float) _wanderSpeed;
-        Fish.Velocity = velocity;
+        _velocity = _wanderDirection.Rotated(_wanderAngle) * (float) _wanderSpeed;
+        Fish.Velocity = _velocity;
+        
         Fish.MoveAndSlide();
-
-        if (velocity.X < 0)
-            Fish.FishSprite.FlipH = true;
-        else
-            Fish.FishSprite.FlipH = false;
-
-            // move by _wanderSpeed per frame, so 1 would be 60 pixels per second
-        // }
-        
-
-        // Fish.MoveAndSlide();
-        
     }
 
     private void RandomiseWanderParameters()
@@ -101,17 +96,9 @@ public partial class FishWanderState : State
         if (randomDirectionDraw == 0)
             _wanderDirection = Vector2.Up;
         else if (randomDirectionDraw == 1)
-        {
             _wanderDirection = Vector2.Right;
-            // Fish.FishSprite.FlipH = false;
-        }
-
         else if (randomDirectionDraw == 2)
-        {
-            _wanderDirection = Vector2.Left;
-            // Fish.FishSprite.FlipH = true;            
-        }
-
+            _wanderDirection = Vector2.Left;            
         else
             _wanderDirection = Vector2.Down;
 
@@ -158,8 +145,7 @@ public partial class FishWanderState : State
 
             // We transition to nibble state straight away, and have the nibble state wait 1.x seconds upon entering the state
             OnStateTransitioned("FishNibbleState");
-            
+
         }
     }
-
 }

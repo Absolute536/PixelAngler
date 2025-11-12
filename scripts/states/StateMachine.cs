@@ -7,7 +7,7 @@ using Godot;
 public partial class StateMachine : Node
 {
     [Export] public State initialState;
-    private State currentState;
+    protected State currentState;
     private Dictionary<string, State> availableStates = new();
 
     public override void _Ready()
@@ -56,7 +56,7 @@ public partial class StateMachine : Node
         currentState.HandleInput(@event);
     }
 
-    private void HandleStateTransition(string nextState)
+    protected void HandleStateTransition(string nextState)
     {
         // Basically, we check if next state is valid
         // If True, fetch it from dictionary, call its EnterState(), call the currentState's ExitState() and assign new state to currentState

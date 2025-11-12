@@ -7,8 +7,9 @@ using GamePlayer;
 public partial class FishNibbleState : State
 {
     [Export] Fish Fish;
-    [Export] Area2D InteractionRaidus;
+    [Export] Area2D InteractionRadius;
     [Export] CollisionShape2D MovementCollisionShape;
+    [Export] FishSpecies SpeciesInformation; // probably should be in the root "Fish", but testing for now (YES, it works)
     private Random _random = new Random();
 
     private int _nibbleCountRequired;
@@ -21,10 +22,11 @@ public partial class FishNibbleState : State
 
     private bool _nibbleActive;
     private bool _isReverse;
+    public bool IsReverse { get => _isReverse; }
 
     // try and see if these works
     private double _reverseDuration = 0;
-    private const double ReverseLimit = 0.5;
+    private const double ReverseLimit = 0.25;
     
 
     public override void _Ready()
@@ -41,7 +43,7 @@ public partial class FishNibbleState : State
         // wait.... it actually won't work
         // because we are instancing the Fish scene during runtime dynamically
         // so.... when the fishing state invokes the event, nothing is subscribed yet
-        InteractionRaidus.AreaEntered += OnAreaEntered;
+        InteractionRadius.AreaEntered += OnAreaEntered;
     }
 
     public override void EnterState(string previousState) // Quick note here regarding the statemachine initial state hehe
@@ -106,13 +108,16 @@ public partial class FishNibbleState : State
          */
 
         InitialiseNibbleParameters();
-        SceneTreeTimer waitTimer = GetTree().CreateTimer(1 + _random.NextDouble(), false, true); // second false is processAlways, so that if game paused, timer will pause as well (explore this on other timers as well)
+        SceneTreeTimer waitTimer = GetTree().CreateTimer(_random.Next(1, 3) + _random.NextDouble(), false, true); // second false is processAlways, so that if game paused, timer will pause as well (explore this on other timers as well)
         waitTimer.Timeout += () => { _nibbleActive = true; }; // make it active on Timeout
     }
 
     public override void ExitState()
     {
+        _nibbleActive = false;
+        _isReverse = false;
 
+        Fish.EnableAlignment = true; // Re-enable the sprite alignment process in Fish
     }
 
     public override void HandleInput(InputEvent @event)
@@ -151,47 +156,59 @@ public partial class FishNibbleState : State
         if (_nibbleActive && _currentNibbleCount <= _nibbleCountRequired)
         {
             // use global position on both so we get the normalised direction correctly
-            Vector2 directionToTarget = Fish.GlobalPosition.DirectionTo(Fish.LatchTarget.GlobalPosition + new Vector2(0, 16));
+            Vector2 directionToTarget = GetMovementDirectionTowardTarget();
 
+            if (!_isReverse)
+            {
+                if (directionToTarget.X < 0)
+                {
+                    if (directionToTarget.X > -0.25)
+                        Fish.EnableAlignment = false;
+                }
+                else if (directionToTarget.X > 0)
+                {
+                    if (directionToTarget.X < 0.25)
+                        Fish.EnableAlignment = false;
+                }
+                else
+                    Fish.EnableAlignment = true;
+            }
+            
+                
             _targetVelocity = directionToTarget * _nibbleSpeed;
-
             if (_isReverse)
             {
                 // https://www.reddit.com/r/godot/comments/1c2yjuj/using_a_timer_instead_of_physics_process/ (might be useful)
                 // The premise for this is we accumulate delta value to a variable until it reaches a threshold (ReverseLimit)
                 // Since delta the time elapsed since last (physics) frame, we can use this to "create" a timer(?) --> kinda like what we did back in Bobber's movement
-                // so while the threshold is not reached (in reverse movement, haven't reach the reverse limit yet), move in the opposite direction from forward movement
-                // once the threshold is reached, flip back the flag and reset the duration, and also introduce some delay before stating movement again
+                // So while the threshold is not reached (in reverse movement, haven't reach the reverse limit yet), move in the opposite direction from forward movement
+                // Once the threshold is reached, flip back the flag and reset the duration, and also introduce some delay before stating movement again
                 _reverseDuration += delta;
-                if (_reverseDuration <= ReverseLimit) // hmm, idk about the equality
+                if (_reverseDuration <= ReverseLimit)
                 {
+                    // If bobber is on the left, set _targetVelocity to reverse to the right
+                    // Conversely, reverse to left instead
+                    // Basically, instead of reversing in the opposite direction, we just do left and right
+                    // I think this if more like the "nibble" behaviour
+                    // Just putting it here in case you (me) wanna switch back: _targetVelocity *= new Vector2(-1, -1);
+                    // Additional problem: this does not account for the lack of space if bobber is at water's edge
+                    // So is the original one better?
+
+                    // _targetVelocity = directionToTarget.X < 0 ? Vector2.Right * _nibbleSpeed : Vector2.Left * _nibbleSpeed;
                     _targetVelocity *= new Vector2(-1, -1);
+
+                    // Hmm, then again, if we wanna do this, then perhaps it's better to move to Bobber's X, then go with the nibble
                 }
                 else
                 {
                     _isReverse = false; // if limit is reached, flip the reverse flag, so that we move forward again
+                    Fish.EnableAlignment = true; // flip the alignment flag again, so the sprite may align according to movement
                     _reverseDuration = 0; // and reset _reverseDuration
                     // and try putting in a wait?
-                    StartNibbleDelay(0.5);
+                    StartNibbleDelay(_random.NextDouble()); // Yeah, so we randomise the delay, not the nibble speed --> but nibble speed can be dependent on the fish itself?
 
                 }
             }
-
-            // velocity = velocity.MoveToward(targetVelocity, (float)delta * 500);
-            // else
-            // {
-            //     // movement towards bobber
-            //     // velocity = Fish.Position.DirectionTo(Vector2.Zero) * _nibbleSpeed;
-            //     // Fish.Position = Fish.Position.MoveToward(velocity, 0.5f);
-
-            //     // just try it first I guess
-            //     velocity = directionToTarget * _nibbleSpeed;
-            //     velocity = velocity.MoveToward(Vector2.Zero, _nibbleSpeed);
-
-            // }
-
-            // We flip the position of the interaction area as well, to make it consistent (at the snout of the fish)
-            AlignFishToMovement();
 
             Fish.Velocity = _targetVelocity;
             Fish.MoveAndSlide();
@@ -212,13 +229,9 @@ public partial class FishNibbleState : State
         // May be replaced with unique values based on the FishStat(?) resource in the future
         _nibbleCountRequired = 2;
         _currentNibbleCount = 0;
-        _nibbleSpeed = 30;
+        _nibbleSpeed = SpeciesInformation.MovementSpeed;
 
-        _nibbleActive = false; // Idk if we should put this here first?
-        // Or we move the other thing out?
-        // Cuz they will be uninitialised when the PhysicsProcess() runs, before this function is called
-        // CORRECTION, nope. Because a state's EnterState() is called first, before the state machine switches to that state
-        // So the values will be initialised before PhysicsProcessUpdate() runs
+        _nibbleActive = false; 
     }
 
     // Connected/Subscribed to the signal/event via the editor already
@@ -229,30 +242,12 @@ public partial class FishNibbleState : State
             GD.Print("Bobber entered");
             _currentNibbleCount += 1;
             _isReverse = true;
+            Fish.EnableAlignment = false;
 
             if (_currentNibbleCount > _nibbleCountRequired)
-                OnStateTransitioned("FishWanderState");
-        }
-    }
+                SignalBus.Instance.OnFishBite(this, EventArgs.Empty);
 
-    private void AlignFishToMovement()
-    {
-        if (!_isReverse)
-        {
-            // If moving left, adjust the sprite and movement collision shape to face right
-            if (_targetVelocity.X < 0)
-            {
-                Fish.FishSprite.FlipH = true;
-                Fish.FishSprite.Offset = new Vector2(8, 0);
-                MovementCollisionShape.Position = new Vector2(8, 0);
-            }
-            // If move right, adjust back to default (as set up in scene editor) 
-            else
-            {
-                Fish.FishSprite.FlipH = false;
-                Fish.FishSprite.Offset = new Vector2(-8, 0);
-                MovementCollisionShape.Position = new Vector2(-8, 0);
-            }
+            GD.Print("Fish Nibble!");
         }
     }
 
@@ -261,5 +256,43 @@ public partial class FishNibbleState : State
         _nibbleActive = false;
         SceneTreeTimer nibbleDelayTimer = GetTree().CreateTimer(duration, true, true);
         nibbleDelayTimer.Timeout += () => { _nibbleActive = true; };
+    }
+
+    private Vector2 GetMovementDirectionTowardTarget()
+    {
+        Vector2 fishPosition = Fish.GlobalPosition;
+        Vector2 bobberPosition = Fish.LatchTarget.GlobalPosition;
+
+        // Add a 16 pixel offset to the left (of the target) if the fish is flipped (facing left)
+        // Because the actual position will be at the tail, and we want the snout/head to contact with the bobber
+        if (Fish.FishSprite.FlipH)
+            return fishPosition.DirectionTo(bobberPosition + new Vector2(16, 16));
+            // equivalent to (fishPosition + new Vector2(16, 0)).DirectionTo(bobberPosition + new Vector2(0, 16));
+            // revamp to (16, 0) cuz I've adjusted the offset on the bobber itself ==> NVM 
+
+        // Problem: the fish sprite will flip left and right continuously if it's somewhat right below the bobber
+        // Because if it's right below, it's not gonna be exactly a STRAIGHT down, so there will be some angle
+        // If fish faces right, and it's slightly towards the right, direction to gives x as -ve because need to go left, fish flip
+        // Once fish flips, direction to gives +ve x instead because need to go right, fish flip again
+        // And this repeats indefinitely
+        // This only happens if fish is above OR below the bobber, and almost straight up or down
+
+
+        // If we don't account for the Sprite's flip, it works
+        // Just that the calculation will consider the actual position of the Fish node instead, so if fish flips, the actual position is at the tail
+        // The fish will home into the bobber centred around the tail, so it will graze past the bobber once (area entered once, but no effect?), then only nibble less than 1 required count
+        // Kinda works, but looks bad
+        // It actually nibbles the required count as well, but the first one happens when it grazes past, and immediately flips the sprite, so area entered
+        // And also it will cause most of the nibble to happen on the left side of bobber because of this
+        // Yeah I think we need the check and also need to account for the direction
+        return fishPosition.DirectionTo(bobberPosition + new Vector2(0, 16));
+    }
+
+    // Next, add a signal to broadcast to fish in nibblestate to go back to wander if bobber is removed
+    // Wee added it in the FishStateMachine weee~~~
+
+    private void HandleQTESucceeded(object sender, EventArgs e)
+    {
+        OnStateTransitioned("FishHookedState");
     }
 }

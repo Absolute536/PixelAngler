@@ -5,11 +5,27 @@ using Godot;
 public partial class Fish : CharacterBody2D
 {
     [Export] public Sprite2D FishSprite;
+    [Export] public Area2D InteractionRadius;
+
     private Bobber _bobber;
     public Bobber LatchTarget
     {
         set => _bobber = value;
         get => _bobber;
+    }
+
+    private Vector2 _movementDirection;
+    public Vector2 MovementDirection
+    {
+        set => _movementDirection = value;
+        get => _movementDirection;
+    }
+
+    private bool _enableAlignment = true;
+    public bool EnableAlignment
+    {
+        set => _enableAlignment = value;
+        get => _enableAlignment;
     }
 
 
@@ -24,9 +40,35 @@ public partial class Fish : CharacterBody2D
     {
         // LookAt(LatchTarget.GlobalPosition); // rotate the +X transform so that it looks at the bobber
         // Transform2D current = GetTransform();
-        // if (LatchTarget is not null)
-        //     LookAt(LatchTarget.GlobalPosition);
         // maybe can change to if LatchTarget is not null, then proceed with the operations
+        AlignToMovementDirection();
+    }
+
+    private void AlignToMovementDirection()
+    {
+        if (_enableAlignment)
+        {
+            if (Velocity.X < 0)
+            {
+                FishSprite.FlipH = true;
+                InteractionRadius.Position = new Vector2(-16, 0);
+            }
+            else if (Velocity.X > 0)
+            {
+                FishSprite.FlipH = false;
+                InteractionRadius.Position = Vector2.Zero;
+            }
+        }
+        // BUGFIX
+        // Instead of repositioning the collision shape, which will cause the fish to "jolt"
+        // We just reposition the interaction radius instead, it works.... somewhat
+        // maybe this can be a method in the fish's physics process?
+        // ok I know why
+        // because the fish's origin is still at the "tail"
+        // and only the interaction radius is reposition, so the fish will move until the origin reaches the designated point instead
+        // soooo.... does that mean when the sprite is flipped, the end position will need to += (16, 0) ?
+        // yes. you're right
+        // Extracted from FishNibbleState (12/11/2025)
     }
 
 

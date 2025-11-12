@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="FishSpecies" load_steps=3 format=3 uid="uid://buv4r5d2ugkg5"]
+
+[ext_resource type="Texture2D" uid="uid://db8vn106q6tyc" path="res://assets/fish/Fish.png" id="1_d7ydg"]
+[ext_resource type="Script" uid="uid://cfyrovpd32dc0" path="res://scripts/fish/FishSpecies.cs" id="2_4ffab"]
+
+[resource]
+script = ExtResource("2_4ffab")
+SpeciesName = "NormalFish"
+MovementSpeed = 50
+SpriteTexture = ExtResource("1_d7ydg")
+metadata/_custom_type_script = "uid://cfyrovpd32dc0"

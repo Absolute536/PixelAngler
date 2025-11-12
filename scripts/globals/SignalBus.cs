@@ -99,6 +99,30 @@ public partial class SignalBus : Node
         FishBite?.Invoke(sender, e);
     }
 
+    public delegate void AnglingCancelledEventHandler(object sender, EventArgs e);
+    public event AnglingCancelledEventHandler AnglingCancelled;
+    public void OnAnglingCancelled(object sender, EventArgs e)
+    {
+        if (sender is PlayerFishingState)
+            AnglingCancelled?.Invoke(sender, e);
+        else
+            GD.PushError("Cannot raise angling cancelled event if caller is not of type \"PlayerFishingState\"");
+    }
+
+    public delegate void QuickTimeEventHandler(object sender, EventArgs e);
+    public event QuickTimeEventHandler QTESucceeded;
+    public event QuickTimeEventHandler QTEFailed;
+
+    public void OnQTESucceeded(object sender, EventArgs e)
+    {
+        QTESucceeded?.Invoke(sender, e);
+    }
+    
+    public void OnQTEFailed (object sender, EventArgs e)
+    {
+        QTEFailed?.Invoke(sender, e);
+    }
+
 
 
 

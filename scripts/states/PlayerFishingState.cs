@@ -7,8 +7,6 @@ using SignalBusNS;
 public partial class PlayerFishingState : State
 {
     [Export] public Bobber Bobber;
-
-    [Export] public FishingQuickTimeEvent FishingQTE; // hmm, nevermind, we need a node in scene tree for timer to work (I forgor)
     [Export] public Player Player;
 
     private bool _IsFishing;
@@ -17,9 +15,7 @@ public partial class PlayerFishingState : State
     public override void _Ready()
     {
         StateName = Name;
-
         SignalBus.Instance.ReverseBobberMotionEnded += HandleReverseBobberMotionEnded;
-        SignalBus.Instance.FishBite += HandleFishBite;
 
         // _waitTimer.OneShot = true; // Well, I can either do it here, or during initialisation
         // _waitTimer.Timeout += SpawnFish;
@@ -73,6 +69,7 @@ public partial class PlayerFishingState : State
         {
             _IsFishing = false;
             Bobber.ReverseBobberMotion();
+            SignalBus.Instance.OnAnglingCancelled(this, EventArgs.Empty);
             // _instancedFish.TopLevel = true;
         }
     }
@@ -80,11 +77,6 @@ public partial class PlayerFishingState : State
     private void HandleReverseBobberMotionEnded(object sender, EventArgs e)
     {
         OnStateTransitioned("PlayerIdleState");
-    }
-
-    private void HandleFishBite(object sender, EventArgs e)
-    {
-        FishingQTE.StartQTE();
     }
 
     // Kay~ so currently we're just instancing the fish scene directly, but later
