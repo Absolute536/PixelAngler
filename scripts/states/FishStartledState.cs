@@ -5,6 +5,7 @@ using System;
 public partial class FishStartledState : State
 {
     [Export] Fish Fish;
+    [Export] Area2D DetectionRadius;
 
     private double _duration;
     private int _movementSpeed;
@@ -17,11 +18,12 @@ public partial class FishStartledState : State
 
     public override void EnterState(string previousState)
     {
+        DetectionRadius.Monitoring = false;
         _movementSpeed = _random.Next(30, 51); // 30 ~ 50?
         _duration = 1 + _random.NextDouble(); // 1.xx to 2.00
 
         SceneTreeTimer startleTimer = GetTree().CreateTimer(_duration, true, true);
-        startleTimer.Timeout += StartleEnd;
+        startleTimer.Timeout += EndStartleState;
     }
 
     public override void ExitState()
@@ -36,7 +38,7 @@ public partial class FishStartledState : State
 
     public override void PhysicsProcessUpdate(double delta)
     {
-        Fish.Velocity = Fish.Velocity.Normalized()  * -1 * _movementSpeed; // move in opposite direction with the specified movementspeed
+        Fish.Velocity = Fish.Velocity.Normalized()  * -1 * _movementSpeed; // move in opposite direction from nibble with the specified movementspeed
         Fish.MoveAndSlide();
     }
 
@@ -45,8 +47,9 @@ public partial class FishStartledState : State
         
     }
 
-    public void StartleEnd()
+    public void EndStartleState()
     {
+        DetectionRadius.Monitoring = true;
         OnStateTransitioned("FishWanderState");
     }
 }

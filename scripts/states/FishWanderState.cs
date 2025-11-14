@@ -9,6 +9,7 @@ public partial class FishWanderState : State
     [Export] public Timer MovementTimer;
     [Export] public Area2D DetectionRadius;
     [Export] public CollisionShape2D MovementCollisionShape;
+    [Export] public RayCast2D ObstacleDetectionRaycast;
 
     private double _wanderSpeed;
     private float _wanderAngle;
@@ -32,20 +33,16 @@ public partial class FishWanderState : State
     public override void _Ready()
     {
         StateName = Name;
+
         MovementTimer.Timeout += RandomiseWanderParameters;
-
-        // Fish.BodyEntered += OnBodyEntered;
-        // Fish.BodyExited += OnBodyExited;
-
-        RandomiseWanderParameters(); // try calling it here instead
-        MovementTimer.Start(_wanderDuration);
-
         DetectionRadius.AreaEntered += HandleBobberEntered;
-
     }
 
     public override void EnterState(string previousState)
     {
+        RandomiseWanderParameters();
+        MovementTimer.Start(_wanderDuration);
+
         // ok, so here if come from nibble state, disable the detection for some duration, then re-enable it back
         if (previousState == "FishNibbleState" || previousState == "FishHookedState") // or other game state?
         {
@@ -63,7 +60,7 @@ public partial class FishWanderState : State
 
     public override void ExitState()
     {
-
+        MovementTimer.Stop();
     }
 
     public override void HandleInput(InputEvent @event)
@@ -154,15 +151,31 @@ public partial class FishWanderState : State
     {
         // Only respond if area is bobber
         // AND also some other conditions (later)
+        /*
+         * If detection radius detects an Area2D, check if it's bobber
+         * If a (the) bobber is detected,
+         * Check for the following conditions:
+         * - The bobber hasn't been latched on by other fish yet
+         * - The direction to the bobber is not impeded by an obstacle (so we only detect at the moment in wander state)
+         * - The bait equipped fulfills the fish's requirement
+         * - Anything else?
+         * IF all of the above are true, transition to nibble state
+         */
         if (area is Bobber)
         {
-            Fish.LatchTarget = area as Bobber;
-            GD.Print(GetParent().GetParent().Name + ":  Bobber Detected");
+            Fish.LatchTarget = area as Bobber; // Set the bobber reference to the fish's latch target property
+            
+            ObstacleDetectionRaycast.TargetPosition = area.GlobalPosition + new Vector2(0, 16) - Fish.GlobalPosition; // 16 pixel offset downward to the bottom of bobber (temporary)
+            ObstacleDetectionRaycast.Enabled = true;
+            ObstacleDetectionRaycast.ForceRaycastUpdate();
+
+
+            if (!Fish.LatchTarget.IsLatchedOn && !ObstacleDetectionRaycast.IsColliding())
+                OnStateTransitioned("FishNibbleState");
+            
 
             // We transition to nibble state straight away, and have the nibble state wait 1.x seconds upon entering the state
             // Update (13/11/2025): Now we add a boolean flag, isLatchedOn and only go to nibble if it is false
-            if (!Fish.LatchTarget.IsLatchedOn)
-                OnStateTransitioned("FishNibbleState");
 
         }
     }

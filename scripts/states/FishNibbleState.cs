@@ -108,8 +108,22 @@ public partial class FishNibbleState : State
          */
 
         InitialiseNibbleParameters();
+         
+        // Testing disable alignment process in nibble
+        // Fish.EnableAlignment = false;
+        // How about just setting the velocity to point to bobber before disabling it?
+        // it can't
+        // but if we only disable it when the fish starts moving (through waitTimer), then it works YEAHHHH
+        // So set the velocity on entering nibble state, allowing the sprite to flip WHILE the fish is temporary motionless
+        // Then disable it on waitTimer timeout
+        Fish.Velocity = GetMovementDirectionTowardTarget();
+
         SceneTreeTimer waitTimer = GetTree().CreateTimer(_random.Next(1, 3) + _random.NextDouble(), false, true); // second false is processAlways, so that if game paused, timer will pause as well (explore this on other timers as well)
-        waitTimer.Timeout += () => { _nibbleActive = true; }; // make it active on Timeout
+        waitTimer.Timeout += () => 
+        { 
+            _nibbleActive = true; 
+            Fish.EnableAlignment = false; 
+        };
     }
 
     public override void ExitState()
@@ -153,7 +167,7 @@ public partial class FishNibbleState : State
         // polish further by randomising the speed as well
         // and should also play a sound cue for each nibble
 
-        if (_nibbleActive && _currentNibbleCount <= _nibbleCountRequired)
+        if (_nibbleActive && _currentNibbleCount < _nibbleCountRequired)
         {
             // use global position on both so we get the normalised direction correctly
             Vector2 directionToTarget = GetMovementDirectionTowardTarget();
@@ -197,17 +211,17 @@ public partial class FishNibbleState : State
              */
             _targetVelocity = directionToTarget * _nibbleSpeed;
 
-            if (!_isReverse)
-            {
-                if (directionToTarget.Abs().X < 0.25)
-                {
-                    Fish.EnableAlignment = false;
-                }
-                else
-                    Fish.EnableAlignment = true;
-            }
-            else
-                Fish.EnableAlignment = false;
+            // if (!_isReverse)
+            // {
+            //     if (directionToTarget.Abs().X < 0.25)
+            //     {
+            //         Fish.EnableAlignment = false;
+            //     }
+            //     else
+            //         Fish.EnableAlignment = true;
+            // }
+            // else
+            //     Fish.EnableAlignment = false;
 
 
             if (_isReverse)
@@ -261,7 +275,7 @@ public partial class FishNibbleState : State
     {
         // For the parameters, we use fixed values for now
         // May be replaced with unique values based on the FishStat(?) resource in the future
-        _nibbleCountRequired = 2;
+        _nibbleCountRequired = 3;
         _currentNibbleCount = 0;
         _nibbleSpeed = SpeciesInformation.MovementSpeed;
 
@@ -276,7 +290,7 @@ public partial class FishNibbleState : State
             GD.Print("Bobber entered");
             _currentNibbleCount += 1;
             _isReverse = true;
-            Fish.EnableAlignment = false;
+
             if (_currentNibbleCount > _nibbleCountRequired)
                 SignalBus.Instance.OnFishBite(this, EventArgs.Empty);
 

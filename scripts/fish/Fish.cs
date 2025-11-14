@@ -6,6 +6,7 @@ public partial class Fish : CharacterBody2D
 {
     [Export] public Sprite2D FishSprite;
     [Export] public Area2D InteractionRadius;
+    [Export] public RayCast2D ObstacleDetectionRaycast;
 
     private Bobber _bobber;
     public Bobber LatchTarget
@@ -68,12 +69,14 @@ public partial class Fish : CharacterBody2D
             if (Velocity.X < 0)
             {
                 FishSprite.FlipH = true;
-                InteractionRadius.Position = new Vector2(-16, 0);
+                InteractionRadius.Position = Vector2.Left * 16;
+                ObstacleDetectionRaycast.Position = Vector2.Left * 16;
             }
             else if (Velocity.X > 0)
             {
                 FishSprite.FlipH = false;
                 InteractionRadius.Position = Vector2.Zero;
+                ObstacleDetectionRaycast.Position = Vector2.Zero;
             }
         }
         // BUGFIX

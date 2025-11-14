@@ -288,3 +288,6 @@ FishAttractedState
 - or maybe navigationmesh2d?
 - You know. Let's put this aside first and stick with the current one
 - Or else, I'll never get this thing done.
+
+- Note: probably need a raycast in Fish
+- if raycast detected collision in the direction of bobber, don't transit to nibble state
