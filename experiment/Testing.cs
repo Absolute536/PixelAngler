@@ -33,7 +33,7 @@ public partial class Testing : Node2D
 		// 	GD.Print("Current iteration (" + (i + 1) + "): " + rand.Next(101));
 		// }
 		Vector2 a = new Vector2(-1, -1);
-		Vector2 b = new Vector2(-0.75f, 0);
+		Vector2 b = new Vector2(-0.5f, 0);
 		GD.Print(Mathf.RadToDeg(b.AngleToPoint(a)));
 		GD.Print(b.DirectionTo(a));
 

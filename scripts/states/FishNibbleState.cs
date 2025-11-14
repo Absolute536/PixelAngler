@@ -122,7 +122,7 @@ public partial class FishNibbleState : State
 
     public override void HandleInput(InputEvent @event)
     {
-
+        
     }
 
     public override void ProcessUpdate(double delta)
@@ -157,25 +157,59 @@ public partial class FishNibbleState : State
         {
             // use global position on both so we get the normalised direction correctly
             Vector2 directionToTarget = GetMovementDirectionTowardTarget();
+            GD.Print(directionToTarget);
+
+            /*
+             * To resolve the sprite flipping issue, it had to be done
+             * The issue is caused by the AlignmentProcess in Fish, as it will flip the FishSprite and offset the interaction area according to the movement direction
+             *
+             * However, since the pathfinding(?) is based on the fish's actual position,
+             * when the sprite is flipped, the origin is at the fish's tail
+             *
+             * So, the account for this, in GetMovementDirection(), I had added an offset of 16 pixels to the right of the bobber's position
+             * so that the fish's snout and its interaction area will collide with the bobber (IF the sprite is flipped).
+             * Actually the movement still works without this extra step, but the fish will converge towards the left side if we use that method
+             * Because when moving towards the bobber from the right, the fish sprite is flipped, and the origin is at the tail
+             * So it's quite likely for the fish to "graze" past the bobber, flip immediately and register as nibble,
+             * and then proceed with the remaining nibble.
+             * It works (sort of), but just looks bad.
+             * Actually issue will arise if the bobber's left side is blocked, then the collision will never happen.
+             *
+             * SO
+             * The problem is if the horizontal displacement between the bobber and the fish's position (in nibble state) is too small,
+             * The sprite will continuously be flipped, and so does the interaction area, as it tries to move towards the bobber
+             * Because in the Alignment process within Fish, if the velocity.X is negative, we flip, else, we don't
+             * AND when the horizontal displacement is too small, and say the fish starts facing right (default),
+             * The direction towards bobber will have negative X, and so does the velocity.
+             * Velocity.X negative, flip the sprite, but this causes direction towards bobber becomes positive X in the next physics frame
+             * Positive X, flip back, direction X negative again, and so on....
+             * So this continues indefinitely, and the fish's interaction area can't collide with the bobber as well
+             *
+             * Although hacky, but I guess I have no other choices but to use the check shown below
+             * For every movement, we check the direction.X, and the horizontal displacement from the target
+             * If the displacement is below a certain threshold, we disable the sprite alignment process
+             * Else, we keep the alignment enabled
+             * AND this is only done for the forward movement, not reverse
+             * P/S: I placed the reverse movement toggle in the OnAreaEntered before, but now we're gonna put it here instead to make things consistent
+
+             * FUCKKKKKKKK
+             * Too clunky, need another approach
+             */
+            _targetVelocity = directionToTarget * _nibbleSpeed;
 
             if (!_isReverse)
             {
-                if (directionToTarget.X < 0)
+                if (directionToTarget.Abs().X < 0.25)
                 {
-                    if (directionToTarget.X > -0.25)
-                        Fish.EnableAlignment = false;
-                }
-                else if (directionToTarget.X > 0)
-                {
-                    if (directionToTarget.X < 0.25)
-                        Fish.EnableAlignment = false;
+                    Fish.EnableAlignment = false;
                 }
                 else
                     Fish.EnableAlignment = true;
             }
-            
-                
-            _targetVelocity = directionToTarget * _nibbleSpeed;
+            else
+                Fish.EnableAlignment = false;
+
+
             if (_isReverse)
             {
                 // https://www.reddit.com/r/godot/comments/1c2yjuj/using_a_timer_instead_of_physics_process/ (might be useful)
@@ -202,7 +236,7 @@ public partial class FishNibbleState : State
                 else
                 {
                     _isReverse = false; // if limit is reached, flip the reverse flag, so that we move forward again
-                    Fish.EnableAlignment = true; // flip the alignment flag again, so the sprite may align according to movement
+                    // Fish.EnableAlignment = true; // flip the alignment flag again, so the sprite may align according to movement
                     _reverseDuration = 0; // and reset _reverseDuration
                     // and try putting in a wait?
                     StartNibbleDelay(_random.NextDouble()); // Yeah, so we randomise the delay, not the nibble speed --> but nibble speed can be dependent on the fish itself?
@@ -243,7 +277,6 @@ public partial class FishNibbleState : State
             _currentNibbleCount += 1;
             _isReverse = true;
             Fish.EnableAlignment = false;
-
             if (_currentNibbleCount > _nibbleCountRequired)
                 SignalBus.Instance.OnFishBite(this, EventArgs.Empty);
 
@@ -268,7 +301,6 @@ public partial class FishNibbleState : State
         if (Fish.FishSprite.FlipH)
             return fishPosition.DirectionTo(bobberPosition + new Vector2(16, 16));
             // equivalent to (fishPosition + new Vector2(16, 0)).DirectionTo(bobberPosition + new Vector2(0, 16));
-            // revamp to (16, 0) cuz I've adjusted the offset on the bobber itself ==> NVM 
 
         // Problem: the fish sprite will flip left and right continuously if it's somewhat right below the bobber
         // Because if it's right below, it's not gonna be exactly a STRAIGHT down, so there will be some angle
@@ -293,6 +325,9 @@ public partial class FishNibbleState : State
 
     private void HandleQTESucceeded(object sender, EventArgs e)
     {
+        Fish.LatchTarget.IsLatchedOn = true;
         OnStateTransitioned("FishHookedState");
+        
+        GD.Print("QTE succeeded");
     }
 }

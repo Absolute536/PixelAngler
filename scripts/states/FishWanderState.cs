@@ -16,6 +16,8 @@ public partial class FishWanderState : State
     private double _wanderDuration;
     private Vector2 _velocity = Vector2.Zero;
     
+    private bool _isStartled = false;
+
     private Random _random = new Random();
 
     
@@ -48,8 +50,14 @@ public partial class FishWanderState : State
         if (previousState == "FishNibbleState" || previousState == "FishHookedState") // or other game state?
         {
             DetectionRadius.Monitoring = false;
+            _isStartled = true;
+
             SceneTreeTimer disableTimer = GetTree().CreateTimer(3.0f, true, true); // try 3 seconds first
-            disableTimer.Timeout += () => { DetectionRadius.Monitoring = true; };
+            disableTimer.Timeout += () => 
+            { 
+                DetectionRadius.Monitoring = true;
+                _isStartled = false;
+            };
         }
     }
 
@@ -76,8 +84,16 @@ public partial class FishWanderState : State
         // maybe also need to track direction, namely if left to right (or vice versa), flip the sprite horizontally (vertical flip is for rotation)
         // I suppose we can skip the rotation
 
-        _velocity = _wanderDirection.Rotated(_wanderAngle) * (float) _wanderSpeed;
-        Fish.Velocity = _velocity;
+        if (!_isStartled) // NOTE: perhaps some of these can be extracted into their own state
+        {
+            _velocity = _wanderDirection.Rotated(_wanderAngle) * (float) _wanderSpeed;
+            Fish.Velocity = _velocity;
+        }
+        else
+        {
+            Fish.Velocity *= new Vector2(-1, -1) * 40; // move in opposite direction
+        }
+        
         
         Fish.MoveAndSlide();
     }
@@ -144,7 +160,9 @@ public partial class FishWanderState : State
             GD.Print(GetParent().GetParent().Name + ":  Bobber Detected");
 
             // We transition to nibble state straight away, and have the nibble state wait 1.x seconds upon entering the state
-            OnStateTransitioned("FishNibbleState");
+            // Update (13/11/2025): Now we add a boolean flag, isLatchedOn and only go to nibble if it is false
+            if (!Fish.LatchTarget.IsLatchedOn)
+                OnStateTransitioned("FishNibbleState");
 
         }
     }

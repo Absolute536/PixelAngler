@@ -55,7 +55,12 @@ public partial class PlayerFishingState : State
 
     public override void HandleInput(InputEvent @event)
     {
-
+        if (@event.IsActionPressed("Action") && !QuickTimeEvent.Instance.IsActive) // just a quick and dirty test
+        {
+            _IsFishing = false;
+            Bobber.ReverseBobberMotion();
+            SignalBus.Instance.OnAnglingCancelled(this, EventArgs.Empty);
+        }
     }
 
     public override void ProcessUpdate(double delta)
@@ -65,13 +70,13 @@ public partial class PlayerFishingState : State
 
     public override void PhysicsProcessUpdate(double delta)
     {
-        if (Input.IsActionJustPressed("Action")) // How about we can reverse at anytime?
-        {
-            _IsFishing = false;
-            Bobber.ReverseBobberMotion();
-            SignalBus.Instance.OnAnglingCancelled(this, EventArgs.Empty);
+        // if (Input.IsActionJustPressed("Action")) // How about we can reverse at anytime?
+        // {
+            // _IsFishing = false;
+            // Bobber.ReverseBobberMotion();
+            // SignalBus.Instance.OnAnglingCancelled(this, EventArgs.Empty); // Quick note, if not casted on water and fish detected, they will still home onto bobber [Solved 13/11/2025]
             // _instancedFish.TopLevel = true;
-        }
+        // }
     }
 
     private void HandleReverseBobberMotionEnded(object sender, EventArgs e)

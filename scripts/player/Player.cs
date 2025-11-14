@@ -55,7 +55,7 @@ public partial class Player : CharacterBody2D
 	// Do we need item shop here as well?
 
 	// FOR DEBUG USE: REMOVE LATER OR HIDE IT
-	[Export] Label DebugText;
+	// [Export] Label DebugText;
 
 	public override void _Ready()
 	{
@@ -102,7 +102,7 @@ public partial class Player : CharacterBody2D
 		// };
 		// DebugText.Text = SignalBus.Instance.InvokePositionChangedEvent(this, eventArgs).ToString() + "\n" + LocationChanged(Position);
 
-		DebugText.Text = GameInfo.Instance.GetTileType(Position).ToString() + "\n" + GameInfo.Instance.GetWorldLocation(Position).ToString();
+		// DebugText.Text = GameInfo.Instance.GetTileType(Position).ToString() + "\n" + GameInfo.Instance.GetWorldLocation(Position).ToString();
 	}
 
 
@@ -170,9 +170,9 @@ public partial class Player : CharacterBody2D
 	 Lerp Smoothing is broken video
 	 */
 
-	public override void _PhysicsProcess(double delta)
-	{
-		// Removed the duplicated old stuffs
-		// Leave it empty without commenting it out first, just in case there're things to be done here
-	}
+	// public override void _PhysicsProcess(double delta)
+	// {
+	// 	// Removed the duplicated old stuffs
+	// 	// Leave it empty without commenting it out first, just in case there're things to be done here
+	// }
 }

@@ -34,7 +34,7 @@ public partial class PlayerIdleState : State
 
     public override void HandleInput(InputEvent inputEvent)
     {
-
+        // No one-off input
     }
 
     public override void ProcessUpdate(double delta)

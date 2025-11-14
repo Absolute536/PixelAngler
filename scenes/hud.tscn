@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://bpy3e2y1hkw0c"]
+
+[ext_resource type="Script" uid="uid://tve3hpdr1g17" path="res://scripts/Hud.cs" id="1_oo0fn"]
+[ext_resource type="FontFile" uid="uid://cibnl77dc0ji7" path="res://resources/fonts/prstartk.ttf" id="1_wrmgf"]
+
+[node name="HUD" type="CanvasLayer" node_paths=PackedStringArray("TestLabel")]
+script = ExtResource("1_oo0fn")
+TestLabel = NodePath("Label")
+
+[node name="Label" type="Label" parent="."]
+offset_left = 214.0
+offset_top = 22.0
+offset_right = 406.0
+offset_bottom = 46.0
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("1_wrmgf")
+theme_override_font_sizes/font_size = 24
+text = "Test"
+horizontal_alignment = 1

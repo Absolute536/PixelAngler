@@ -1,6 +1,6 @@
 using System;
-using GamePlayer;
 using Godot;
+using SignalBusNS;
 
 public partial class Fish : CharacterBody2D
 {
@@ -28,12 +28,20 @@ public partial class Fish : CharacterBody2D
         get => _enableAlignment;
     }
 
+    private bool _isHooked = false;
+    public bool IsHooked
+    {
+        get => _isHooked;
+        private set => _isHooked = value;
+    }
+
 
     private Random _random = new Random();
 
     public override void _Ready()
     {
         Position = new Vector2(_random.Next(4, 13), _random.Next(5, 15));
+        SignalBus.Instance.QTESucceeded += HandleQTESucceeded;
     }
 
     public override void _PhysicsProcess(double delta)
@@ -42,7 +50,16 @@ public partial class Fish : CharacterBody2D
         // Transform2D current = GetTransform();
         // maybe can change to if LatchTarget is not null, then proceed with the operations
         AlignToMovementDirection();
+
+        if (_isHooked)
+        {
+            if (FishSprite.FlipH && LatchTarget is not null)
+                LatchTarget.GlobalPosition = GlobalPosition + new Vector2(-16, -16); // if flipH, actual position is at tail, so need to offset by -16 on X-axis
+            else
+                LatchTarget.GlobalPosition = GlobalPosition + new Vector2(0, -16); // 16 pixel offset upwards because fish's mouth will be at top of bobber without this
+        }
     }
+            
 
     private void AlignToMovementDirection()
     {
@@ -69,6 +86,11 @@ public partial class Fish : CharacterBody2D
         // soooo.... does that mean when the sprite is flipped, the end position will need to += (16, 0) ?
         // yes. you're right
         // Extracted from FishNibbleState (12/11/2025)
+    }
+
+    private void HandleQTESucceeded(object sender, EventArgs e)
+    {
+        IsHooked = true;
     }
 
 

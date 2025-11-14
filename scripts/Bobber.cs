@@ -56,6 +56,8 @@ public partial class Bobber : Area2D
 	private bool _hasStopped = false; // Boolean flag to determine if the bobber has stopped (hmm ~)
 	private bool _reverseMotion = false; // Indicate if we are in reverse motion;
 
+	public bool IsLatchedOn = false;
+
 	public override void _Ready()
 	{
 		// Setup Bobber Properties
@@ -213,7 +215,9 @@ public partial class Bobber : Area2D
 			else // For forward motion
             {
 				SignalBus.Instance.OnForwardBobberMotionEnded(this, EventArgs.Empty);
-				BobberCollisionShape.SetDeferred(CollisionShape2D.PropertyName.Disabled, false);
+				
+				if (_inWater)
+					BobberCollisionShape.SetDeferred(CollisionShape2D.PropertyName.Disabled, false);
             }
 
 
@@ -225,14 +229,6 @@ public partial class Bobber : Area2D
 		else
 			GD.Print("Bobber " + GlobalPosition + " not overlapped with end position: " + _endPosition);
 	}
-	
-	// public bool IsSpawnPositionInvalid(Vector2 position)
-	// {
-	// 	BobberRayCast.TargetPosition = position;
-	// 	BobberRayCast.ForceRaycastUpdate();
-
-	// 	return BobberRayCast.IsColliding();
-    // }
 	
 	private Vector2 CalculateBobberDisplacement(double time)
     {

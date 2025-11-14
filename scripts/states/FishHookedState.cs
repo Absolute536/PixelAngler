@@ -32,7 +32,7 @@ public partial class FishHookedState : State
 
     public override void PhysicsProcessUpdate(double delta)
     {
-        Fish.LatchTarget.GlobalPosition = Fish.GlobalPosition + new Vector2(0, -16);
+        // Fish.LatchTarget.GlobalPosition = Fish.GlobalPosition + new Vector2(0, -16);
 
         Vector2 velocity = Vector2.Left * 10;
         Fish.Velocity = velocity;
