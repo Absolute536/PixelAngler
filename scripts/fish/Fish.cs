@@ -52,12 +52,20 @@ public partial class Fish : CharacterBody2D
         // maybe can change to if LatchTarget is not null, then proceed with the operations
         AlignToMovementDirection();
 
+        // if (LatchTarget is not null) // So this works, because there's always something with the timing
+        // // problem is also sometime when RevertFromNibble(), the exit state method doesn't get called FUCK!
+        // {
+        //     ObstacleDetectionRaycast.TargetPosition = LatchTarget.GlobalPosition + new Vector2(0, 16) - ObstacleDetectionRaycast.GlobalPosition;
+        //     ObstacleDetectionRaycast.ForceRaycastUpdate();
+        // }
+
         if (_isHooked)
         {
             if (FishSprite.FlipH && LatchTarget is not null)
                 LatchTarget.GlobalPosition = GlobalPosition + new Vector2(-16, -16); // if flipH, actual position is at tail, so need to offset by -16 on X-axis
             else
                 LatchTarget.GlobalPosition = GlobalPosition + new Vector2(0, -16); // 16 pixel offset upwards because fish's mouth will be at top of bobber without this
+                // I see now. Because  the HandleQTESucceeded is broadcasted to every fish, so need to filter
         }
     }
             
@@ -93,7 +101,8 @@ public partial class Fish : CharacterBody2D
 
     private void HandleQTESucceeded(object sender, EventArgs e)
     {
-        IsHooked = true;
+        if (LatchTarget is not null)
+            IsHooked = true;
     }
 
 

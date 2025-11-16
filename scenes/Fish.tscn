@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://eii05j1pdh14"]
+[gd_scene load_steps=15 format=3 uid="uid://eii05j1pdh14"]
 
 [ext_resource type="Texture2D" uid="uid://db8vn106q6tyc" path="res://assets/fish/Fish.png" id="1_n6yr6"]
 [ext_resource type="Script" uid="uid://cu4l4rhqag1e7" path="res://scripts/fish/Fish.cs" id="1_nub35"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://w4at84aqc781" path="res://scripts/states/FishHookedState.cs" id="7_21k1a"]
 [ext_resource type="Resource" uid="uid://buv4r5d2ugkg5" path="res://resources/fish_species/test_species.tres" id="7_bvcvt"]
 [ext_resource type="Script" uid="uid://bt2urs8wcgl8j" path="res://scripts/states/FishStartledState.cs" id="9_x24sl"]
+[ext_resource type="Script" uid="uid://c57xic6cbvmm0" path="res://scripts/states/FishBitingState.cs" id="10_f1s4w"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6lgmd"]
 radius = 5.0
@@ -71,11 +72,17 @@ script = ExtResource("7_21k1a")
 Fish = NodePath("../..")
 metadata/_custom_type_script = "uid://w4at84aqc781"
 
-[node name="FishStartledState" type="Node" parent="StateMachine" node_paths=PackedStringArray("Fish", "DetectionRadius")]
+[node name="FishStartledState" type="Node" parent="StateMachine" node_paths=PackedStringArray("Fish", "DetectionRadius", "ObstacleDetectionRaycast")]
 script = ExtResource("9_x24sl")
 Fish = NodePath("../..")
 DetectionRadius = NodePath("../../DetectionRadius")
+ObstacleDetectionRaycast = NodePath("../../ObstacleDetectionRayCast")
 metadata/_custom_type_script = "uid://bt2urs8wcgl8j"
+
+[node name="FishBitingState" type="Node" parent="StateMachine" node_paths=PackedStringArray("Fish")]
+script = ExtResource("10_f1s4w")
+Fish = NodePath("../..")
+metadata/_custom_type_script = "uid://c57xic6cbvmm0"
 
 [node name="DetectionRadius" type="Area2D" parent="."]
 visible = false
@@ -98,3 +105,4 @@ rotation = 1.5708
 shape = SubResource("CapsuleShape2D_wpvan")
 
 [node name="ObstacleDetectionRayCast" type="RayCast2D" parent="."]
+modulate = Color(0.692405, 0, 0.0468403, 1)

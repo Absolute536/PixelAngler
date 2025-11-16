@@ -44,16 +44,14 @@ public partial class FishWanderState : State
         MovementTimer.Start(_wanderDuration);
 
         // ok, so here if come from nibble state, disable the detection for some duration, then re-enable it back
-        if (previousState == "FishNibbleState" || previousState == "FishHookedState") // or other game state?
+        if (previousState == "FishStartledState") // or other game state?
         {
             DetectionRadius.Monitoring = false;
-            _isStartled = true;
 
             SceneTreeTimer disableTimer = GetTree().CreateTimer(3.0f, true, true); // try 3 seconds first
             disableTimer.Timeout += () => 
             { 
                 DetectionRadius.Monitoring = true;
-                _isStartled = false;
             };
         }
     }
@@ -65,12 +63,12 @@ public partial class FishWanderState : State
 
     public override void HandleInput(InputEvent @event)
     {
-
+        // No input handling in wander state
     }
 
     public override void ProcessUpdate(double delta)
     {
-
+        // No per frame processing in wander state
     }
 
     public override void PhysicsProcessUpdate(double delta)
@@ -79,19 +77,11 @@ public partial class FishWanderState : State
         // randomly select a direction and speed (+ movement angle I guess, so that it won't be just 4 directions only)
         // also need a timer to set the duration of moving via the randomised parameters
         // maybe also need to track direction, namely if left to right (or vice versa), flip the sprite horizontally (vertical flip is for rotation)
-        // I suppose we can skip the rotation
+        // I suppose we can skip the rotation (cuz it looks ugly)
 
-        if (!_isStartled) // NOTE: perhaps some of these can be extracted into their own state
-        {
-            _velocity = _wanderDirection.Rotated(_wanderAngle) * (float) _wanderSpeed;
-            Fish.Velocity = _velocity;
-        }
-        else
-        {
-            Fish.Velocity *= new Vector2(-1, -1) * 40; // move in opposite direction
-        }
-        
-        
+        _velocity = _wanderDirection.Rotated(_wanderAngle) * (float) _wanderSpeed;
+        Fish.Velocity = _velocity;
+
         Fish.MoveAndSlide();
     }
 
@@ -165,18 +155,36 @@ public partial class FishWanderState : State
         {
             Fish.LatchTarget = area as Bobber; // Set the bobber reference to the fish's latch target property
             
-            ObstacleDetectionRaycast.TargetPosition = area.GlobalPosition + new Vector2(0, 16) - Fish.GlobalPosition; // 16 pixel offset downward to the bottom of bobber (temporary)
+            Vector2 bobberTargetPosition = area.GlobalPosition + new Vector2(0, 16); // 16 pixel offset downward to the bottom of bobber (temporary)
+            // need to account for sprite flipping here as well
+            // actually no need now, cuz we've already flipped the raycast's position in the alignment process
+            // if (Fish.FishSprite.FlipH)
+            //     ObstacleDetectionRaycast.TargetPosition = bobberTargetPosition - (Fish.GlobalPosition + new Vector2(-16, 0));
+            // else
+            
+            ObstacleDetectionRaycast.TargetPosition = bobberTargetPosition - ObstacleDetectionRaycast.GlobalPosition;
+            // calculations are correct
+            // so it has to do with sth related to flipping the raycast2D's position, since target position depends on the position
+            // is it because when the sprite is flipped, but the position haven't been updated yet?
+            // So the underlying calculation is correct, just that when transition to nibble state, the sprite it flipped, causing the target position to be off by 16 pixels
+            // try not transition?
+            // Damn... so I was right all along.....
+            // HAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHA
+            // I LoVe wAsTiNg My tImE heheheeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee!!!!
+
+                // ok, so the bug is the raycast ends at the facing direction + 1 tile in the direction
+                // and only happens if bobber hits water and the fish detect it
+
             ObstacleDetectionRaycast.Enabled = true;
             ObstacleDetectionRaycast.ForceRaycastUpdate();
 
 
-            if (!Fish.LatchTarget.IsLatchedOn && !ObstacleDetectionRaycast.IsColliding())
-                OnStateTransitioned("FishNibbleState");
+            // if (!Fish.LatchTarget.IsLatchedOn && !ObstacleDetectionRaycast.IsColliding())
+                // OnStateTransitioned("FishNibbleState");
             
 
             // We transition to nibble state straight away, and have the nibble state wait 1.x seconds upon entering the state
             // Update (13/11/2025): Now we add a boolean flag, isLatchedOn and only go to nibble if it is false
-
         }
     }
 }

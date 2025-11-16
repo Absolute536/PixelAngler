@@ -1,6 +1,18 @@
 using Godot;
 using System;
+public class SuperTest
+{
+    
+}
+public class SubTestA : SuperTest
+{
+    
+}
 
+public class SubTestB : SuperTest
+{
+    
+}
 public partial class Testing : Node2D
 {
 	// Called when the node enters the scene tree for the first time.
@@ -32,10 +44,18 @@ public partial class Testing : Node2D
 		// {
 		// 	GD.Print("Current iteration (" + (i + 1) + "): " + rand.Next(101));
 		// }
-		Vector2 a = new Vector2(-1, -1);
-		Vector2 b = new Vector2(-0.5f, 0);
-		GD.Print(Mathf.RadToDeg(b.AngleToPoint(a)));
-		GD.Print(b.DirectionTo(a));
+		// Vector2 a = new Vector2(-1, -1);
+		// Vector2 b = new Vector2(-0.5f, 0);
+		// GD.Print(Mathf.RadToDeg(b.AngleToPoint(a)));
+		// GD.Print(b.DirectionTo(a));
+
+		SuperTest superClass = new SubTestA();
+		SubTestA subClassA = new ();
+		SubTestB subClassB = new ();
+		GD.Print(superClass is SuperTest);
+		GD.Print(superClass is SubTestA);
+		GD.Print(superClass is SubTestB);
+		
 
 	}
 
