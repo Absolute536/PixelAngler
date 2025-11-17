@@ -82,7 +82,7 @@ public partial class PlayerCastingState : State
     public void HandleForwardBobberMotionEnded(object sender, EventArgs e)
     {
         if (_landedInWater)
-            OnStateTransitioned("PlayerFishingState");
+            OnStateTransitioned("PlayerAnglingState");
         else
             OnStateTransitioned("PlayerIdleState");
     }

@@ -36,12 +36,9 @@ y_sort_enabled = true
 
 [node name="SpawnPoint" parent="WorldEntities" instance=ExtResource("5_71j4m")]
 position = Vector2(264, 106)
-MaxEntityCount = 0
 
 [node name="SpawnPoint2" parent="WorldEntities" instance=ExtResource("5_71j4m")]
 position = Vector2(48, 206)
-MaxEntityCount = 0
 
 [node name="SpawnPoint3" parent="WorldEntities" instance=ExtResource("5_71j4m")]
 position = Vector2(19, -79)
-MaxEntityCount = 1

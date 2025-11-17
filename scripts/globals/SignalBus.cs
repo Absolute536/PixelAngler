@@ -103,10 +103,10 @@ public partial class SignalBus : Node
     public event AnglingCancelledEventHandler AnglingCancelled;
     public void OnAnglingCancelled(object sender, EventArgs e)
     {
-        if (sender is PlayerFishingState)
+        if (sender is PlayerAnglingState)
             AnglingCancelled?.Invoke(sender, e);
         else
-            GD.PushError("Cannot raise angling cancelled event if caller is not of type \"PlayerFishingState\"");
+            GD.PushError("Cannot raise angling cancelled event if caller is not of type \"PlayerAnglingState\"");
     }
 
     public delegate void QuickTimeEventHandler(object sender, EventArgs e);

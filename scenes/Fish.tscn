@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://eii05j1pdh14"]
+[gd_scene load_steps=16 format=3 uid="uid://eii05j1pdh14"]
 
 [ext_resource type="Texture2D" uid="uid://db8vn106q6tyc" path="res://assets/fish/Fish.png" id="1_n6yr6"]
 [ext_resource type="Script" uid="uid://cu4l4rhqag1e7" path="res://scripts/fish/Fish.cs" id="1_nub35"]
@@ -10,6 +10,7 @@
 [ext_resource type="Resource" uid="uid://buv4r5d2ugkg5" path="res://resources/fish_species/test_species.tres" id="7_bvcvt"]
 [ext_resource type="Script" uid="uid://bt2urs8wcgl8j" path="res://scripts/states/FishStartledState.cs" id="9_x24sl"]
 [ext_resource type="Script" uid="uid://c57xic6cbvmm0" path="res://scripts/states/FishBitingState.cs" id="10_f1s4w"]
+[ext_resource type="Script" uid="uid://bephjnbdbbg7a" path="res://scripts/states/FishAttractedState.cs" id="11_3ig6q"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6lgmd"]
 radius = 5.0
@@ -59,6 +60,11 @@ MovementCollisionShape = NodePath("../../FishMovementCollisionShape")
 ObstacleDetectionRaycast = NodePath("../../ObstacleDetectionRayCast")
 metadata/_custom_type_script = "uid://d3qyypo0non2h"
 
+[node name="FishAttractedState" type="Node" parent="StateMachine" node_paths=PackedStringArray("Fish")]
+script = ExtResource("11_3ig6q")
+Fish = NodePath("../..")
+metadata/_custom_type_script = "uid://bephjnbdbbg7a"
+
 [node name="FishNibbleState" type="Node" parent="StateMachine" node_paths=PackedStringArray("Fish", "InteractionRadius", "MovementCollisionShape")]
 script = ExtResource("4_pgks6")
 Fish = NodePath("../..")
@@ -67,10 +73,10 @@ MovementCollisionShape = NodePath("../../FishMovementCollisionShape")
 SpeciesInformation = ExtResource("7_bvcvt")
 metadata/_custom_type_script = "uid://bqvg3v6abxftl"
 
-[node name="FishHookedState" type="Node" parent="StateMachine" node_paths=PackedStringArray("Fish")]
-script = ExtResource("7_21k1a")
+[node name="FishBitingState" type="Node" parent="StateMachine" node_paths=PackedStringArray("Fish")]
+script = ExtResource("10_f1s4w")
 Fish = NodePath("../..")
-metadata/_custom_type_script = "uid://w4at84aqc781"
+metadata/_custom_type_script = "uid://c57xic6cbvmm0"
 
 [node name="FishStartledState" type="Node" parent="StateMachine" node_paths=PackedStringArray("Fish", "DetectionRadius", "ObstacleDetectionRaycast")]
 script = ExtResource("9_x24sl")
@@ -79,10 +85,10 @@ DetectionRadius = NodePath("../../DetectionRadius")
 ObstacleDetectionRaycast = NodePath("../../ObstacleDetectionRayCast")
 metadata/_custom_type_script = "uid://bt2urs8wcgl8j"
 
-[node name="FishBitingState" type="Node" parent="StateMachine" node_paths=PackedStringArray("Fish")]
-script = ExtResource("10_f1s4w")
+[node name="FishHookedState" type="Node" parent="StateMachine" node_paths=PackedStringArray("Fish")]
+script = ExtResource("7_21k1a")
 Fish = NodePath("../..")
-metadata/_custom_type_script = "uid://c57xic6cbvmm0"
+metadata/_custom_type_script = "uid://w4at84aqc781"
 
 [node name="DetectionRadius" type="Area2D" parent="."]
 visible = false

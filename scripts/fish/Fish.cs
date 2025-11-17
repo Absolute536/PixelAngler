@@ -37,11 +37,11 @@ public partial class Fish : CharacterBody2D
     }
 
 
-    private Random _random = new Random();
+    private Random spawnPositionRandomiser = new Random();
 
     public override void _Ready()
     {
-        Position = new Vector2(_random.Next(4, 13), _random.Next(5, 15));
+        Position = new Vector2(spawnPositionRandomiser.Next(4, 13), spawnPositionRandomiser.Next(5, 15));
         SignalBus.Instance.QTESucceeded += HandleQTESucceeded;
     }
 
@@ -51,13 +51,6 @@ public partial class Fish : CharacterBody2D
         // Transform2D current = GetTransform();
         // maybe can change to if LatchTarget is not null, then proceed with the operations
         AlignToMovementDirection();
-
-        // if (LatchTarget is not null) // So this works, because there's always something with the timing
-        // // problem is also sometime when RevertFromNibble(), the exit state method doesn't get called FUCK!
-        // {
-        //     ObstacleDetectionRaycast.TargetPosition = LatchTarget.GlobalPosition + new Vector2(0, 16) - ObstacleDetectionRaycast.GlobalPosition;
-        //     ObstacleDetectionRaycast.ForceRaycastUpdate();
-        // }
 
         if (_isHooked)
         {
@@ -80,7 +73,7 @@ public partial class Fish : CharacterBody2D
                 InteractionRadius.Position = Vector2.Left * 16;
                 ObstacleDetectionRaycast.Position = Vector2.Left * 16;
             }
-            else if (Velocity.X > 0)
+            else if (Velocity.X >= 0)
             {
                 FishSprite.FlipH = false;
                 InteractionRadius.Position = Vector2.Zero;
@@ -97,6 +90,23 @@ public partial class Fish : CharacterBody2D
         // soooo.... does that mean when the sprite is flipped, the end position will need to += (16, 0) ?
         // yes. you're right
         // Extracted from FishNibbleState (12/11/2025)
+    }
+
+    // Added a public utility method to force the alignment process regardless of EnableAlignment (this is a hacky fix, but whatever)
+    public void ForceAlignmentToMovementDirection()
+    {
+        if (Velocity.X < 0)
+        {
+            FishSprite.FlipH = true;
+            InteractionRadius.Position = Vector2.Left * 16;
+            ObstacleDetectionRaycast.Position = Vector2.Left * 16;
+        }
+        else if (Velocity.X >= 0)
+        {
+            FishSprite.FlipH = false;
+            InteractionRadius.Position = Vector2.Zero;
+            ObstacleDetectionRaycast.Position = Vector2.Zero;
+        }
     }
 
     private void HandleQTESucceeded(object sender, EventArgs e)

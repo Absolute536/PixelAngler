@@ -18,17 +18,7 @@ public partial class FishWanderState : State
     private Vector2 _velocity = Vector2.Zero;
     
     private bool _isStartled = false;
-
-    private Random _random = new Random();
-
-    
-
-    // private bool _isColliding = false;
-
-    public FishWanderState()
-    {
-         // randomise on constructor call
-    }
+    private Random _parameterRandomiser = new Random();
 
     public override void _Ready()
     {
@@ -54,6 +44,8 @@ public partial class FishWanderState : State
                 DetectionRadius.Monitoring = true;
             };
         }
+
+        Fish.EnableAlignment = true;
     }
 
     public override void ExitState()
@@ -87,14 +79,14 @@ public partial class FishWanderState : State
 
     private void RandomiseWanderParameters()
     {
-        _wanderDuration = _random.Next(1, 2) + _random.NextDouble(); // (1 ~ 2) + (0.0 + 1.0) --> so max: 3, min: 1
+        _wanderDuration = _parameterRandomiser.Next(1, 2) + _parameterRandomiser.NextDouble(); // (1 ~ 2) + (0.0 + 1.0) --> so max: 3, min: 1
         MovementTimer.WaitTime = _wanderDuration; // set it here, OR make it OneShot and start it? hmmmm.......
 
-        _wanderAngle = Mathf.DegToRad(45 - _random.Next(91)); // same as last time, -45 to 45 on that direction
-        _wanderSpeed = _random.Next(15, 51); // min: 15, max 50, let's try this out first
+        _wanderAngle = Mathf.DegToRad(45 - _parameterRandomiser.Next(91)); // same as last time, -45 to 45 on that direction
+        _wanderSpeed = _parameterRandomiser.Next(15, 51); // min: 15, max 50, let's try this out first
 
         // well, this I can probably use an array of constant and store it, but whatever, it'll do for now
-        int randomDirectionDraw = _random.Next(4);
+        int randomDirectionDraw = _parameterRandomiser.Next(4);
 
         if (randomDirectionDraw == 0)
             _wanderDirection = Vector2.Up;
@@ -154,37 +146,23 @@ public partial class FishWanderState : State
         if (area is Bobber)
         {
             Fish.LatchTarget = area as Bobber; // Set the bobber reference to the fish's latch target property
+
+            // Orient the fish towards the bobber by calling ForceAlignment...
+            Fish.Velocity = ObstacleDetectionRaycast.TargetPosition;
+            Fish.ForceAlignmentToMovementDirection();
             
+            // Then set target position of raycast to the targeted position at the bobber to perform any obstacle detection
+            // So that if the fish's path is obstructed by any object, it won't transition into attracted state, and into the nibble state
+            // This is not exactly perfect, cuz the fish may move backward in the AttractedState, but it will do for most cases.
             Vector2 bobberTargetPosition = area.GlobalPosition + new Vector2(0, 16); // 16 pixel offset downward to the bottom of bobber (temporary)
-            // need to account for sprite flipping here as well
-            // actually no need now, cuz we've already flipped the raycast's position in the alignment process
-            // if (Fish.FishSprite.FlipH)
-            //     ObstacleDetectionRaycast.TargetPosition = bobberTargetPosition - (Fish.GlobalPosition + new Vector2(-16, 0));
-            // else
-            
             ObstacleDetectionRaycast.TargetPosition = bobberTargetPosition - ObstacleDetectionRaycast.GlobalPosition;
-            // calculations are correct
-            // so it has to do with sth related to flipping the raycast2D's position, since target position depends on the position
-            // is it because when the sprite is flipped, but the position haven't been updated yet?
-            // So the underlying calculation is correct, just that when transition to nibble state, the sprite it flipped, causing the target position to be off by 16 pixels
-            // try not transition?
-            // Damn... so I was right all along.....
-            // HAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHA
-            // I LoVe wAsTiNg My tImE heheheeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee!!!!
-
-                // ok, so the bug is the raycast ends at the facing direction + 1 tile in the direction
-                // and only happens if bobber hits water and the fish detect it
-
+            // GD.Print(bobberTargetPosition);
+            // GD.Print(ObstacleDetectionRaycast.GlobalPosition + ObstacleDetectionRaycast.TargetPosition);
             ObstacleDetectionRaycast.Enabled = true;
             ObstacleDetectionRaycast.ForceRaycastUpdate();
 
-
-            // if (!Fish.LatchTarget.IsLatchedOn && !ObstacleDetectionRaycast.IsColliding())
-                // OnStateTransitioned("FishNibbleState");
-            
-
-            // We transition to nibble state straight away, and have the nibble state wait 1.x seconds upon entering the state
-            // Update (13/11/2025): Now we add a boolean flag, isLatchedOn and only go to nibble if it is false
+            if (!Fish.LatchTarget.IsLatchedOn && !ObstacleDetectionRaycast.IsColliding())
+                OnStateTransitioned("FishAttractedState");
         }
     }
 }

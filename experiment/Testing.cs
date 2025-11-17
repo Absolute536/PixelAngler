@@ -56,6 +56,9 @@ public partial class Testing : Node2D
 		GD.Print(superClass is SubTestA);
 		GD.Print(superClass is SubTestB);
 		
+		Vector2 test = new Vector2(10, 10);
+		GD.Print(test.Length());
+		GD.Print(test.Normalized());
 
 	}
 

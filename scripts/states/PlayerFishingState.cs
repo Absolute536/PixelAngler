@@ -8,39 +8,16 @@ public partial class PlayerFishingState : State
 {
     [Export] public Bobber Bobber;
     [Export] public Player Player;
-
-    private bool _IsFishing;
-
-    // private Timer _waitTimer = new (); // actually, we need to add it to scene tree for it to work, so let's try scene tree timer instead
+    
     public override void _Ready()
     {
         StateName = Name;
         SignalBus.Instance.ReverseBobberMotionEnded += HandleReverseBobberMotionEnded;
-
-        // _waitTimer.OneShot = true; // Well, I can either do it here, or during initialisation
-        // _waitTimer.Timeout += SpawnFish;
     }
 
     public override void EnterState(string previousState)
     {
-        // On enter, we start the timer
-        // Or maybe on enter we add the QTE node to the scene tree (hold this one first)
-
-        // So, on enter, create scene tree timer
-        // subscribe to timeout
-        // you know what, let's make two nodes, one for controlling the QTE, another for controlling the fishing
-
-        _IsFishing = true;
-        // Correction, starting the QTE should be performed by the spawnning thingy
-        // So here should be starting some timer to trigger to fish to spawn
-        Random rand = new Random();
-        int duration = rand.Next(2, 4);
         
-        SceneTreeTimer timer = GetTree().CreateTimer(duration, true, true);
-        timer.Timeout += SpawnFish;
-        GD.Print("Fish Spawnning Timer set to duration: " + duration);
-
-        // _waitTimer.Start(rand.Next(2, 4) + rand.NextDouble()); // Random int 2 ~ 4 + Random double 0.0 ~ 1.0
     }
 
     public override void ExitState()
@@ -57,7 +34,6 @@ public partial class PlayerFishingState : State
     {
         if (@event.IsActionPressed("Action") && !QuickTimeEvent.Instance.IsActive) // just a quick and dirty test
         {
-            _IsFishing = false;
             Bobber.ReverseBobberMotion();
             SignalBus.Instance.OnAnglingCancelled(this, EventArgs.Empty);
         }
@@ -87,13 +63,5 @@ public partial class PlayerFishingState : State
     // Kay~ so currently we're just instancing the fish scene directly, but later
     // we probably would want a spawner or some other class to handle all the rng and shits for spawnning the fish
     // then it'll return us a reference to the fish object from the scene here
-    private void SpawnFish()
-    {
-        if (_IsFishing)
-        {
-            GD.Print("Fish appears!");
-        }
-
-    }
     
 }

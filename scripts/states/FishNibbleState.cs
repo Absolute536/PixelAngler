@@ -108,22 +108,10 @@ public partial class FishNibbleState : State
          */
 
         InitialiseNibbleParameters();
-         
-        // Testing disable alignment process in nibble
-        // Fish.EnableAlignment = false;
-        // How about just setting the velocity to point to bobber before disabling it?
-        // it can't
-        // but if we only disable it when the fish starts moving (through waitTimer), then it works YEAHHHH
-        // So set the velocity on entering nibble state, allowing the sprite to flip WHILE the fish is temporary motionless
-        // Then disable it on waitTimer timeout
-        Fish.Velocity = GetMovementDirectionTowardTarget();
 
-        SceneTreeTimer waitTimer = GetTree().CreateTimer(_random.Next(1, 3) + _random.NextDouble(), false, true); // second false is processAlways, so that if game paused, timer will pause as well (explore this on other timers as well)
-        waitTimer.Timeout += () => 
-        { 
-            _nibbleActive = true; 
-            // Fish.EnableAlignment = false; 
-        };
+        Fish.EnableAlignment = false;
+        _nibbleActive = true;
+        _isReverse = false;
     }
 
     public override void ExitState()
@@ -133,11 +121,6 @@ public partial class FishNibbleState : State
         _isReverse = false;
 
         Fish.EnableAlignment = true; // Re-enable the sprite alignment process in Fish
-        // Ok, I know why
-        // Because if the fish has exited the nibble state BEFORE the waitTimer times out, enable alignment will be true
-        // on exiting the state, but the timeout will still be triggered, causing it to become false
-        // a dirty fix would be to enable it for a miniscule amount of time, like 0.xx seconds
-        // hmm... what should I do then?
     }
 
     public override void HandleInput(InputEvent @event)
@@ -152,18 +135,6 @@ public partial class FishNibbleState : State
 
     public override void PhysicsProcessUpdate(double delta)
     {
-        // set movement
-        // Tolol
-        // Cuz I didn't flip the _isActive flag upon area entered, so that's why the fish
-        // continues to move until both origins (bobber and fish) overlaps
-
-        // Use <= so it will nibble once more when current == required
-        
-
-        // Hol up, maybe we don't really need these?
-        // you know, maybe don't do rotation, it jumbles up the pixels
-        // how about move to the bobber's Y, then nibble through modifying X?
-
         // OKAY!!!
         // I see the problem
         // It's because when I flip the sprite when changing direction, all the other collision shape (ESPECIALLY the interaction one) still remain at their original location
@@ -236,8 +207,6 @@ public partial class FishNibbleState : State
         _nibbleCountRequired = 2;
         _currentNibbleCount = 0;
         _nibbleSpeed = SpeciesInformation.MovementSpeed;
-
-        _nibbleActive = false; 
     }
 
     // Connected/Subscribed to the signal/event via the editor already
@@ -270,36 +239,10 @@ public partial class FishNibbleState : State
 
         // Add a 16 pixel offset to the left (of the target) if the fish is flipped (facing left)
         // Because the actual position will be at the tail, and we want the snout/head to contact with the bobber
+        // So the direction should be towards the right of the bobber by 16 pixels, so that the mouth coincides with the bobber
         if (Fish.FishSprite.FlipH)
-            return (fishPosition + new Vector2(-16, 0)).DirectionTo(bobberPosition + new Vector2(0, 16));
-            // equivalent to (fishPosition + new Vector2(16, 0)).DirectionTo(bobberPosition + new Vector2(0, 16));
-
-        // Problem: the fish sprite will flip left and right continuously if it's somewhat right below the bobber
-        // Because if it's right below, it's not gonna be exactly a STRAIGHT down, so there will be some angle
-        // If fish faces right, and it's slightly towards the right, direction to gives x as -ve because need to go left, fish flip
-        // Once fish flips, direction to gives +ve x instead because need to go right, fish flip again
-        // And this repeats indefinitely
-        // This only happens if fish is above OR below the bobber, and almost straight up or down
-
-
-        // If we don't account for the Sprite's flip, it works
-        // Just that the calculation will consider the actual position of the Fish node instead, so if fish flips, the actual position is at the tail
-        // The fish will home into the bobber centred around the tail, so it will graze past the bobber once (area entered once, but no effect?), then only nibble less than 1 required count
-        // Kinda works, but looks bad
-        // It actually nibbles the required count as well, but the first one happens when it grazes past, and immediately flips the sprite, so area entered
-        // And also it will cause most of the nibble to happen on the left side of bobber because of this
-        // Yeah I think we need the check and also need to account for the direction
+            return fishPosition.DirectionTo(bobberPosition + new Vector2(16, 16));
+            
         return fishPosition.DirectionTo(bobberPosition + new Vector2(0, 16));
-    }
-
-    // Next, add a signal to broadcast to fish in nibblestate to go back to wander if bobber is removed
-    // Wee added it in the FishStateMachine weee~~~
-
-    private void HandleQTESucceeded(object sender, EventArgs e)
-    {
-        Fish.LatchTarget.IsLatchedOn = true;
-        OnStateTransitioned("FishHookedState");
-        
-        GD.Print("QTE succeeded");
     }
 }
