@@ -19,6 +19,8 @@ public partial class FishStartledState : State
 
     public override void EnterState(string previousState)
     {
+        base.EnterState(previousState);
+        
         DetectionRadius.Monitoring = false;
         _movementSpeed = _random.Next(30, 51); // 30 ~ 50?
         _duration = _random.Next(1, 3) + _random.NextDouble(); // 1.xx to 2.00
@@ -29,7 +31,7 @@ public partial class FishStartledState : State
 
     public override void ExitState()
     {
-        
+        base.ExitState();
     }
 
     public override void HandleInput(InputEvent @event)

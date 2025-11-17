@@ -38,16 +38,21 @@ public partial class FishNibbleState : State
         // SetPhysicsProcess(false);
         _nibbleActive = false;
         _isReverse = false;
+    }
 
-        // SignalBus.Instance.AnglingStarted += HandleAnglingStarted;
-        // wait.... it actually won't work
-        // because we are instancing the Fish scene during runtime dynamically
-        // so.... when the fishing state invokes the event, nothing is subscribed yet
-        InteractionRadius.AreaEntered += OnAreaEntered;
+    public override void _ExitTree()
+    {
+        InteractionRadius.AreaEntered -= OnAreaEntered;
+        SignalBus.Instance.FishBite -= RevertToDefaultState;
+        SignalBus.Instance.AnglingCancelled -= RevertToDefaultState;
     }
 
     public override void EnterState(string previousState) // Quick note here regarding the statemachine initial state hehe
     {
+        base.EnterState(previousState);
+        InteractionRadius.AreaEntered += OnAreaEntered;
+        SignalBus.Instance.FishBite += RevertToDefaultState;
+        SignalBus.Instance.AnglingCancelled += RevertToDefaultState;
         // For the other state ideas are as follows:
         // On enter each of those states (the fish behaviour green, yellow, red), randomise a timer duration for the state duration
         // Also upon enter, check for the fish's stamina(?) NOPE ---> we probably don't neet yet, cuz we're planning on using a progress bar, but we'll see
@@ -116,6 +121,12 @@ public partial class FishNibbleState : State
 
     public override void ExitState()
     {
+        base.ExitState();
+
+        InteractionRadius.AreaEntered -= OnAreaEntered;
+        SignalBus.Instance.FishBite -= RevertToDefaultState;
+        SignalBus.Instance.AnglingCancelled -= RevertToDefaultState;
+
         GD.Print(Name + " Exit from nibble state (testing)");
         _nibbleActive = false;
         _isReverse = false;
@@ -242,7 +253,13 @@ public partial class FishNibbleState : State
         // So the direction should be towards the right of the bobber by 16 pixels, so that the mouth coincides with the bobber
         if (Fish.FishSprite.FlipH)
             return fishPosition.DirectionTo(bobberPosition + new Vector2(16, 16));
-            
+
         return fishPosition.DirectionTo(bobberPosition + new Vector2(0, 16));
+    }
+
+    private void RevertToDefaultState(object sender, EventArgs e)
+    {
+        if (IsCurrentlyActive)
+            OnStateTransitioned("FishWanderState");
     }
 }

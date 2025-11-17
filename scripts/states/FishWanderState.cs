@@ -25,11 +25,21 @@ public partial class FishWanderState : State
         StateName = Name;
 
         MovementTimer.Timeout += RandomiseWanderParameters;
-        DetectionRadius.AreaEntered += HandleBobberEntered;
+        // DetectionRadius.AreaEntered += HandleBobberEntered;
+    }
+
+    public override void _ExitTree()
+    {
+        MovementTimer.Timeout -= RandomiseWanderParameters;
+        DetectionRadius.AreaEntered -= HandleBobberEntered;
     }
 
     public override void EnterState(string previousState)
     {
+        base.EnterState(previousState);
+        
+        DetectionRadius.AreaEntered += HandleBobberEntered;
+
         RandomiseWanderParameters();
         MovementTimer.Start(_wanderDuration);
 
@@ -50,7 +60,10 @@ public partial class FishWanderState : State
 
     public override void ExitState()
     {
+        base.ExitState();
+
         MovementTimer.Stop();
+        DetectionRadius.AreaEntered -= HandleBobberEntered;
     }
 
     public override void HandleInput(InputEvent @event)

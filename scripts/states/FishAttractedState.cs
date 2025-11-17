@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using SignalBusNS;
 
 [GlobalClass]
 public partial class FishAttractedState : State
@@ -14,8 +15,19 @@ public partial class FishAttractedState : State
         StateName = Name;
     }
 
+    public override void _ExitTree()
+    {
+        SignalBus.Instance.AnglingCancelled -= RevertToDefaultState;
+        SignalBus.Instance.FishBite -= RevertToDefaultState;
+    }
+
     public override void EnterState(string previousState)
     {
+        base.EnterState(previousState);
+        
+        SignalBus.Instance.AnglingCancelled += RevertToDefaultState;
+        SignalBus.Instance.FishBite += RevertToDefaultState;
+
         // Similar to startle state, we set some timer here
         _movementDirection = Fish.GlobalPosition.DirectionTo(Fish.LatchTarget.GlobalPosition + new Vector2(0, 16)); // adjust later
 
@@ -41,7 +53,9 @@ public partial class FishAttractedState : State
 
     public override void ExitState()
     {
-        
+        base.ExitState();
+        SignalBus.Instance.AnglingCancelled -= RevertToDefaultState;
+        SignalBus.Instance.FishBite -= RevertToDefaultState;
     }
 
     public override void HandleInput(InputEvent @event)
@@ -62,6 +76,13 @@ public partial class FishAttractedState : State
 
     private void EndAttractedState()
     {
-        OnStateTransitioned("FishNibbleState");
+        if (IsCurrentlyActive)
+            OnStateTransitioned("FishNibbleState");
+    }
+
+    private void RevertToDefaultState(object sender, EventArgs e)
+    {
+        if (IsCurrentlyActive)
+            OnStateTransitioned("FishWanderState");
     }
 }

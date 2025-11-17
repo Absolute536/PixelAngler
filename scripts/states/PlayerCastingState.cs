@@ -23,12 +23,13 @@ public partial class PlayerCastingState : State
 
     public override void EnterState(string previousState)
     {
+        base.EnterState(previousState);
         CastMarker.StartCastMarking();
     }
 
     public override void ExitState()
     {
-
+        base.ExitState();
     }
 
     public override void HandleInput(InputEvent @event)

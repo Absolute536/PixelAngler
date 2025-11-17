@@ -18,6 +18,7 @@ public partial class PlayerWalkingState : State
 
     public override void EnterState(String previousState)
     {
+        base.EnterState(previousState);
         // Nothing cuz we need to check the animation on enter first
         // Hmm, what to do for walking then?
 
@@ -27,6 +28,7 @@ public partial class PlayerWalkingState : State
     public override void ExitState()
     {
         // player.AudioPlayer.Stop();
+        base.ExitState();
     }
 
     public override void HandleInput(InputEvent inputEvent)

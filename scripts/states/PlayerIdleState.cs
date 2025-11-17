@@ -16,6 +16,8 @@ public partial class PlayerIdleState : State
 
     public override void EnterState(string previousState)
     {
+        base.EnterState(previousState);
+        
         // Comment out first cuz haven't made the animation yet
         // player.AnimationPlayer.Play("Idle");
         if (previousState == "PlayerWalkingState")
@@ -29,7 +31,7 @@ public partial class PlayerIdleState : State
 
     public override void ExitState()
     {
-        // Nothing on exit yet
+        base.ExitState();
     }
 
     public override void HandleInput(InputEvent inputEvent)

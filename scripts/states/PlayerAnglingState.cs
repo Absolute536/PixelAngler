@@ -13,17 +13,21 @@ public partial class PlayerAnglingState : State
     public override void _Ready()
     {
         StateName = Name;
-        SignalBus.Instance.ReverseBobberMotionEnded += HandleReverseBobberMotionEnded;
+        
     }
-    
+
     public override void EnterState(string previousState)
     {
-
+        base.EnterState(previousState);
+        SignalBus.Instance.ReverseBobberMotionEnded += HandleReverseBobberMotionEnded;
+        SignalBus.Instance.QTESucceeded += HandleQTESuccess;
     }
 
     public override void ExitState()
     {
-        
+        base.ExitState();
+        SignalBus.Instance.ReverseBobberMotionEnded -= HandleReverseBobberMotionEnded;
+        SignalBus.Instance.QTESucceeded += HandleQTESuccess;
     }
 
     public override void HandleInput(InputEvent @event)
@@ -47,6 +51,13 @@ public partial class PlayerAnglingState : State
 
     private void HandleReverseBobberMotionEnded(object sender, EventArgs e)
     {
-        OnStateTransitioned("PlayerIdleState");
+        if (IsCurrentlyActive)
+            OnStateTransitioned("PlayerIdleState");
+    }
+
+    private void HandleQTESuccess(object sender, EventArgs e)
+    {
+        if (IsCurrentlyActive)
+            OnStateTransitioned("PlayerFishingState");
     }
 }

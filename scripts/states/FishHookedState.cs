@@ -12,12 +12,14 @@ public partial class FishHookedState : State
     }
     public override void EnterState(string previousState)
     {
-        
+        base.EnterState(previousState);
     }
 
     public override void ExitState()
     {
-
+        base.ExitState();
+        Fish.IsHooked = false;
+        Fish.LatchTarget.IsLatchedOn = false;
     }
 
     public override void HandleInput(InputEvent @event)

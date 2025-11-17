@@ -60,9 +60,8 @@ public partial class SignalBus : Node
      * Also we restrict the caller, such that only the Bobber can raise these events
      */
 
-    public delegate void BobberMotionEndedEventHandler(object sender, EventArgs e);
-    public event BobberMotionEndedEventHandler ForwardBobberMotionEnded;
-    public event BobberMotionEndedEventHandler ReverseBobberMotionEnded;
+    public event EventHandler ForwardBobberMotionEnded;
+    public event EventHandler ReverseBobberMotionEnded;
 
     public void OnForwardBobberMotionEnded(object sender, EventArgs e)
     {
@@ -81,9 +80,7 @@ public partial class SignalBus : Node
     }
 
     // Probably won't use this, but keep it for now
-    public delegate void AnglingStartedEventHandler(object sender, EventArgs e);
-    public event AnglingStartedEventHandler AnglingStarted;
-
+    public event EventHandler AnglingStarted;
     public void OnAnglingStarted(object sender, EventArgs e)
     {
         if (sender is PlayerFishingState)
@@ -92,15 +89,13 @@ public partial class SignalBus : Node
             GD.PushError("Cannot raise angling started event if caller is not of type \"PlayerFishingState\"");
     }
 
-    public delegate void FishBiteEventHandler(object sender, EventArgs e);
-    public event FishBiteEventHandler FishBite;
+    public event EventHandler FishBite;
     public void OnFishBite(object sender, EventArgs e)
     {
         FishBite?.Invoke(sender, e);
     }
 
-    public delegate void AnglingCancelledEventHandler(object sender, EventArgs e);
-    public event AnglingCancelledEventHandler AnglingCancelled;
+    public event EventHandler AnglingCancelled;
     public void OnAnglingCancelled(object sender, EventArgs e)
     {
         if (sender is PlayerAnglingState)
@@ -108,10 +103,8 @@ public partial class SignalBus : Node
         else
             GD.PushError("Cannot raise angling cancelled event if caller is not of type \"PlayerAnglingState\"");
     }
-
-    public delegate void QuickTimeEventHandler(object sender, EventArgs e);
-    public event QuickTimeEventHandler QTESucceeded;
-    public event QuickTimeEventHandler QTEFailed;
+    public event EventHandler QTESucceeded;
+    public event EventHandler QTEFailed;
 
     public void OnQTESucceeded(object sender, EventArgs e)
     {

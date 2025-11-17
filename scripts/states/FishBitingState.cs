@@ -10,11 +10,20 @@ public partial class FishBitingState : State
     public override void _Ready()
     {
         StateName = Name;
-        SignalBus.Instance.QTESucceeded += SuccessQTE;
+    }
+
+    public override void _ExitTree()
+    {
+        SignalBus.Instance.QTESucceeded -= HandleQTESuccess;
+        SignalBus.Instance.QTEFailed -= HandleQTEFailed;
     }
 
     public override void EnterState(string previousState)
     {
+        base.EnterState(previousState);
+        SignalBus.Instance.QTESucceeded += HandleQTESuccess;
+        SignalBus.Instance.QTEFailed += HandleQTEFailed;
+
         if (previousState == "FishNibbleState")
         {
             SignalBus.Instance.OnFishBite(this, EventArgs.Empty);
@@ -23,7 +32,9 @@ public partial class FishBitingState : State
 
     public override void ExitState()
     {
-        
+        base.ExitState();
+        SignalBus.Instance.QTESucceeded -= HandleQTESuccess;
+        SignalBus.Instance.QTEFailed -= HandleQTEFailed;
     }
 
     public override void HandleInput(InputEvent @event)
@@ -41,8 +52,21 @@ public partial class FishBitingState : State
         
     }
 
-    private void SuccessQTE(object sender, EventArgs e)
+    private void HandleQTESuccess(object sender, EventArgs e)
     {
-        GD.Print("QTE success");
+        if (IsCurrentlyActive)
+        {
+            Fish.IsHooked = true;
+            Fish.LatchTarget.IsLatchedOn = true;
+            OnStateTransitioned("FishHookedState");
+        }
+        
     }
+
+    private void HandleQTEFailed(object sender, EventArgs e)
+    {
+        if (IsCurrentlyActive)
+            OnStateTransitioned("FishWanderState");
+    }
+
 }

@@ -12,12 +12,11 @@ public partial class PlayerFishingState : State
     public override void _Ready()
     {
         StateName = Name;
-        SignalBus.Instance.ReverseBobberMotionEnded += HandleReverseBobberMotionEnded;
     }
 
     public override void EnterState(string previousState)
     {
-        
+        base.EnterState(previousState);
     }
 
     public override void ExitState()
@@ -27,15 +26,14 @@ public partial class PlayerFishingState : State
         // I'll leave it like this for now (maybe not)
         // YEAH ~~, I think we'll do on click, or else the fish will still spawn when the bobber is reeling back if you time it well
         // _IsFishing = false;
-
+        base.ExitState();
     }
 
     public override void HandleInput(InputEvent @event)
     {
-        if (@event.IsActionPressed("Action") && !QuickTimeEvent.Instance.IsActive) // just a quick and dirty test
+        if (@event.IsActionPressed("Action")) // just a quick and dirty test
         {
-            Bobber.ReverseBobberMotion();
-            SignalBus.Instance.OnAnglingCancelled(this, EventArgs.Empty);
+            GD.Print("Reel in");
         }
     }
 
@@ -55,10 +53,6 @@ public partial class PlayerFishingState : State
         // }
     }
 
-    private void HandleReverseBobberMotionEnded(object sender, EventArgs e)
-    {
-        OnStateTransitioned("PlayerIdleState");
-    }
 
     // Kay~ so currently we're just instancing the fish scene directly, but later
     // we probably would want a spawner or some other class to handle all the rng and shits for spawnning the fish

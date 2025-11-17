@@ -8,6 +8,8 @@ public abstract partial class State : Node, StateAction
     public delegate void TransitionedEventHandler(string nextState);
     public event TransitionedEventHandler StateTransitioned;
 
+    protected bool IsCurrentlyActive;
+
     public string StateName { get; set; }
 
     protected virtual void OnStateTransitioned(string nextState)
@@ -15,9 +17,15 @@ public abstract partial class State : Node, StateAction
         StateTransitioned?.Invoke(nextState);
     }
 
-    public abstract void EnterState(string previousState);
+    public virtual void EnterState(string previousState)
+    {
+        IsCurrentlyActive = true;
+    }
 
-    public abstract void ExitState();
+    public virtual void ExitState()
+    {
+        IsCurrentlyActive = false;
+    }
 
     public abstract void HandleInput(InputEvent @event);
 

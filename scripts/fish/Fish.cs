@@ -33,7 +33,7 @@ public partial class Fish : CharacterBody2D
     public bool IsHooked
     {
         get => _isHooked;
-        private set => _isHooked = value;
+        set => _isHooked = value;
     }
 
 
@@ -42,7 +42,6 @@ public partial class Fish : CharacterBody2D
     public override void _Ready()
     {
         Position = new Vector2(spawnPositionRandomiser.Next(4, 13), spawnPositionRandomiser.Next(5, 15));
-        SignalBus.Instance.QTESucceeded += HandleQTESucceeded;
     }
 
     public override void _PhysicsProcess(double delta)
@@ -108,12 +107,4 @@ public partial class Fish : CharacterBody2D
             ObstacleDetectionRaycast.Position = Vector2.Zero;
         }
     }
-
-    private void HandleQTESucceeded(object sender, EventArgs e)
-    {
-        if (LatchTarget is not null)
-            IsHooked = true;
-    }
-
-
 }
