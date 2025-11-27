@@ -217,7 +217,7 @@ public partial class Bobber : Area2D
 				SignalBus.Instance.OnForwardBobberMotionEnded(this, EventArgs.Empty);
 				
 				if (_inWater)
-					BobberCollisionShape.SetDeferred(CollisionShape2D.PropertyName.Disabled, false);
+					BobberCollisionShape.SetDeferred(CollisionShape2D.PropertyName.Disabled, false); // it's the area2d of bobber actually, not the collsion(wait?)
             }
 
 

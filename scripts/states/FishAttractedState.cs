@@ -7,7 +7,7 @@ public partial class FishAttractedState : State
 {
     [Export] Fish Fish;
     
-    private int _movementSpeed = 10; // set as 15 so that it moves really slowly?
+    private int _movementSpeed = 8; // set as 15 so that it moves really slowly?
     private Vector2 _movementDirection;
 
     public override void _Ready()
@@ -24,7 +24,7 @@ public partial class FishAttractedState : State
     public override void EnterState(string previousState)
     {
         base.EnterState(previousState);
-        
+
         SignalBus.Instance.AnglingCancelled += RevertToDefaultState;
         SignalBus.Instance.FishBite += RevertToDefaultState;
 
@@ -35,17 +35,20 @@ public partial class FishAttractedState : State
         Fish.Velocity = _movementDirection;
         Fish.ForceAlignmentToMovementDirection();
 
-
+        // only move the Y component, move away if < 2 tiles
+        // yeah, make it like this FOR NOW
+        _movementDirection.X = 0;
         if (Fish.GlobalPosition.DistanceTo(Fish.LatchTarget.GlobalPosition + new Vector2(0, 16)) < 32) // less than 2 tiles?
-            _movementDirection *= -1;
+            _movementDirection.Y *= -1;
+        
      
         // screw it, so if close (< 2 tiles), move away
         // else, move towards
         // THAT'S ALL!
         // should we account for the flipH too?
-        
-        
-        Fish.EnableAlignment = false;
+
+        Fish.EnableAlignment = false; // actually can try ditching force alignment and use a timer as before with the isActive flag
+        // let's not first
 
         SceneTreeTimer attractedTimer = GetTree().CreateTimer(2.0f, false, true);
         attractedTimer.Timeout += EndAttractedState;

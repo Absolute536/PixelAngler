@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://eii05j1pdh14"]
+[gd_scene load_steps=19 format=3 uid="uid://eii05j1pdh14"]
 
 [ext_resource type="Texture2D" uid="uid://db8vn106q6tyc" path="res://assets/fish/Fish.png" id="1_n6yr6"]
 [ext_resource type="Script" uid="uid://cu4l4rhqag1e7" path="res://scripts/fish/Fish.cs" id="1_nub35"]
@@ -11,6 +11,9 @@
 [ext_resource type="Script" uid="uid://bt2urs8wcgl8j" path="res://scripts/states/FishStartledState.cs" id="9_x24sl"]
 [ext_resource type="Script" uid="uid://c57xic6cbvmm0" path="res://scripts/states/FishBitingState.cs" id="10_f1s4w"]
 [ext_resource type="Script" uid="uid://bephjnbdbbg7a" path="res://scripts/states/FishAttractedState.cs" id="11_3ig6q"]
+[ext_resource type="Script" uid="uid://dryk3s2pqfhvn" path="res://scripts/states/FishWrestleState.cs" id="12_8hrfi"]
+[ext_resource type="Script" uid="uid://bw4l8x01c18wn" path="res://scripts/states/FishDivingState.cs" id="13_ex20v"]
+[ext_resource type="Script" uid="uid://bftje352nck6l" path="res://scripts/states/FishCaughtState.cs" id="14_k2ocq"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6lgmd"]
 radius = 5.0
@@ -54,7 +57,7 @@ metadata/_custom_type_script = "uid://bakg405h3gvhu"
 [node name="FishWanderState" type="Node" parent="StateMachine" node_paths=PackedStringArray("Fish", "MovementTimer", "DetectionRadius", "MovementCollisionShape", "ObstacleDetectionRaycast")]
 script = ExtResource("5_6lgmd")
 Fish = NodePath("../..")
-MovementTimer = NodePath("../../WanderTimer")
+MovementTimer = NodePath("../../MovementTimer")
 DetectionRadius = NodePath("../../DetectionRadius")
 MovementCollisionShape = NodePath("../../FishMovementCollisionShape")
 ObstacleDetectionRaycast = NodePath("../../ObstacleDetectionRayCast")
@@ -85,10 +88,27 @@ DetectionRadius = NodePath("../../DetectionRadius")
 ObstacleDetectionRaycast = NodePath("../../ObstacleDetectionRayCast")
 metadata/_custom_type_script = "uid://bt2urs8wcgl8j"
 
-[node name="FishHookedState" type="Node" parent="StateMachine" node_paths=PackedStringArray("Fish")]
+[node name="FishHookedState" type="Node" parent="StateMachine" node_paths=PackedStringArray("Fish", "MovementTimer")]
 script = ExtResource("7_21k1a")
 Fish = NodePath("../..")
+MovementTimer = NodePath("../../MovementTimer")
 metadata/_custom_type_script = "uid://w4at84aqc781"
+
+[node name="FishWrestleState" type="Node" parent="StateMachine" node_paths=PackedStringArray("Fish", "MovementTimer")]
+script = ExtResource("12_8hrfi")
+Fish = NodePath("../..")
+MovementTimer = NodePath("../../MovementTimer")
+metadata/_custom_type_script = "uid://dryk3s2pqfhvn"
+
+[node name="FishDivingState" type="Node" parent="StateMachine" node_paths=PackedStringArray("Fish")]
+script = ExtResource("13_ex20v")
+Fish = NodePath("../..")
+metadata/_custom_type_script = "uid://bw4l8x01c18wn"
+
+[node name="FishCaughtState" type="Node" parent="StateMachine" node_paths=PackedStringArray("Fish")]
+script = ExtResource("14_k2ocq")
+Fish = NodePath("../..")
+metadata/_custom_type_script = "uid://bftje352nck6l"
 
 [node name="DetectionRadius" type="Area2D" parent="."]
 visible = false
@@ -99,7 +119,7 @@ collision_mask = 2
 [node name="DetectionRadiusShape" type="CollisionShape2D" parent="DetectionRadius"]
 shape = SubResource("CircleShape2D_pgks6")
 
-[node name="WanderTimer" type="Timer" parent="."]
+[node name="MovementTimer" type="Timer" parent="."]
 process_callback = 0
 
 [node name="InteractionRadius" type="Area2D" parent="."]

@@ -15,6 +15,7 @@ public class SubTestB : SuperTest
 }
 public partial class Testing : Node2D
 {
+	private ProgressBar bar;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -60,6 +61,8 @@ public partial class Testing : Node2D
 		GD.Print(test.Length());
 		GD.Print(test.Normalized());
 
+		bar = GetNode<ProgressBar>("ProgressBar");
+
 	}
 
     public override void _UnhandledInput(InputEvent @event)
@@ -72,16 +75,21 @@ public partial class Testing : Node2D
 		// GD.Print("Is action pressed: " + (@event.IsActionPressed("Left") && @event.IsActionPressed("Up")));
 		// GD.Print("Is action released: " + @event.IsActionReleased("Left"));
 		// Ok, so if I don't allow echo, IsActionPressed will return true for only the "frame" / "tick" when I pressed the action key
+		if (@event.IsEcho())
+			GD.Print("Echo key event" + @event.ToString());
     }
 
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
+	public override void _PhysicsProcess(double delta)
 	{
-		if (Input.IsActionPressed("Action"))
-        {
-			GD.Print("LMB detected in _Process()");
-        }
+		// if (Input.IsActionPressed("Action"))
+        // {
+		// 	GD.Print("LMB detected in _Process()");
+		// 	bar.Value += 0.25;
+        // }
+		// else
+		// 	bar.Value -= 0.5;
 	}
 	
 

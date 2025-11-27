@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://d1r8eckfg8xw"]
 
-[ext_resource type="Script" uid="uid://dcwcvyphpsh56" path="res://scripts/FishingLine.cs" id="1_j4fxa"]
+[ext_resource type="Script" uid="uid://dcwcvyphpsh56" path="res://scripts/game_mechanism/FishingLine.cs" id="1_j4fxa"]
 
 [node name="FishingLine" type="Line2D"]
 width = 3.0

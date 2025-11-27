@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://birkglg70yi31"]
+
+[ext_resource type="StyleBox" uid="uid://cleabbows1gj4" path="res://resources/ui_styles/fishing_progress_background_stylebox_flat.tres" id="1_j6d8p"]
+[ext_resource type="Script" uid="uid://gudm84r4jaqm" path="res://scripts/user_interface/progress_bar/FishingProgressBar.cs" id="2_1u22c"]
+
+[node name="FishingProgress" type="MarginContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -590.0
+offset_bottom = -356.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+custom_minimum_size = Vector2(50, 3)
+layout_mode = 2
+theme_override_styles/background = ExtResource("1_j6d8p")
+show_percentage = false
+script = ExtResource("2_1u22c")

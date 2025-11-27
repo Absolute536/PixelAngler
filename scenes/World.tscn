@@ -42,3 +42,4 @@ position = Vector2(48, 206)
 
 [node name="SpawnPoint3" parent="WorldEntities" instance=ExtResource("5_71j4m")]
 position = Vector2(19, -79)
+MaxEntityCount = 3

@@ -56,17 +56,25 @@ public partial class FishBitingState : State
     {
         if (IsCurrentlyActive)
         {
-            Fish.IsHooked = true;
-            Fish.LatchTarget.IsLatchedOn = true;
+            PackedScene progressBarScene = GD.Load<PackedScene>("res://scenes/fishing_progress.tscn");
+            MarginContainer progressBarRoot = progressBarScene.Instantiate<MarginContainer>();
+            FishingProgressBar progressBar = progressBarRoot.GetChild(0) as FishingProgressBar; // fix later :P
+            // GD.Print("Size: " + progressBar.Size); // size is 0? (cuz only controlled by parent?)
+            // progressBar.Size = new Vector2(40, 3);
+            progressBarRoot.Position = new Vector2(-8, 8);
+
+            Fish.AddChild(progressBarRoot);
+            MinigameManager.Instance.StartMinigame(progressBarRoot);
+
             OnStateTransitioned("FishHookedState");
         }
-        
+            
     }
 
     private void HandleQTEFailed(object sender, EventArgs e)
     {
         if (IsCurrentlyActive)
-            OnStateTransitioned("FishWanderState");
+            OnStateTransitioned("FishStartledState");
     }
 
 }

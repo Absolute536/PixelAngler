@@ -17,16 +17,15 @@ public partial class PlayerFishingState : State
     public override void EnterState(string previousState)
     {
         base.EnterState(previousState);
+        SignalBus.Instance.FishCaught += HandleFishCaught;
+        SignalBus.Instance.ReverseBobberMotionEnded += HandleReverseBobberMotionEnded;
     }
 
     public override void ExitState()
     {
-        // Hmm, on exit OR on click (for reverse bobber)? on exit works, but it kinda has a "delay", cuz we had to wait unti the bobber is fully reeled back
-        // However, on exit feels "right"? Cuz we set the flag on enter, so we should reverse on exit right?
-        // I'll leave it like this for now (maybe not)
-        // YEAH ~~, I think we'll do on click, or else the fish will still spawn when the bobber is reeling back if you time it well
-        // _IsFishing = false;
         base.ExitState();
+        SignalBus.Instance.FishCaught -= HandleFishCaught;
+        SignalBus.Instance.ReverseBobberMotionEnded += HandleReverseBobberMotionEnded;
     }
 
     public override void HandleInput(InputEvent @event)
@@ -53,6 +52,16 @@ public partial class PlayerFishingState : State
         // }
     }
 
+    private void HandleFishCaught(object sender, EventArgs e)
+    {
+        if (IsCurrentlyActive)
+            Bobber.ReverseBobberMotion();      
+    }
+
+    private void HandleReverseBobberMotionEnded(object sender, EventArgs e)
+    {
+        OnStateTransitioned("PlayerIdleState");
+    }
 
     // Kay~ so currently we're just instancing the fish scene directly, but later
     // we probably would want a spawner or some other class to handle all the rng and shits for spawnning the fish

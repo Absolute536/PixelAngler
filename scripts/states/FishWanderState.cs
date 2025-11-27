@@ -15,17 +15,12 @@ public partial class FishWanderState : State
     private float _wanderAngle;
     private Vector2 _wanderDirection;
     private double _wanderDuration;
-    private Vector2 _velocity = Vector2.Zero;
     
-    private bool _isStartled = false;
     private Random _parameterRandomiser = new Random();
 
     public override void _Ready()
     {
         StateName = Name;
-
-        MovementTimer.Timeout += RandomiseWanderParameters;
-        // DetectionRadius.AreaEntered += HandleBobberEntered;
     }
 
     public override void _ExitTree()
@@ -39,16 +34,19 @@ public partial class FishWanderState : State
         base.EnterState(previousState);
         
         DetectionRadius.AreaEntered += HandleBobberEntered;
+        MovementTimer.Timeout += RandomiseWanderParameters;
 
         RandomiseWanderParameters();
+        _wanderSpeed = _parameterRandomiser.Next(15, 36); // yeah, I think this is better (if based on species as well)
+
         MovementTimer.Start(_wanderDuration);
 
-        // ok, so here if come from nibble state, disable the detection for some duration, then re-enable it back
-        if (previousState == "FishStartledState") // or other game state?
+        // ok, so here if come from startled or attracted state, disable the detection for some duration, then re-enable it back
+        if (previousState == "FishStartledState" || previousState == "FishAttractedState") // or other game state?
         {
             DetectionRadius.Monitoring = false;
 
-            SceneTreeTimer disableTimer = GetTree().CreateTimer(3.0f, true, true); // try 3 seconds first
+            SceneTreeTimer disableTimer = GetTree().CreateTimer(5.0f, true, true); // disable the detection radius for 5 second
             disableTimer.Timeout += () => 
             { 
                 DetectionRadius.Monitoring = true;
@@ -63,6 +61,7 @@ public partial class FishWanderState : State
         base.ExitState();
 
         MovementTimer.Stop();
+        MovementTimer.Timeout -= RandomiseWanderParameters;
         DetectionRadius.AreaEntered -= HandleBobberEntered;
     }
 
@@ -84,8 +83,8 @@ public partial class FishWanderState : State
         // maybe also need to track direction, namely if left to right (or vice versa), flip the sprite horizontally (vertical flip is for rotation)
         // I suppose we can skip the rotation (cuz it looks ugly)
 
-        _velocity = _wanderDirection.Rotated(_wanderAngle) * (float) _wanderSpeed;
-        Fish.Velocity = _velocity;
+        // _velocity = _wanderDirection.Rotated(_wanderAngle) * (float) _wanderSpeed;
+        Fish.Velocity = _wanderDirection.Rotated(_wanderAngle) * (float) _wanderSpeed;
 
         Fish.MoveAndSlide();
     }
@@ -96,7 +95,8 @@ public partial class FishWanderState : State
         MovementTimer.WaitTime = _wanderDuration; // set it here, OR make it OneShot and start it? hmmmm.......
 
         _wanderAngle = Mathf.DegToRad(45 - _parameterRandomiser.Next(91)); // same as last time, -45 to 45 on that direction
-        _wanderSpeed = _parameterRandomiser.Next(15, 51); // min: 15, max 50, let's try this out first
+        // _wanderSpeed = _parameterRandomiser.Next(15, 51); // min: 15, max 50, let's try this out first
+        // Update (17/11/2025): only randomise on enter and it should remain constant (or based on fish species resource)
 
         // well, this I can probably use an array of constant and store it, but whatever, it'll do for now
         int randomDirectionDraw = _parameterRandomiser.Next(4);
@@ -154,28 +154,25 @@ public partial class FishWanderState : State
          * - The direction to the bobber is not impeded by an obstacle (so we only detect at the moment in wander state)
          * - The bait equipped fulfills the fish's requirement
          * - Anything else?
-         * IF all of the above are true, transition to nibble state
+         * IF all of the above are true, transition to attracted state
          */
+
+        // Only one bobber
         if (area is Bobber)
         {
-            Fish.LatchTarget = area as Bobber; // Set the bobber reference to the fish's latch target property
+            Fish.LatchTarget = area as Bobber;
 
-            // Orient the fish towards the bobber by calling ForceAlignment...
-            Fish.Velocity = ObstacleDetectionRaycast.TargetPosition;
-            Fish.ForceAlignmentToMovementDirection();
-            
-            // Then set target position of raycast to the targeted position at the bobber to perform any obstacle detection
-            // So that if the fish's path is obstructed by any object, it won't transition into attracted state, and into the nibble state
-            // This is not exactly perfect, cuz the fish may move backward in the AttractedState, but it will do for most cases.
-            Vector2 bobberTargetPosition = area.GlobalPosition + new Vector2(0, 16); // 16 pixel offset downward to the bottom of bobber (temporary)
-            ObstacleDetectionRaycast.TargetPosition = bobberTargetPosition - ObstacleDetectionRaycast.GlobalPosition;
-            // GD.Print(bobberTargetPosition);
-            // GD.Print(ObstacleDetectionRaycast.GlobalPosition + ObstacleDetectionRaycast.TargetPosition);
+            Vector2 toBobberPosition = area.GlobalPosition + new Vector2(0, 16);
+            Vector2 directionToBobber = ObstacleDetectionRaycast.GlobalPosition.DirectionTo(toBobberPosition);
+
+            // raycast to the bobber position (the point)
+            ObstacleDetectionRaycast.TargetPosition = toBobberPosition - ObstacleDetectionRaycast.GlobalPosition;
             ObstacleDetectionRaycast.Enabled = true;
             ObstacleDetectionRaycast.ForceRaycastUpdate();
 
             if (!Fish.LatchTarget.IsLatchedOn && !ObstacleDetectionRaycast.IsColliding())
                 OnStateTransitioned("FishAttractedState");
+            
         }
     }
 }

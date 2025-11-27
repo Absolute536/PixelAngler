@@ -36,6 +36,13 @@ public partial class Fish : CharacterBody2D
         set => _isHooked = value;
     }
 
+    private bool _isCaught = false;
+    public bool IsCaught
+    {
+        get => _isCaught;
+        set => _isCaught = value;
+    }
+
 
     private Random spawnPositionRandomiser = new Random();
 
@@ -51,6 +58,9 @@ public partial class Fish : CharacterBody2D
         // maybe can change to if LatchTarget is not null, then proceed with the operations
         AlignToMovementDirection();
 
+        // If Fish is hooked, fix the bobber's position at the fish's snout every frame
+        // Since bobber's physics process will be halted once it reaches its destination
+        // but instead of this, maybe we should just place this within the hooked state?
         if (_isHooked)
         {
             if (FishSprite.FlipH && LatchTarget is not null)
@@ -58,6 +68,22 @@ public partial class Fish : CharacterBody2D
             else
                 LatchTarget.GlobalPosition = GlobalPosition + new Vector2(0, -16); // 16 pixel offset upwards because fish's mouth will be at top of bobber without this
                 // I see now. Because  the HandleQTESucceeded is broadcasted to every fish, so need to filter
+        }
+
+        // This is for if the fish is caught (minigame completed successfully)
+        // So we need the fish to follow the bobber's position instead
+        // Basically the opposite of isHooked block
+        // I KNOW WE'RE POLLING THE STATE EVERY PHYSICS FRAME, BUT IT'LL HAVE TO DO FOR NOW, JUST TO MAKE THINGS FASTER
+        if (_isCaught)
+        {
+            _enableAlignment = false;
+            if (LatchTarget is not null)
+            {
+                if (FishSprite.FlipH)
+                    GlobalPosition = LatchTarget.GlobalPosition + new Vector2(16, 16); // if FlipH, fish position at bobber's offset by 16, 16 to ensure mouth is at the bottom
+                else
+                    GlobalPosition = LatchTarget.GlobalPosition + new Vector2(0, 16);
+            }
         }
     }
             
@@ -107,4 +133,11 @@ public partial class Fish : CharacterBody2D
             ObstacleDetectionRaycast.Position = Vector2.Zero;
         }
     }
+}
+
+public enum FishBehaviour
+{
+    Green,
+    Yellow,
+    Red
 }

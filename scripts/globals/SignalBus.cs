@@ -116,6 +116,20 @@ public partial class SignalBus : Node
         QTEFailed?.Invoke(sender, e);
     }
 
+    public delegate void FishBehaviourChangedEventHandler(string behaviour);
+    public event FishBehaviourChangedEventHandler FishBehaviourChanged;
+
+    public void OnFishBehaviourChanged(string behaviour)
+    {
+        FishBehaviourChanged?.Invoke(behaviour);
+    }
+
+    public event EventHandler FishCaught;
+    public void OnFishCaught(object sender, EventArgs e)
+    {
+        FishCaught?.Invoke(sender, e);
+    }
+
 
 
 

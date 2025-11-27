@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cwtba6wd0gfht"]
 
 [ext_resource type="Texture2D" uid="uid://v8vf2wflbo6g" path="res://assets/player/cast_marker.png" id="1_i45yn"]
-[ext_resource type="Script" uid="uid://5b503ors8bhg" path="res://scripts/player/CastMarker.cs" id="2_i45yn"]
+[ext_resource type="Script" uid="uid://5b503ors8bhg" path="res://scripts/game_mechanism/CastMarker.cs" id="2_i45yn"]
 
 [node name="CastMarker" type="Sprite2D" node_paths=PackedStringArray("CastTimer")]
 scale = Vector2(0.25, 0.25)
