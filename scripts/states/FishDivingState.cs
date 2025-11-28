@@ -17,7 +17,8 @@ public partial class FishDivingState : State
         base.EnterState(previousState);
         Fish.Velocity = Vector2.Zero; // not moving
         // change sprite to the diving thingy or animation
-        SignalBus.Instance.OnFishBehaviourChanged("Interact");
+        // SignalBus.Instance.OnFishBehaviourChanged(FishBehaviour.Red, 0);
+        MinigameManager.Instance.CurrentBehaviour = FishBehaviour.Red;
 
         SceneTreeTimer divingTimer = GetTree().CreateTimer(3.0, false, true);
         divingTimer.Timeout += () =>

@@ -1,20 +1,43 @@
-[gd_scene load_steps=3 format=3 uid="uid://birkglg70yi31"]
+[gd_scene load_steps=6 format=3 uid="uid://birkglg70yi31"]
 
+[ext_resource type="FontFile" uid="uid://cibnl77dc0ji7" path="res://resources/fonts/prstartk.ttf" id="1_1u22c"]
 [ext_resource type="StyleBox" uid="uid://cleabbows1gj4" path="res://resources/ui_styles/fishing_progress_background_stylebox_flat.tres" id="1_j6d8p"]
+[ext_resource type="Script" uid="uid://bbl1lpo8xgm6q" path="res://scripts/user_interface/progress_bar/FishingProgress.cs" id="1_pddit"]
 [ext_resource type="Script" uid="uid://gudm84r4jaqm" path="res://scripts/user_interface/progress_bar/FishingProgressBar.cs" id="2_1u22c"]
+[ext_resource type="StyleBox" uid="uid://cidj02nwk8w0p" path="res://resources/ui_styles/fishing_clicks_needed_style_box_flat.tres" id="2_h6xbt"]
 
-[node name="FishingProgress" type="MarginContainer"]
+[node name="FishingProgress" type="MarginContainer" node_paths=PackedStringArray("GameProgressBar", "GameActionPrompt")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -590.0
-offset_bottom = -356.0
+offset_right = -568.0
+offset_bottom = -342.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_pddit")
+GameProgressBar = NodePath("HBoxContainer/ProgressBar")
+GameActionPrompt = NodePath("HBoxContainer/RichTextLabel")
 
-[node name="ProgressBar" type="ProgressBar" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer"]
+custom_minimum_size = Vector2(18, 18)
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("1_1u22c")
+theme_override_fonts/italics_font = ExtResource("1_1u22c")
+theme_override_fonts/bold_font = ExtResource("1_1u22c")
+theme_override_font_sizes/normal_font_size = 8
+theme_override_styles/normal = ExtResource("2_h6xbt")
+text = "5"
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ProgressBar" type="ProgressBar" parent="HBoxContainer"]
 custom_minimum_size = Vector2(50, 3)
 layout_mode = 2
+size_flags_vertical = 4
 theme_override_styles/background = ExtResource("1_j6d8p")
 show_percentage = false
 script = ExtResource("2_1u22c")

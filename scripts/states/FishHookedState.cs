@@ -36,7 +36,8 @@ public partial class FishHookedState : State
         MovementTimer.Timeout += ChangeMovementAngle;
         // MovementTimer.Timeout += ChangeBehaviour;
         MovementTimer.Start(1.0); // every 3s?
-        SignalBus.Instance.OnFishBehaviourChanged("Action");
+        // SignalBus.Instance.OnFishBehaviourChanged(FishBehaviour.Green, 0);
+        MinigameManager.Instance.CurrentBehaviour = FishBehaviour.Green;
 
         SignalBus.Instance.FishCaught += HandleFishCaught;
         // PackedScene progressBarScene = GD.Load<PackedScene>("res://scenes/fishing_progress.tscn");
@@ -118,7 +119,7 @@ public partial class FishHookedState : State
 
     private void ChangeBehaviour()
     {
-        SignalBus.Instance.OnFishBehaviourChanged("Interact");
+        // SignalBus.Instance.OnFishBehaviourChanged("Interact");
     }
 
     private void HandleFishCaught(object sender, EventArgs e) // since this is duplicated across the three state, maybe can extract into an interface?

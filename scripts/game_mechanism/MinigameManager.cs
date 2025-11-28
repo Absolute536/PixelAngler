@@ -9,19 +9,23 @@ public partial class MinigameManager : Node
     public static MinigameManager Instance { get; private set; }
     private QuickTimeEvent QTE;
 
-    private ProgressBar _progressBar;
-    private Control _progressBarParent;
+    private FishingProgress _fishingProgress;
 
     private bool _gameStarted = false;
 
-    private string _currentBehaviour = "Action";
+    // private string _currentBehaviour = "Action";
+    public FishBehaviour CurrentBehaviour { get => _currentBehaviour; set => _currentBehaviour = value; }
+    private FishBehaviour _currentBehaviour;
+
+    public int ClicksNeeded { get => _clicksNeeded; set => _clicksNeeded = value; }
+    private int _clicksNeeded;
 
     // Backup plan (below)
-    private readonly Dictionary<FishBehaviour, string[]> _behaviourInputPair = new ()
+    private readonly Dictionary<FishBehaviour, string> _behaviourInputPair = new ()
     {
-      {FishBehaviour.Green, ["Action"]},
-      {FishBehaviour.Yellow, ["Up", "Down", "Left", "Right"]},
-      {FishBehaviour.Red, ["Interact"]}
+      {FishBehaviour.Green, "Action"},
+      {FishBehaviour.Yellow, "Action"},
+      {FishBehaviour.Red, "Interact"}
     };
 
     public override void _Ready()
@@ -40,22 +44,38 @@ public partial class MinigameManager : Node
             // // Check if the input matches with any of the actionName for the behaviour
             // bool isInputValid = actionList.Any((element) => Input.IsActionPressed(element));
 
-            if (Input.IsActionPressed(_currentBehaviour))
+            if (CurrentBehaviour != FishBehaviour.Yellow)
             {
-                GD.Print("Mouse pressed detected");
+                if (Input.IsActionPressed(_behaviourInputPair[CurrentBehaviour]))
+                {
+                    _fishingProgress.GameProgressBar.Value += 0.25;
+                    GD.Print("Mouse pressed detected");
+                }
+                else
+                    _fishingProgress.GameProgressBar.Value -= 0.2;
+                    
                 // _progressBar.Value += 0.16667; // 10 per second
-                _progressBar.Value += 0.25;
             }
             else
             {
-                _progressBar.Value -= 0.2; // 20 per second
+                if (Input.IsActionJustPressed(_behaviourInputPair[CurrentBehaviour]))
+                {
+                    ClicksNeeded -= 1;
+                    // Halt increase until clicks needed are fulfilled, only decrease while not met
+                    // _progressBar.Value += 0.25;
+                }
+                else
+                    _fishingProgress.GameProgressBar.Value -= 0.2; // 20 per second
+                
+                if (ClicksNeeded <= 0)
+                    SignalBus.Instance.OnFishWrestleCompleted(this, EventArgs.Empty);
             }
 
             // it should be if value becomes 0 (min) --> Lose
             // value becomes >= 100 (max) --> Win
 
             // try win only first
-            if (_progressBar.Value >= _progressBar.MaxValue)
+            if (_fishingProgress.GameProgressBar.Value >= _fishingProgress.GameProgressBar.MaxValue)
                 WinMinigame();
         }
     }
@@ -65,26 +85,26 @@ public partial class MinigameManager : Node
         QTE.StartQuickTimeEvent(0.7f, "Action");  
     }
 
-    public void StartMinigame(Control progressBar)
+    public void StartMinigame(FishingProgress fishingProgress)
     {
-        _progressBarParent = progressBar;
-        _progressBar = progressBar.GetChild(0) as ProgressBar;
+        _fishingProgress = fishingProgress;
         _gameStarted = true;
-        SignalBus.Instance.FishBehaviourChanged += HandleFishBehaviourChanged;
+        // SignalBus.Instance.FishBehaviourChanged += HandleFishBehaviourChanged;
     }
 
     public void EndMinigame()
     {
         _gameStarted = false;
         // _progressBar.QueueFree();
-        _progressBarParent.QueueFree();
-        SignalBus.Instance.FishBehaviourChanged -= HandleFishBehaviourChanged;
+        _fishingProgress.QueueFree();
+        // SignalBus.Instance.FishBehaviourChanged -= HandleFishBehaviourChanged;
     }
 
-    public void HandleFishBehaviourChanged(string behaviour)
-    {
-        _currentBehaviour = behaviour;
-    }
+    // public void HandleFishBehaviourChanged(FishBehaviour behaviour, int repeatNumber)
+    // {
+    //     CurrentBehaviour = behaviour;
+    //     _actionRepeat = repeatNumber;
+    // }
 
     private void WinMinigame()
     {
