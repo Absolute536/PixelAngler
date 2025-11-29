@@ -1,0 +1,92 @@
+[gd_scene load_steps=5 format=3 uid="uid://grxfauprixx0"]
+
+[ext_resource type="FontFile" uid="uid://cibnl77dc0ji7" path="res://resources/fonts/prstartk.ttf" id="1_1bx0f"]
+[ext_resource type="Script" uid="uid://db4vwpmvhss28" path="res://scripts/user_interface/DayNightCycleUi.cs" id="1_2w82t"]
+[ext_resource type="Texture2D" uid="uid://c6gruwfemeuhx" path="res://assets/day_night_cycle_panel.png" id="1_7kwcf"]
+[ext_resource type="Texture2D" uid="uid://caf02j160lynb" path="res://assets/day_icon.png" id="2_ukgtc"]
+
+[node name="DayNightCycleUI" type="Control" node_paths=PackedStringArray("DayLabel", "TimeLabel", "DayNightIcon")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_2w82t")
+DayLabel = NodePath("PanelNinePatch/DayNightContent/TimeInformation/CenterContainer/DayLabel")
+TimeLabel = NodePath("PanelNinePatch/DayNightContent/TimeInformation/CenterContainer2/TimeLabel")
+DayNightIcon = NodePath("PanelNinePatch/DayNightContent/DayNightIcon")
+
+[node name="PanelNinePatch" type="NinePatchRect" parent="."]
+custom_minimum_size = Vector2(108, 44)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -108.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = 44.0
+grow_horizontal = 0
+texture = ExtResource("1_7kwcf")
+region_rect = Rect2(5, 5, 100, 37)
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="DayNightContent" type="HBoxContainer" parent="PanelNinePatch"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -18.0
+offset_right = 50.0
+offset_bottom = 18.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 2
+
+[node name="TimeInformation" type="VBoxContainer" parent="PanelNinePatch/DayNightContent"]
+custom_minimum_size = Vector2(64, 32)
+layout_mode = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="PanelNinePatch/DayNightContent/TimeInformation"]
+custom_minimum_size = Vector2(64, 16)
+layout_mode = 2
+
+[node name="DayLabel" type="RichTextLabel" parent="PanelNinePatch/DayNightContent/TimeInformation/CenterContainer"]
+custom_minimum_size = Vector2(64, 16)
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("1_1bx0f")
+theme_override_font_sizes/normal_font_size = 8
+text = "Day 1"
+scroll_active = false
+autowrap_mode = 0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CenterContainer2" type="CenterContainer" parent="PanelNinePatch/DayNightContent/TimeInformation"]
+custom_minimum_size = Vector2(64, 16)
+layout_mode = 2
+
+[node name="TimeLabel" type="RichTextLabel" parent="PanelNinePatch/DayNightContent/TimeInformation/CenterContainer2"]
+custom_minimum_size = Vector2(64, 16)
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("1_1bx0f")
+theme_override_font_sizes/normal_font_size = 8
+text = "12:00 PM"
+scroll_active = false
+autowrap_mode = 0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DayNightIcon" type="TextureRect" parent="PanelNinePatch/DayNightContent"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("2_ukgtc")
+stretch_mode = 3

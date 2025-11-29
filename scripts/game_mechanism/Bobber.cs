@@ -47,7 +47,7 @@ public partial class Bobber : Area2D
 
 	// Indicate if the bobber should land in water
 	// This one is a bit hacky, cuz we use it to decide whether to hide early or not
-	private bool _inWater = true;
+	private bool _inWater = false;
 	public bool InWater
     {
 		set => _inWater = value;
@@ -58,6 +58,7 @@ public partial class Bobber : Area2D
 
 	public bool IsLatchedOn = false; // A boolean flag to indicate if a fish has latched on (Kinda Fragile and risky, but let's test it first)
 
+	[Export] public GpuParticles2D waterSplash;
 	public override void _Ready()
 	{
 		// Setup Bobber Properties
@@ -117,6 +118,7 @@ public partial class Bobber : Area2D
 		// Start Physics Process to initiate the bobber's motion
 		SetPhysicsProcess(true);
 
+		waterSplash.Emitting = false;
 		// Initiate the fishing line physics as well
 		FishingLine.InitiateFishingLine();
 	}
@@ -149,8 +151,10 @@ public partial class Bobber : Area2D
 
 		_timeElapsed = 0;
 		_hasStopped = false;
-		_inWater = true;
+		_inWater = false; // reset to false you idiot!!!!
 		_reverseMotion = false;
+
+		waterSplash.Emitting = false;
 
 		// try disabling the collision shape
 		BobberCollisionShape.SetDeferred(CollisionShape2D.PropertyName.Disabled, true);
@@ -217,7 +221,13 @@ public partial class Bobber : Area2D
 				SignalBus.Instance.OnForwardBobberMotionEnded(this, EventArgs.Empty);
 				
 				if (_inWater)
-					BobberCollisionShape.SetDeferred(CollisionShape2D.PropertyName.Disabled, false); // it's the area2d of bobber actually, not the collsion(wait?)
+                {
+					// GD.Print("Print if landed in water");
+                    BobberCollisionShape.SetDeferred(CollisionShape2D.PropertyName.Disabled, false); // it's the area2d of bobber actually, not the collsion(wait?)
+					// yeah, just disabling the collision won't stop fish from detecting
+					waterSplash.Emitting = true; // need to reset to false afterwards to ensure it emits once only
+                }
+					
             }
 
 

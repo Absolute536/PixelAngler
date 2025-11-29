@@ -64,9 +64,9 @@ public partial class Fish : CharacterBody2D
         if (_isHooked)
         {
             if (FishSprite.FlipH && LatchTarget is not null)
-                LatchTarget.GlobalPosition = GlobalPosition + new Vector2(-16, -16); // if flipH, actual position is at tail, so need to offset by -16 on X-axis
+                LatchTarget.GlobalPosition = GlobalPosition + new Vector2(-16, 0); // if flipH, actual position is at tail, so need to offset by -16 on X-axis
             else
-                LatchTarget.GlobalPosition = GlobalPosition + new Vector2(0, -16); // 16 pixel offset upwards because fish's mouth will be at top of bobber without this
+                LatchTarget.GlobalPosition = GlobalPosition; // 16 pixel offset upwards because fish's mouth will be at top of bobber without this
                 // I see now. Because  the HandleQTESucceeded is broadcasted to every fish, so need to filter
         }
 
@@ -80,9 +80,9 @@ public partial class Fish : CharacterBody2D
             if (LatchTarget is not null)
             {
                 if (FishSprite.FlipH)
-                    GlobalPosition = LatchTarget.GlobalPosition + new Vector2(16, 16); // if FlipH, fish position at bobber's offset by 16, 16 to ensure mouth is at the bottom
+                    GlobalPosition = LatchTarget.GlobalPosition + new Vector2(16, 0); // if FlipH, fish position at bobber's offset by 16, 16 to ensure mouth is at the bottom
                 else
-                    GlobalPosition = LatchTarget.GlobalPosition + new Vector2(0, 16);
+                    GlobalPosition = LatchTarget.GlobalPosition;
             }
         }
     }

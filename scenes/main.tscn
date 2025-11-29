@@ -1,9 +1,12 @@
-[gd_scene load_steps=5 format=3 uid="uid://ce4rewbiais2w"]
+[gd_scene load_steps=8 format=3 uid="uid://ce4rewbiais2w"]
 
 [ext_resource type="Script" uid="uid://2v8xi5onl0t5" path="res://scripts/Main.cs" id="1_0wfyh"]
 [ext_resource type="PackedScene" uid="uid://dmw15ruxpndyg" path="res://scenes/world.tscn" id="1_o5qli"]
 [ext_resource type="FontFile" uid="uid://cibnl77dc0ji7" path="res://resources/fonts/prstartk.ttf" id="3_sugp2"]
 [ext_resource type="PackedScene" uid="uid://bpy3e2y1hkw0c" path="res://scenes/hud.tscn" id="4_jyhfs"]
+[ext_resource type="Script" uid="uid://qyd3mvt50vh2" path="res://scripts/user_interface/DayNightTint.cs" id="4_tefeu"]
+[ext_resource type="Texture2D" uid="uid://cpqmtr86q04ao" path="res://resources/ui_styles/day_night_gradient_texture_1d.tres" id="5_o6xl0"]
+[ext_resource type="PackedScene" uid="uid://grxfauprixx0" path="res://scenes/day_night_cycle_ui.tscn" id="5_tbgi4"]
 
 [node name="Main" type="Node2D" node_paths=PackedStringArray("FPSCount")]
 script = ExtResource("1_0wfyh")
@@ -18,4 +21,10 @@ offset_right = 497.0
 offset_bottom = 104.0
 theme_override_fonts/font = ExtResource("3_sugp2")
 
+[node name="DayNightTint" type="CanvasModulate" parent="."]
+script = ExtResource("4_tefeu")
+DayNightGradient = ExtResource("5_o6xl0")
+
 [node name="HUD" parent="." instance=ExtResource("4_jyhfs")]
+
+[node name="DayNightCycleUI" parent="HUD" instance=ExtResource("5_tbgi4")]

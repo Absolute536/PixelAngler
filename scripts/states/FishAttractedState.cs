@@ -29,7 +29,7 @@ public partial class FishAttractedState : State
         SignalBus.Instance.FishBite += RevertToDefaultState;
 
         // Similar to startle state, we set some timer here
-        _movementDirection = Fish.GlobalPosition.DirectionTo(Fish.LatchTarget.GlobalPosition + new Vector2(0, 16)); // adjust later
+        _movementDirection = Fish.GlobalPosition.DirectionTo(Fish.LatchTarget.GlobalPosition);
 
         // Force alignment to flip the fish if necessary while EnableAlignment is false
         Fish.Velocity = _movementDirection;

@@ -252,9 +252,9 @@ public partial class FishNibbleState : State
         // Because the actual position will be at the tail, and we want the snout/head to contact with the bobber
         // So the direction should be towards the right of the bobber by 16 pixels, so that the mouth coincides with the bobber
         if (Fish.FishSprite.FlipH)
-            return fishPosition.DirectionTo(bobberPosition + new Vector2(16, 16));
+            return fishPosition.DirectionTo(bobberPosition + new Vector2(16, 0));
 
-        return fishPosition.DirectionTo(bobberPosition + new Vector2(0, 16));
+        return fishPosition.DirectionTo(bobberPosition);
     }
 
     private void RevertToDefaultState(object sender, EventArgs e)

@@ -29,7 +29,6 @@ theme_override_fonts/italics_font = ExtResource("1_1u22c")
 theme_override_fonts/bold_font = ExtResource("1_1u22c")
 theme_override_font_sizes/normal_font_size = 8
 theme_override_styles/normal = ExtResource("2_h6xbt")
-text = "5"
 scroll_active = false
 horizontal_alignment = 1
 vertical_alignment = 1

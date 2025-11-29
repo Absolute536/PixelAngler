@@ -58,6 +58,7 @@ public partial class MinigameManager : Node
             }
             else
             {
+                _fishingProgress.GameActionPrompt.Text = ClicksNeeded.ToString();
                 if (Input.IsActionJustPressed(_behaviourInputPair[CurrentBehaviour]))
                 {
                     ClicksNeeded -= 1;
@@ -68,7 +69,11 @@ public partial class MinigameManager : Node
                     _fishingProgress.GameProgressBar.Value -= 0.2; // 20 per second
                 
                 if (ClicksNeeded <= 0)
+                {
                     SignalBus.Instance.OnFishWrestleCompleted(this, EventArgs.Empty);
+                    _fishingProgress.GameActionPrompt.Text = "";
+                }
+                    
             }
 
             // it should be if value becomes 0 (min) --> Lose

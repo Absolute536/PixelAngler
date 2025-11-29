@@ -162,7 +162,7 @@ public partial class FishWanderState : State
         {
             Fish.LatchTarget = area as Bobber;
 
-            Vector2 toBobberPosition = area.GlobalPosition + new Vector2(0, 16);
+            Vector2 toBobberPosition = area.GlobalPosition;
             Vector2 directionToBobber = ObstacleDetectionRaycast.GlobalPosition.DirectionTo(toBobberPosition);
 
             // raycast to the bobber position (the point)

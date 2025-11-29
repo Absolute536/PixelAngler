@@ -13,7 +13,7 @@ public partial class PlayerCastingState : State
     [Export] public Bobber Bobber;
     [Export] public FishingLine FishingLine;
 
-    private bool _landedInWater = true;
+    private bool _landedInWater = false;
 
     public override void _Ready()
     {
@@ -52,6 +52,7 @@ public partial class PlayerCastingState : State
 
             _landedInWater = castingInfo.Item1 == TileType.Water;
             Bobber.InWater = _landedInWater;
+
             if (_landedInWater)
             {
                 // if on water do sth
