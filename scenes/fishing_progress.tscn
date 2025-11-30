@@ -16,14 +16,15 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_pddit")
 GameProgressBar = NodePath("HBoxContainer/ProgressBar")
-GameActionPrompt = NodePath("HBoxContainer/RichTextLabel")
+GameActionPrompt = NodePath("HBoxContainer/ActionPrompt")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
 
-[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer"]
+[node name="ActionPrompt" type="RichTextLabel" parent="HBoxContainer"]
 custom_minimum_size = Vector2(18, 18)
 layout_mode = 2
+theme_override_colors/default_color = Color(1, 1, 1, 1)
 theme_override_fonts/normal_font = ExtResource("1_1u22c")
 theme_override_fonts/italics_font = ExtResource("1_1u22c")
 theme_override_fonts/bold_font = ExtResource("1_1u22c")

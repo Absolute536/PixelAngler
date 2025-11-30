@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://2s2ypdl0f7e8"
-path="res://.godot/imported/dawn_icon.png-424531e23cb3435eaab023eb99eb483a.ctex"
+uid="uid://caf02j160lynb"
+path="res://.godot/imported/day_icon.png-4f4e2b132a64aa36ff535b20624e7386.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/dawn_icon.png"
-dest_files=["res://.godot/imported/dawn_icon.png-424531e23cb3435eaab023eb99eb483a.ctex"]
+source_file="res://assets/ui_design/day_icon.png"
+dest_files=["res://.godot/imported/day_icon.png-4f4e2b132a64aa36ff535b20624e7386.ctex"]
 
 [params]
 

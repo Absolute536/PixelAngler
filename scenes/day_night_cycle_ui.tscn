@@ -2,8 +2,8 @@
 
 [ext_resource type="FontFile" uid="uid://cibnl77dc0ji7" path="res://resources/fonts/prstartk.ttf" id="1_1bx0f"]
 [ext_resource type="Script" uid="uid://db4vwpmvhss28" path="res://scripts/user_interface/DayNightCycleUi.cs" id="1_2w82t"]
-[ext_resource type="Texture2D" uid="uid://c6gruwfemeuhx" path="res://assets/day_night_cycle_panel.png" id="1_7kwcf"]
-[ext_resource type="Texture2D" uid="uid://caf02j160lynb" path="res://assets/day_icon.png" id="2_ukgtc"]
+[ext_resource type="Texture2D" uid="uid://c6gruwfemeuhx" path="res://assets/ui_design/day_night_cycle_panel.png" id="1_7kwcf"]
+[ext_resource type="Texture2D" uid="uid://caf02j160lynb" path="res://assets/ui_design/day_icon.png" id="2_ukgtc"]
 
 [node name="DayNightCycleUI" type="Control" node_paths=PackedStringArray("DayLabel", "TimeLabel", "DayNightIcon")]
 layout_mode = 3

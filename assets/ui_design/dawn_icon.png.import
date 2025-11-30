@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c6gruwfemeuhx"
-path="res://.godot/imported/day_night_cycle_panel.png-06998bfe63fcf06902cac76f3de9ab01.ctex"
+uid="uid://2s2ypdl0f7e8"
+path="res://.godot/imported/dawn_icon.png-bb53b3048577040d03248675e25d89d4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/day_night_cycle_panel.png"
-dest_files=["res://.godot/imported/day_night_cycle_panel.png-06998bfe63fcf06902cac76f3de9ab01.ctex"]
+source_file="res://assets/ui_design/dawn_icon.png"
+dest_files=["res://.godot/imported/dawn_icon.png-bb53b3048577040d03248675e25d89d4.ctex"]
 
 [params]
 

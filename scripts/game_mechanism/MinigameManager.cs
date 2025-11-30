@@ -53,11 +53,28 @@ public partial class MinigameManager : Node
                 }
                 else
                     _fishingProgress.GameProgressBar.Value -= 0.2;
-                    
+                
+                // just quick test
+                StyleBoxFlat promptStyleBox = _fishingProgress.GameActionPrompt.GetThemeStylebox("normal").Duplicate() as StyleBoxFlat;
+                // Color textColour = _fishingProgress.GameActionPrompt.GetThemeColor("default_color");
+                if (CurrentBehaviour == FishBehaviour.Green)
+                {
+                    promptStyleBox.BgColor = Colors.Green;
+                }
+                else
+                    promptStyleBox.BgColor = Colors.Red;
+                _fishingProgress.GameActionPrompt.AddThemeStyleboxOverride("normal", promptStyleBox);
+                _fishingProgress.GameActionPrompt.AddThemeColorOverride("default_color", Colors.White);
                 // _progressBar.Value += 0.16667; // 10 per second
             }
             else
             {
+                // quick test
+                StyleBoxFlat promptStyleBox = _fishingProgress.GameActionPrompt.GetThemeStylebox("normal").Duplicate() as StyleBoxFlat;
+                promptStyleBox.BgColor = Colors.Yellow;
+                _fishingProgress.GameActionPrompt.AddThemeStyleboxOverride("normal", promptStyleBox);
+                _fishingProgress.GameActionPrompt.AddThemeColorOverride("default_color", Colors.Black);
+
                 _fishingProgress.GameActionPrompt.Text = ClicksNeeded.ToString();
                 if (Input.IsActionJustPressed(_behaviourInputPair[CurrentBehaviour]))
                 {

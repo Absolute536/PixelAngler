@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cquenqienxieh"
-path="res://.godot/imported/night_icon.png-a65205fdb14aa0b1556eaea5f459661f.ctex"
+uid="uid://dmo0o4ykhhqsk"
+path="res://.godot/imported/pause_button.png-7db5eb1679cc2d65d98be4465b8c6283.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/night_icon.png"
-dest_files=["res://.godot/imported/night_icon.png-a65205fdb14aa0b1556eaea5f459661f.ctex"]
+source_file="res://assets/ui_design/pause_button.png"
+dest_files=["res://.godot/imported/pause_button.png-7db5eb1679cc2d65d98be4465b8c6283.ctex"]
 
 [params]
 

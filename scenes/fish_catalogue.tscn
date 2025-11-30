@@ -1,0 +1,272 @@
+[gd_scene load_steps=9 format=3 uid="uid://cn4q7dpau58bf"]
+
+[ext_resource type="Script" uid="uid://d3u0mloua7er" path="res://scripts/user_interface/FishCatalogueUi.cs" id="1_5or32"]
+[ext_resource type="Texture2D" uid="uid://62tskre4i8wf" path="res://assets/ui_design/catalogue_background_book.png" id="1_in17x"]
+[ext_resource type="Texture2D" uid="uid://v0rat11sxilo" path="res://icon.svg" id="1_r1mv3"]
+[ext_resource type="Texture2D" uid="uid://db8vn106q6tyc" path="res://assets/fish/Fish.png" id="2_kbqgc"]
+[ext_resource type="Texture2D" uid="uid://brvxyx0j1nui" path="res://assets/ui_design/catalogue_display_forest.png" id="2_nf8fy"]
+[ext_resource type="Theme" uid="uid://fhofu6vf4lby" path="res://resources/ui_styles/scroll_bar_theme.tres" id="2_yn27h"]
+[ext_resource type="FontFile" uid="uid://cibnl77dc0ji7" path="res://resources/fonts/prstartk.ttf" id="4_0jd5l"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_yn27h"]
+line_spacing = 2.0
+font = ExtResource("4_0jd5l")
+font_size = 8
+font_color = Color(0, 0, 0, 1)
+shadow_size = 0
+
+[node name="FishCatalogue" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_5or32")
+metadata/_edit_lock_ = true
+
+[node name="Background" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(464, 312)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -232.0
+offset_top = -156.0
+offset_right = 232.0
+offset_bottom = 156.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_in17x")
+
+[node name="FishCatalogueContainer" type="GridContainer" parent="."]
+custom_minimum_size = Vector2(416, 216)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -208.0
+offset_top = -116.0
+offset_right = 208.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/h_separation = 0
+columns = 2
+
+[node name="FishSpeciesSelections" type="ScrollContainer" parent="FishCatalogueContainer"]
+custom_minimum_size = Vector2(208, 216)
+layout_mode = 2
+size_flags_vertical = 4
+theme = ExtResource("2_yn27h")
+
+[node name="FishIcons" type="MarginContainer" parent="FishCatalogueContainer/FishSpeciesSelections"]
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="FishIconButtons" type="GridContainer" parent="FishCatalogueContainer/FishSpeciesSelections/FishIcons"]
+layout_mode = 2
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 32
+columns = 3
+
+[node name="TextureButton" type="TextureButton" parent="FishCatalogueContainer/FishSpeciesSelections/FishIcons/FishIconButtons"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+texture_normal = ExtResource("1_r1mv3")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="TextureButton2" type="TextureButton" parent="FishCatalogueContainer/FishSpeciesSelections/FishIcons/FishIconButtons"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+texture_normal = ExtResource("1_r1mv3")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="TextureButton3" type="TextureButton" parent="FishCatalogueContainer/FishSpeciesSelections/FishIcons/FishIconButtons"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+texture_normal = ExtResource("1_r1mv3")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="TextureButton4" type="TextureButton" parent="FishCatalogueContainer/FishSpeciesSelections/FishIcons/FishIconButtons"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+texture_normal = ExtResource("1_r1mv3")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="TextureButton5" type="TextureButton" parent="FishCatalogueContainer/FishSpeciesSelections/FishIcons/FishIconButtons"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+texture_normal = ExtResource("1_r1mv3")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="TextureButton6" type="TextureButton" parent="FishCatalogueContainer/FishSpeciesSelections/FishIcons/FishIconButtons"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+texture_normal = ExtResource("1_r1mv3")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="TextureButton7" type="TextureButton" parent="FishCatalogueContainer/FishSpeciesSelections/FishIcons/FishIconButtons"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+texture_normal = ExtResource("1_r1mv3")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="TextureButton8" type="TextureButton" parent="FishCatalogueContainer/FishSpeciesSelections/FishIcons/FishIconButtons"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+texture_normal = ExtResource("1_r1mv3")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="TextureButton9" type="TextureButton" parent="FishCatalogueContainer/FishSpeciesSelections/FishIcons/FishIconButtons"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+texture_normal = ExtResource("1_r1mv3")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="TextureButton10" type="TextureButton" parent="FishCatalogueContainer/FishSpeciesSelections/FishIcons/FishIconButtons"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+texture_normal = ExtResource("1_r1mv3")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="TextureButton11" type="TextureButton" parent="FishCatalogueContainer/FishSpeciesSelections/FishIcons/FishIconButtons"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+texture_normal = ExtResource("1_r1mv3")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="TextureButton12" type="TextureButton" parent="FishCatalogueContainer/FishSpeciesSelections/FishIcons/FishIconButtons"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+texture_normal = ExtResource("1_r1mv3")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="FishSpeciesInformation" type="ScrollContainer" parent="FishCatalogueContainer"]
+custom_minimum_size = Vector2(208, 216)
+layout_mode = 2
+theme = ExtResource("2_yn27h")
+
+[node name="MarginContainer" type="MarginContainer" parent="FishCatalogueContainer/FishSpeciesInformation"]
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="FishCatalogueContainer/FishSpeciesInformation/MarginContainer"]
+custom_minimum_size = Vector2(176, 0)
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="FishDisplayBackground" type="NinePatchRect" parent="FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(176, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+texture = ExtResource("2_nf8fy")
+region_rect = Rect2(6, 6, 100, 36)
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="FishDisplaySprite" type="TextureRect" parent="FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer/FishDisplayBackground"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+texture = ExtResource("2_kbqgc")
+
+[node name="Species" type="Label" parent="FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(128, 8)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("4_0jd5l")
+theme_override_font_sizes/font_size = 8
+text = "Species: Fish"
+
+[node name="NumberCaught" type="Label" parent="FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(128, 8)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("4_0jd5l")
+theme_override_font_sizes/font_size = 8
+text = "Numbers Caught: 0"
+autowrap_mode = 3
+
+[node name="CatchConditions" type="VBoxContainer" parent="FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(176, 0)
+layout_mode = 2
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="Label" type="Label" parent="FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer/CatchConditions"]
+layout_mode = 2
+text = "~~ Catch Conditions ~~"
+label_settings = SubResource("LabelSettings_yn27h")
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer/CatchConditions"]
+layout_mode = 2
+text = "Location:"
+label_settings = SubResource("LabelSettings_yn27h")
+
+[node name="Label3" type="Label" parent="FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer/CatchConditions"]
+layout_mode = 2
+text = "Time:"
+label_settings = SubResource("LabelSettings_yn27h")
+
+[node name="Label4" type="Label" parent="FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer/CatchConditions"]
+layout_mode = 2
+text = "Bait:"
+label_settings = SubResource("LabelSettings_yn27h")
+
+[node name="CatchConditions2" type="VBoxContainer" parent="FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(176, 0)
+layout_mode = 2
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="Label" type="Label" parent="FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer/CatchConditions2"]
+layout_mode = 2
+text = "~~ Hint ~~"
+label_settings = SubResource("LabelSettings_yn27h")
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer/CatchConditions2"]
+custom_minimum_size = Vector2(176, 80)
+layout_mode = 2
+text = "A species with an oval shape, just like any other fishes that can be found anywhere."
+label_settings = SubResource("LabelSettings_yn27h")
+horizontal_alignment = 1
+autowrap_mode = 3

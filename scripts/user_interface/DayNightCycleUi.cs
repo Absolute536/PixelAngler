@@ -8,21 +8,28 @@ public partial class DayNightCycleUi : Control
 	[Export] public RichTextLabel TimeLabel;
 	[Export] public TextureRect DayNightIcon;
 
+	private int _previousHours = -1; // just to reduce the icon update frequency
+
 	// test
 	// [Export] public Button button;
 
     public override void _Ready()
     {
         // button.Pressed += () => {UpdateTime(12, 21, 25);}; // ok it works
-		SignalBus.Instance.InGameTimeChanged += UpdateTime;
+		SignalBus.Instance.InGameTimeChanged += UpdateTimeInfo;
     }
 
 
-	public void UpdateTime(float totalMinutes, int day, int hours, int minutes)
+	public void UpdateTimeInfo(float scaledTotalMinutes, int day, int hours, int minutes)
     {
 		DayLabel.Text = "Day " + (day + 1);
 		TimeLabel.Text = To12Hours(hours) + ":" + FormatMinutes(minutes) + GetAmFm(hours);
-		DayNightIcon.Texture = UpdateIcon(hours);
+
+		if (_previousHours != hours)
+        {
+            _previousHours = hours;
+			DayNightIcon.Texture = UpdateIcon(hours);
+        }
     }
 
 	private string To12Hours(int hours)
@@ -62,13 +69,13 @@ public partial class DayNightCycleUi : Control
 		// 2100 - 0259 -> Night
 
 		if (hours >= 7 && hours <= 16)
-			return GD.Load<CompressedTexture2D>("res://assets/day_icon.png");
+			return GD.Load<CompressedTexture2D>("res://assets/ui_design/day_icon.png");
 		else if (hours >= 21 || hours <= 2)
-			return GD.Load<CompressedTexture2D>("res://assets/night_icon.png");
+			return GD.Load<CompressedTexture2D>("res://assets/ui_design/night_icon.png");
 		else if (hours >= 3 && hours <= 6)
-			return GD.Load<CompressedTexture2D>("res://assets/dawn_icon.png");
+			return GD.Load<CompressedTexture2D>("res://assets/ui_design/dawn_icon.png");
 		else
-			return GD.Load<CompressedTexture2D>("res://assets/dusk_icon.png");
+			return GD.Load<CompressedTexture2D>("res://assets/ui_design/dusk_icon.png");
     }
 
 }

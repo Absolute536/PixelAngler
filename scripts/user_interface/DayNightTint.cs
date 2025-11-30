@@ -16,10 +16,13 @@ public partial class DayNightTint : CanvasModulate
 	{
 	}
 
-	private void UpdateDayNightTint(float totalMinutes, int day, int hours, int minutes)
+	private void UpdateDayNightTint(float scaledTotalMinutes, int day, int hours, int minutes)
     {
 		// using Sin function/wave to measure the ratio from which the gradient is sampled
-        float sampleRatio = (float) ((Mathf.Sin(totalMinutes + 0.5 * Mathf.Pi) + 1.0) / 2.0);
+		// the time is added with 0.5pi to shift the curve forward by 0.5pi so tha
+		// the start (time = 0) is at the peak of the sin func (y = 1) the brightest?
+		// and the gradient will also be offset accordingly(?)
+        float sampleRatio = (float) ((Mathf.Sin(scaledTotalMinutes + 0.5 * Mathf.Pi) + 1.0) / 2.0);
 		Color = DayNightGradient.Gradient.Sample(sampleRatio);
     }
 }
