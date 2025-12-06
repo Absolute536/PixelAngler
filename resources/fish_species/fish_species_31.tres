@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="FishSpecies" load_steps=3 format=3 uid="uid://ccg1g7er06kds"]
+
+[ext_resource type="Texture2D" uid="uid://db8vn106q6tyc" path="res://assets/fish/Fish.png" id="1_amty2"]
+[ext_resource type="Script" uid="uid://cfyrovpd32dc0" path="res://scripts/fish/FishSpecies.cs" id="2_nxcyp"]
+
+[resource]
+script = ExtResource("2_nxcyp")
+FishId = 31
+SpeciesName = "Black Pomfret"
+MovementSpeed = 50
+SpriteTexture = ExtResource("1_amty2")
+Rarity = 0
+Size = 0
+DietType = 2
+IsDayActive = true
+IsNightActive = true
+IsDuskActive = true
+IsDawnActive = true
+SpawnLocations = PackedStringArray("Ocean")
+Aggresiveness = 0.3
+metadata/_custom_type_script = "uid://cfyrovpd32dc0"

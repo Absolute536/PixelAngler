@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="FishSpecies" load_steps=3 format=3 uid="uid://cdtn4afnbknvk"]
+
+[ext_resource type="Texture2D" uid="uid://db8vn106q6tyc" path="res://assets/fish/Fish.png" id="1_g6gbj"]
+[ext_resource type="Script" uid="uid://cfyrovpd32dc0" path="res://scripts/fish/FishSpecies.cs" id="2_jrh6y"]
+
+[resource]
+script = ExtResource("2_jrh6y")
+FishId = 20
+SpeciesName = "Freshwater Eel"
+MovementSpeed = 50
+SpriteTexture = ExtResource("1_g6gbj")
+Rarity = 0
+Size = 1
+DietType = 2
+IsDayActive = false
+IsNightActive = true
+IsDuskActive = false
+IsDawnActive = false
+SpawnLocations = PackedStringArray("Forest")
+Aggresiveness = 0.3
+metadata/_custom_type_script = "uid://cfyrovpd32dc0"

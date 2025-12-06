@@ -26,7 +26,8 @@ theme_override_fonts/font = ExtResource("3_sugp2")
 script = ExtResource("4_tefeu")
 DayNightGradient = ExtResource("5_o6xl0")
 
-[node name="HUD" parent="." instance=ExtResource("4_jyhfs")]
+[node name="HUD" parent="." node_paths=PackedStringArray("DayNightUi") instance=ExtResource("4_jyhfs")]
+DayNightUi = NodePath("DayNightCycleUI")
 
 [node name="DayNightCycleUI" parent="HUD" instance=ExtResource("5_tbgi4")]
 

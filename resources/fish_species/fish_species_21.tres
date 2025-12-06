@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="FishSpecies" load_steps=3 format=3 uid="uid://qyu1lr724cq5"]
+
+[ext_resource type="Texture2D" uid="uid://db8vn106q6tyc" path="res://assets/fish/Fish.png" id="1_gncwv"]
+[ext_resource type="Script" uid="uid://cfyrovpd32dc0" path="res://scripts/fish/FishSpecies.cs" id="2_c8sck"]
+
+[resource]
+script = ExtResource("2_c8sck")
+FishId = 21
+SpeciesName = "Redtail Catfish"
+MovementSpeed = 55
+SpriteTexture = ExtResource("1_gncwv")
+Rarity = 2
+Size = 1
+DietType = 2
+IsDayActive = false
+IsNightActive = false
+IsDuskActive = true
+IsDawnActive = true
+SpawnLocations = PackedStringArray("Forest")
+Aggresiveness = 0.6
+metadata/_custom_type_script = "uid://cfyrovpd32dc0"

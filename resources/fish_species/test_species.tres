@@ -5,7 +5,12 @@
 
 [resource]
 script = ExtResource("2_4ffab")
-SpeciesName = "NormalFish"
-MovementSpeed = 50
+FishId = 0
+SpeciesName = "GoldFish"
+MovementSpeed = 35
 SpriteTexture = ExtResource("1_d7ydg")
+MinSpawnHours = 6
+MaxSpawnHours = 2
+SpawnLocation = "Pond"
+Aggresiveness = 0.1
 metadata/_custom_type_script = "uid://cfyrovpd32dc0"

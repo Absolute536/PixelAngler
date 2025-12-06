@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="FishSpecies" load_steps=3 format=3 uid="uid://ct7m6mldp4ywu"]
+
+[ext_resource type="Texture2D" uid="uid://db8vn106q6tyc" path="res://assets/fish/Fish.png" id="1_1lihb"]
+[ext_resource type="Script" uid="uid://cfyrovpd32dc0" path="res://scripts/fish/FishSpecies.cs" id="2_k2ymv"]
+
+[resource]
+script = ExtResource("2_k2ymv")
+FishId = 18
+SpeciesName = "Pacu"
+MovementSpeed = 50
+SpriteTexture = ExtResource("1_1lihb")
+Rarity = 0
+Size = 1
+DietType = 0
+IsDayActive = true
+IsNightActive = false
+IsDuskActive = true
+IsDawnActive = true
+SpawnLocations = PackedStringArray("Forest")
+Aggresiveness = 0.4
+metadata/_custom_type_script = "uid://cfyrovpd32dc0"

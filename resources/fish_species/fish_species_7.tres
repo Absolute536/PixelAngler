@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="FishSpecies" load_steps=3 format=3 uid="uid://bvmpbiw4oety5"]
+
+[ext_resource type="Texture2D" uid="uid://db8vn106q6tyc" path="res://assets/fish/Fish.png" id="1_jdhf0"]
+[ext_resource type="Script" uid="uid://cfyrovpd32dc0" path="res://scripts/fish/FishSpecies.cs" id="2_208a7"]
+
+[resource]
+script = ExtResource("2_208a7")
+FishId = 7
+SpeciesName = "Loach"
+MovementSpeed = 40
+SpriteTexture = ExtResource("1_jdhf0")
+Rarity = 1
+Size = 0
+DietType = 2
+IsDayActive = false
+IsNightActive = true
+IsDuskActive = false
+IsDawnActive = true
+SpawnLocations = PackedStringArray("Pond", "Forest")
+Aggresiveness = 0.2
+metadata/_custom_type_script = "uid://cfyrovpd32dc0"

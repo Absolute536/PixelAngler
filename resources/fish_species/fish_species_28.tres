@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="FishSpecies" load_steps=3 format=3 uid="uid://ct3istait7qgc"]
+
+[ext_resource type="Texture2D" uid="uid://db8vn106q6tyc" path="res://assets/fish/Fish.png" id="1_k2k6f"]
+[ext_resource type="Script" uid="uid://cfyrovpd32dc0" path="res://scripts/fish/FishSpecies.cs" id="2_32hqe"]
+
+[resource]
+script = ExtResource("2_32hqe")
+FishId = 28
+SpeciesName = "Tilapia"
+MovementSpeed = 45
+SpriteTexture = ExtResource("1_k2k6f")
+Rarity = 0
+Size = 0
+DietType = 2
+IsDayActive = true
+IsNightActive = true
+IsDuskActive = true
+IsDawnActive = true
+SpawnLocations = PackedStringArray("Pond", "Forest")
+Aggresiveness = 0.3
+metadata/_custom_type_script = "uid://cfyrovpd32dc0"

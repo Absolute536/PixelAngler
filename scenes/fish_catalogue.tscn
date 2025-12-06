@@ -15,14 +15,24 @@ font_size = 8
 font_color = Color(0, 0, 0, 1)
 shadow_size = 0
 
-[node name="FishCatalogue" type="Control"]
+[node name="FishCatalogue" type="Control" node_paths=PackedStringArray("FishSelectionButtonsContainer", "FishSpriteDisplay", "SpeciesNameLabel", "NumbersCaughtLabel", "LocationLabel", "SpawnTimeLabel", "BaitLabel", "DescriptionLabel", "HintLabel")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+focus_mode = 2
 script = ExtResource("1_5or32")
+FishSelectionButtonsContainer = NodePath("FishCatalogueContainer/FishSpeciesSelections/FishIcons/FishIconButtons")
+FishSpriteDisplay = NodePath("FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer/FishDisplayBackground/FishDisplaySprite")
+SpeciesNameLabel = NodePath("FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer/Species")
+NumbersCaughtLabel = NodePath("FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer/NumberCaught")
+LocationLabel = NodePath("FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer/CatchConditions/Label2")
+SpawnTimeLabel = NodePath("FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer/CatchConditions/Label3")
+BaitLabel = NodePath("FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer/CatchConditions/Label4")
+DescriptionLabel = NodePath("FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer/Description/Label2")
+HintLabel = NodePath("FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer/Catch Hint/Label2")
 metadata/_edit_lock_ = true
 
 [node name="Background" type="TextureRect" parent="."]
@@ -40,6 +50,7 @@ offset_bottom = 156.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("1_in17x")
+metadata/_edit_lock_ = true
 
 [node name="FishCatalogueContainer" type="GridContainer" parent="."]
 custom_minimum_size = Vector2(416, 216)
@@ -57,6 +68,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/h_separation = 0
 columns = 2
+metadata/_edit_lock_ = true
 
 [node name="FishSpeciesSelections" type="ScrollContainer" parent="FishCatalogueContainer"]
 custom_minimum_size = Vector2(208, 216)
@@ -79,6 +91,7 @@ columns = 3
 [node name="TextureButton" type="TextureButton" parent="FishCatalogueContainer/FishSpeciesSelections/FishIcons/FishIconButtons"]
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
+action_mode = 0
 texture_normal = ExtResource("1_r1mv3")
 ignore_texture_size = true
 stretch_mode = 0
@@ -251,20 +264,40 @@ layout_mode = 2
 text = "Bait:"
 label_settings = SubResource("LabelSettings_yn27h")
 
-[node name="CatchConditions2" type="VBoxContainer" parent="FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer"]
+[node name="Description" type="VBoxContainer" parent="FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(176, 0)
 layout_mode = 2
 theme_override_constants/separation = 4
 alignment = 1
 
-[node name="Label" type="Label" parent="FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer/CatchConditions2"]
+[node name="Label" type="Label" parent="FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer/Description"]
+layout_mode = 2
+text = "~~ Description ~~"
+label_settings = SubResource("LabelSettings_yn27h")
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer/Description"]
+custom_minimum_size = Vector2(176, 0)
+layout_mode = 2
+text = "A species with an oval shape, just like any other fishes that can be found anywhere."
+label_settings = SubResource("LabelSettings_yn27h")
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Catch Hint" type="VBoxContainer" parent="FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(176, 0)
+layout_mode = 2
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="Label" type="Label" parent="FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer/Catch Hint"]
 layout_mode = 2
 text = "~~ Hint ~~"
 label_settings = SubResource("LabelSettings_yn27h")
 horizontal_alignment = 1
 
-[node name="Label2" type="Label" parent="FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer/CatchConditions2"]
-custom_minimum_size = Vector2(176, 80)
+[node name="Label2" type="Label" parent="FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer/Catch Hint"]
+custom_minimum_size = Vector2(176, 0)
 layout_mode = 2
 text = "A species with an oval shape, just like any other fishes that can be found anywhere."
 label_settings = SubResource("LabelSettings_yn27h")

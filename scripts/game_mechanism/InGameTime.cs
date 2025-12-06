@@ -1,7 +1,6 @@
 using Godot;
 using SignalBusNS;
 
-
 public partial class InGameTime : Node
 {
     public static InGameTime Instance {get; private set;}
@@ -58,6 +57,11 @@ public partial class InGameTime : Node
 
     public int GetHours()
     {
+        // 0300 - 0659 -> Dawn
+		// 0700 - 1659 -> Day
+		// 1700 - 2059 -> Dusk
+		// 2100 - 0259 -> Night
+
         // Hmm.. maybe consider using a property, cuz it's duplication
         int totalMinutesPassed = (int) (_time/TimeCycleToRealMinute);
         int minutesPassedInDay = totalMinutesPassed % MinuteInDay;
@@ -65,5 +69,25 @@ public partial class InGameTime : Node
         return minutesPassedInDay / MinuteInHour;
     }
 
+    public TimeOfDay GetTimeOfDay() // wait, maybe we'll just use this?
+    {
+        int hours = GetHours();
+        if (hours >= 7 && hours <= 16)
+			return TimeOfDay.Day;
+		else if (hours >= 21 || hours <= 2)
+			return TimeOfDay.Night;
+		else if (hours >= 3 && hours <= 6)
+			return TimeOfDay.Dawn;
+		else
+			return TimeOfDay.Dusk;
+    }
 
+}
+
+public enum TimeOfDay
+{
+    Dawn,
+    Day,
+    Dusk, 
+    Night
 }

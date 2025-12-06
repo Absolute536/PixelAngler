@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="FishSpecies" load_steps=3 format=3 uid="uid://chgn1cm4dm0jg"]
+
+[ext_resource type="Texture2D" uid="uid://db8vn106q6tyc" path="res://assets/fish/Fish.png" id="1_i3vma"]
+[ext_resource type="Script" uid="uid://cfyrovpd32dc0" path="res://scripts/fish/FishSpecies.cs" id="2_j048s"]
+
+[resource]
+script = ExtResource("2_j048s")
+FishId = 8
+SpeciesName = "Walleye"
+MovementSpeed = 50
+SpriteTexture = ExtResource("1_i3vma")
+Rarity = 0
+Size = 1
+DietType = 1
+IsDayActive = false
+IsNightActive = true
+IsDuskActive = true
+IsDawnActive = true
+SpawnLocations = PackedStringArray("Pond", "Forest")
+Aggresiveness = 0.3
+metadata/_custom_type_script = "uid://cfyrovpd32dc0"

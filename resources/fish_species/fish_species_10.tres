@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="FishSpecies" load_steps=3 format=3 uid="uid://dyl4dg3gejosp"]
+
+[ext_resource type="Texture2D" uid="uid://db8vn106q6tyc" path="res://assets/fish/Fish.png" id="1_jrmlg"]
+[ext_resource type="Script" uid="uid://cfyrovpd32dc0" path="res://scripts/fish/FishSpecies.cs" id="2_v7s55"]
+
+[resource]
+script = ExtResource("2_v7s55")
+FishId = 10
+SpeciesName = "Smallmouth Bass"
+MovementSpeed = 55
+SpriteTexture = ExtResource("1_jrmlg")
+Rarity = 1
+Size = 1
+DietType = 2
+IsDayActive = false
+IsNightActive = true
+IsDuskActive = true
+IsDawnActive = true
+SpawnLocations = PackedStringArray("Pond", "Forest")
+Aggresiveness = 0.5
+metadata/_custom_type_script = "uid://cfyrovpd32dc0"

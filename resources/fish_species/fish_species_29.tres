@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="FishSpecies" load_steps=3 format=3 uid="uid://bvq2hdcif6bom"]
+
+[ext_resource type="Texture2D" uid="uid://db8vn106q6tyc" path="res://assets/fish/Fish.png" id="1_pux78"]
+[ext_resource type="Script" uid="uid://cfyrovpd32dc0" path="res://scripts/fish/FishSpecies.cs" id="2_u4r5d"]
+
+[resource]
+script = ExtResource("2_u4r5d")
+FishId = 29
+SpeciesName = "Red Snapper"
+MovementSpeed = 55
+SpriteTexture = ExtResource("1_pux78")
+Rarity = 0
+Size = 0
+DietType = 1
+IsDayActive = false
+IsNightActive = true
+IsDuskActive = true
+IsDawnActive = true
+SpawnLocations = PackedStringArray("Ocean")
+Aggresiveness = 0.4
+metadata/_custom_type_script = "uid://cfyrovpd32dc0"

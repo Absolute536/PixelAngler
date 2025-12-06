@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.IO;
 public class SuperTest
 {
     
@@ -50,18 +51,26 @@ public partial class Testing : Node2D
 		// GD.Print(Mathf.RadToDeg(b.AngleToPoint(a)));
 		// GD.Print(b.DirectionTo(a));
 
-		SuperTest superClass = new SubTestA();
-		SubTestA subClassA = new ();
-		SubTestB subClassB = new ();
-		GD.Print(superClass is SuperTest);
-		GD.Print(superClass is SubTestA);
-		GD.Print(superClass is SubTestB);
+		// SuperTest superClass = new SubTestA();
+		// SubTestA subClassA = new ();
+		// SubTestB subClassB = new ();
+		// GD.Print(superClass is SuperTest);
+		// GD.Print(superClass is SubTestA);
+		// GD.Print(superClass is SubTestB);
 		
-		Vector2 test = new Vector2(10, 10);
-		GD.Print(test.Length());
-		GD.Print(test.Normalized());
+		// Vector2 test = new Vector2(10, 10);
+		// GD.Print(test.Length());
+		// GD.Print(test.Normalized());
 
-		bar = GetNode<ProgressBar>("ProgressBar");
+		// bar = GetNode<ProgressBar>("ProgressBar");
+		// testing the path
+		// string path = OS.GetExecutablePath().GetBaseDir().PathJoin("resources/fish_species");
+		// OKK!!! It works
+		// So.. I'm gonna assume the exported version will work (for now)
+		string path = ProjectSettings.GlobalizePath("res://resources/fish_species");
+		int length = Directory.GetFiles(path).Length;
+		GD.Print("Path: " + path);
+		GD.Print("File count: " + length);
 
 	}
 

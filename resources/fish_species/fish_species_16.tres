@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="FishSpecies" load_steps=3 format=3 uid="uid://cc1i1yru6ld0v"]
+
+[ext_resource type="Texture2D" uid="uid://db8vn106q6tyc" path="res://assets/fish/Fish.png" id="1_gmyal"]
+[ext_resource type="Script" uid="uid://cfyrovpd32dc0" path="res://scripts/fish/FishSpecies.cs" id="2_f8nf7"]
+
+[resource]
+script = ExtResource("2_f8nf7")
+FishId = 16
+SpeciesName = "Bream"
+MovementSpeed = 50
+SpriteTexture = ExtResource("1_gmyal")
+Rarity = 0
+Size = 1
+DietType = 2
+IsDayActive = false
+IsNightActive = false
+IsDuskActive = true
+IsDawnActive = true
+SpawnLocations = PackedStringArray("Forest")
+Aggresiveness = 0.4
+metadata/_custom_type_script = "uid://cfyrovpd32dc0"

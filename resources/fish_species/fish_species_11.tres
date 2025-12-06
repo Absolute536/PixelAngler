@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="FishSpecies" load_steps=3 format=3 uid="uid://r8e8ruagluol"]
+
+[ext_resource type="Texture2D" uid="uid://db8vn106q6tyc" path="res://assets/fish/Fish.png" id="1_gvoba"]
+[ext_resource type="Script" uid="uid://cfyrovpd32dc0" path="res://scripts/fish/FishSpecies.cs" id="2_6n8um"]
+
+[resource]
+script = ExtResource("2_6n8um")
+FishId = 11
+SpeciesName = "Snakehead"
+MovementSpeed = 50
+SpriteTexture = ExtResource("1_gvoba")
+Rarity = 0
+Size = 1
+DietType = 1
+IsDayActive = false
+IsNightActive = true
+IsDuskActive = true
+IsDawnActive = true
+SpawnLocations = PackedStringArray("Forest")
+Aggresiveness = 0.4
+metadata/_custom_type_script = "uid://cfyrovpd32dc0"

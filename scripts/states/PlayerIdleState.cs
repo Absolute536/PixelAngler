@@ -37,12 +37,14 @@ public partial class PlayerIdleState : State
     public override void HandleInput(InputEvent inputEvent)
     {
         // No one-off input
-        // just testing
+        // just testing (hahaha......)
         if (inputEvent.IsActionPressed("OpenCatalogue"))
         {
             Control catalogue = GetNode<Control>("/root/Main/HUD/FishCatalogue");
             catalogue.Visible = true;
+            catalogue.FocusMode = Control.FocusModeEnum.All;
             catalogue.GrabFocus();
+            OnStateTransitioned("PlayerUiState");
         }
     }
 

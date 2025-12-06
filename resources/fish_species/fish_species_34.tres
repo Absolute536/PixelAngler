@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="FishSpecies" load_steps=3 format=3 uid="uid://dwpqtislyyygo"]
+
+[ext_resource type="Texture2D" uid="uid://db8vn106q6tyc" path="res://assets/fish/Fish.png" id="1_257pu"]
+[ext_resource type="Script" uid="uid://cfyrovpd32dc0" path="res://scripts/fish/FishSpecies.cs" id="2_3lhf1"]
+
+[resource]
+script = ExtResource("2_3lhf1")
+FishId = 34
+SpeciesName = "Clownfish"
+MovementSpeed = 40
+SpriteTexture = ExtResource("1_257pu")
+Rarity = 1
+Size = 0
+DietType = 2
+IsDayActive = true
+IsNightActive = false
+IsDuskActive = true
+IsDawnActive = true
+SpawnLocations = PackedStringArray("Ocean")
+Aggresiveness = 0.3
+metadata/_custom_type_script = "uid://cfyrovpd32dc0"

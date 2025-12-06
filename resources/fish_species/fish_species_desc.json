@@ -1,0 +1,300 @@
+{
+    "WrittenDescription": [
+        {
+            "FishId": 0,
+            "SpeciesDescription": 
+                "The common goldfish, often kept as pets by children. Such a cruel fate for these poor souls.",
+            "Hint":
+                "Abundant in freshwater ponds, struggling to survive on anything they can find." 
+        },
+
+        {
+            "FishId": 1,
+            "SpeciesDescription": 
+                "A small fish commonly found in freshwater bodies. It is primarily used as baits for other fishes, a rather convenient prey.",
+            "Hint":
+                "Easily found in small freshwater bodies, given their small size." 
+        },
+
+        {
+            "FishId": 2,
+            "SpeciesDescription": 
+                "Colourful freshwater fish, often used for ornamental purposes by humans. Yet another victim of humanity's whims",
+            "Hint":
+                "It is best to observe these beautiful fishes in a pond, though you might hardly find one at night." 
+        },
+
+        {
+            "FishId": 3,
+            "SpeciesDescription": 
+                "Freshwater fish with moderate size. One man's trash is another man's food.",
+            "Hint":
+                "You can find them in most freshwater sources, except when it's really bright outside." 
+        },
+
+        {
+            "FishId": 4,
+            "SpeciesDescription": 
+                "Tiny colourful freshwater fishes, a common resident of an aquarium. They breed easily, huddle together to form shoals.",
+            "Hint":
+                "They are like tight freshwater spaces and are afraid of the dark (poor things)." 
+        },
+
+        {
+            "FishId": 5,
+            "SpeciesDescription": 
+                "Another tiny colourful freshwater fish. Also a common sight in aquariums.",
+            "Hint":
+                "Thrives in ponds and sleeps at night. What a carefree life." 
+        },
+
+        {
+            "FishId": 6,
+            "SpeciesDescription": 
+                "Fiesty little fishes with vibrant colours, commonly known as Siamese fighting fish. They really don't like being with others.",
+            "Hint":
+                "A tiny flesh-eating bully in ponds. Such aggressive yet beautiful creatures are a rare sight indeed." 
+        },
+
+        {
+            "FishId": 7,
+            "SpeciesDescription": 
+                "Small bottom-dwelling fishes. Wandering around without a care in the world.",
+            "Hint":
+                "Found in any freshwater sources. Might an uncommon sight due to their nature as nocturnal bottom-dwellers." 
+        },
+
+        {
+            "FishId": 8,
+            "SpeciesDescription": 
+                "Medium sized freshwater carnivores, scurrying around in the dark, hunting for food.",
+            "Hint":
+                "Freshwater predators that sleep in the day."
+        },
+
+        {
+            "FishId": 9,
+            "SpeciesDescription": 
+                "A freshwater species with a rather rounded body that fits in your palm.",
+            "Hint":
+                "Litte vegans of the pond that is crepuscular in nature. (no offence to vegans whatsoever)."
+        },
+
+        {
+            "FishId": 10,
+            "SpeciesDescription": 
+                "Freshwater species with a medium sized build that can grow larger still. Eats anything and packs quite a punch to unsuspecting anglers.",
+            "Hint":
+                "Found in freshwater sources during low-light times, though they are a somewhat uncommon sight."
+        },
+
+        {
+            "FishId": 11,
+            "SpeciesDescription": 
+                "Voracious predatory freshwater species. Its insatiable hunger makes it an invasive species in some parts of the world, but can serve as a good delicacy. Oh, the irony.",
+            "Hint":
+                "Forest predators that dislike brightness."
+        },
+
+        {
+            "FishId": 12,
+            "SpeciesDescription": 
+                "Bottom feeders that lives in freshwater sources. Another species that gobbles up anything it can fit in its mouth. Oh, the gluttony.",
+            "Hint":
+                "They live in freshwater and eat just about anything. Can be found throughout the day."
+        },
+
+        {
+            "FishId": 13,
+            "SpeciesDescription": 
+                "A freshwater predator with a streamlined shape, zooming around. It is closely related to salmons, but less expensive. Poor man's salmon, if you will.",
+            "Hint":
+                "Non-nocturnal meat lovers in forest waters."
+        },
+
+        {
+            "FishId": 14,
+            "SpeciesDescription": 
+                "Small to medium sized freshwater omnivores. It's a common sight, the so-called generic freshwaterr fish depicted in many media.",
+            "Hint":
+                "Forest dwellers that only comes out without the scorching heat of the sun."
+        },
+
+        {
+            "FishId": 15,
+            "SpeciesDescription": 
+                "A large freshwater carnivore armed with a long body and sharp teeth. It's an ambush predator that can consume large preys, truly a formidable one.",
+            "Hint":
+                "A patient hunter in the forest that relies on low visiblity environment to catch preys. It can be quite a rare sight."
+        },
+
+        {
+            "FishId": 16,
+            "SpeciesDescription": 
+                "Small to medium sized freshwater species. Yet another generic-looking freshwater fish.",
+            "Hint":
+                "Found in the forest, a crepuscular species."
+        },
+
+        {
+            "FishId": 17,
+            "SpeciesDescription": 
+                "An omnivorous freshwater species that can grow up to an infant's weight. It can be a fiesty one when hooked, indeed the big brother of the small-mouthed one.",
+            "Hint":
+                "An uncommon sight in larger freshwater bodies. Inactive at night."
+        },
+
+        {
+            "FishId": 18,
+            "SpeciesDescription": 
+                "Freshwater herbivore with a medium sized build. Although a veg-lover, they can deliver a vicious bite to identified threats. (Probably an omnivore actually ~)",
+            "Hint":
+                "Forest species that is active in daylight hours and prefers vegetables and fruits."
+        },
+
+        {
+            "FishId": 19,
+            "SpeciesDescription": 
+                "Common freshwater species that is available all-year round. One of the most inconspicuous looking fish ever.",
+            "Hint":
+                "A cathemeral forest dweller."
+        },
+
+        {
+            "FishId": 20,
+            "SpeciesDescription": 
+                "Long slimy species that resembles a snake, but is actually a fish with elongated body. Don't panic when you spot one, they are delicious (yum ~ yum ~).",
+            "Hint":
+                "A nocturnal species that lives in the forest."
+        },
+
+        {
+            "FishId": 21,
+            "SpeciesDescription": 
+                "A catfish species characterised by its red colouration on the tail and dorsal fins. A common presence in freshwater aquarium as well. ",
+            "Hint":
+                "A rare crepuscular species found in the forest. Be prepared for a struggle if you managed to hook one."
+        },
+
+        {
+            "FishId": 22,
+            "SpeciesDescription": 
+                "A small sized freshwater species, characterised by their tessellation-like patterns on its body along with spiky dorsal fins. Nothing particulary remarkable about it (ouch!).",
+            "Hint":
+                "Active in the forest when there is sunlight."
+        },
+
+        {
+            "FishId": 23,
+            "SpeciesDescription": 
+                "Small oceanic filter feeders that move in shoals and has an omnivorous diet. A common fish that is consumed by people across the world, often found in the form of canned food.",
+            "Hint":
+                "Commonly found in the ocean all-day, everyday."
+        },
+
+        {
+            "FishId": 24,
+            "SpeciesDescription": 
+                "Tiny saltwater species that also move in shoals and filter feed on both planktons and algae (omnivorous). Not to be confused with sardines, anchovies are smaller in size and is often consumed as dried food by humans.",
+            "Hint":
+                "Available around the clock in the sea."
+        },
+
+        {
+            "FishId": 25,
+            "SpeciesDescription": 
+                "Silvery and small omnivorous filter feeders in the ocean. Also move in shoals like sardines and is closely related to them. These small fishies are confusing indeed.",
+            "Hint":
+                "Active in low light environments in the ocean."
+        },
+
+        {
+            "FishId": 26,
+            "SpeciesDescription": 
+                "Medium to large sized saltwater species. One of the top predators in the ocean, but still outdone by humans (sadly). Yet, they are incredibly delicious and nutritious.",
+            "Hint":
+                "Top predator in the ocean that sleeps at night."
+        },
+
+        {
+            "FishId": 27,
+            "SpeciesDescription": 
+                "Small red fishes that lives in the sea, often found scavenging the ocean floor for food. They are smaller and slimmer in size compared to red snappers.",
+            "Hint":
+                "A crepuscular oceanic species that has a plant-based diet (probably not in real life)."
+        },
+
+        {
+            "FishId": 28,
+            "SpeciesDescription": 
+                "A common freshwater species that is small in size. It is widely farmed across the world as a food source, due to its mild taste and adaptability to different environments.",
+            "Hint":
+                "A common species that is found in freshwater sources."
+        },
+
+        {
+            "FishId": 29,
+            "SpeciesDescription": 
+                "Small saltwater species, characterised by their red coloured scales and eyes. They are larger in size, and is a predator species compared to red snappers.",
+            "Hint":
+                "A carnivorous oceanic species that is more active when daylight is weak."
+        },
+
+        {
+            "FishId": 30,
+            "SpeciesDescription": 
+                "A silvery and white coloured saltwater species with a rounded body. A popular delicacy in Asian cuisines. Best enjoyed steamed or fried (yummers ~).",
+            "Hint":
+                "A common sight in the ocean around the clock."
+        },
+
+        {
+            "FishId": 31,
+            "SpeciesDescription": 
+                "A dark and grey coloured saltwater species with a rounded body. A popular delicacy in Asian cuisines as well. Best enjoyed fried or curried (yum ~ yum ~).",
+            "Hint":
+                "A cathemeral species in the ocean."
+        },
+
+        {
+            "FishId": 32,
+            "SpeciesDescription": 
+                "Often seen lying on the ocean floor, as they are a flatfish species. They are ambush predators who patiently waits to gobble up unsuspecting victims.",
+            "Hint":
+                "An oceanic species that prefers a low light environment that is more favourable for hunting."          
+        },
+
+        {
+            "FishId": 33,
+            "SpeciesDescription": 
+                "Armed with a large build and razor-sharp teeth, it is an apex predator in the ocean. Throughout the ocean and the sea, the shark alone is the scariest one.",
+            "Hint":
+                "An apex predator in the ocean that prefers a low-light environment for hunting. Prepare thyselves for this rare challenge if you manage to hook one."
+        },
+
+        {
+            "FishId": 34,
+            "SpeciesDescription": 
+                "Small saltwater species with a vibrant orange colour and white stripes. A popular choice in aquariums for their decorative value. Nemo.",
+            "Hint":
+                "Though uncommon, its presence may be observed in the ocean during daylight."
+        },
+
+        {
+            "FishId": 35,
+            "SpeciesDescription": 
+                "A small saltwater species with a vibrant blue colour with black palette and a yellow tail. Also a popular occurrence in aquariums due to their decorative value. Dory.",
+            "Hint":
+                "Active in daylight, but an uncommon sight in the ocean."
+        },
+
+        {
+            "FishId": 36,
+            "SpeciesDescription": 
+                "Small saltwater predator commonly found along the coastal areas. Also another popular food source of humans. Not to be confused with the fictional character, Dory.",
+            "Hint":
+                "Small predators in the ocean that rests at night."
+        }
+    ]
+
+}

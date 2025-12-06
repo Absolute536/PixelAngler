@@ -8,6 +8,7 @@ scale = Vector2(0.25, 0.25)
 texture = ExtResource("1_i45yn")
 script = ExtResource("2_i45yn")
 CastTimer = NodePath("Timer")
+metadata/_edit_lock_ = true
 
 [node name="Timer" type="Timer" parent="."]
 process_callback = 0
