@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 public partial class FishRepository : Node
 {
@@ -33,7 +34,7 @@ public partial class FishRepository : Node
 
         // Initialise the FishSpecies resources list
         string resourcePath = GetAbsolutePathToResourcesDirectory();
-        int speciesCount = Directory.GetFiles(resourcePath).Length;
+        int speciesCount = Directory.GetFiles(resourcePath).Length - 2; // minue 2 for now cuz of the test file and the json file (move later?)
         
         for (int i = 0; i < speciesCount; i++)
         {
@@ -44,8 +45,9 @@ public partial class FishRepository : Node
 
         // Initialise the description list
         string jsonString = File.ReadAllText(GetAbsolutePathToDescJSONDirectory());
-        FishSpeciesDescriptionJSON? descriptionJson = JsonSerializer.Deserialize<FishSpeciesDescriptionJSON>(jsonString)!; // apparently '!' means null forgiving operator
-
+        // GD.Print(jsonString);
+        FishSpeciesDescriptionJSON descriptionJson = JsonSerializer.Deserialize<FishSpeciesDescriptionJSON>(jsonString); // apparently '!' means null forgiving operator
+        GD.Print(descriptionJson.WrittenDescription.Count);
         foreach (FishDescription fishDesc in descriptionJson.WrittenDescription)
         {
             _fishDescriptions.Add(fishDesc);
@@ -94,13 +96,17 @@ public partial class FishRepository : Node
 // Class representing the species description's JSON
 public class FishSpeciesDescriptionJSON
 {
-    public IList<FishDescription>? WrittenDescription;
+    [JsonInclude]
+    public IList<FishDescription>? WrittenDescription = new List<FishDescription>();
 }
 
 // Class containing the information on each fish's description
 public class FishDescription
 {
+    [JsonInclude]
     public int FishId {get; set;}
+    [JsonInclude]
     public string SpeciesDescription {get; set;}
+    [JsonInclude]
     public string Hint {get; set;}
 }

@@ -14,6 +14,7 @@ public partial class FishCaughtState : State
     {
         base.EnterState(previousState);
         Fish.Velocity = Vector2.Zero;
+        Fish.FishSprite.Material = null;
     }
 
     public override void ExitState()

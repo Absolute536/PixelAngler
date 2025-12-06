@@ -1,5 +1,8 @@
 using Godot;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 public partial class FishCatalogueUi : Control
 {
@@ -9,7 +12,8 @@ public partial class FishCatalogueUi : Control
     [Export] Label NumbersCaughtLabel; // this one need more work (haven't implemented yet) along with the locked unlocked tracker (it's be 0 for now)
     [Export] Label LocationLabel;
     [Export] Label SpawnTimeLabel;
-    [Export] Label BaitLabel;
+    [Export] Label SizeLabel;
+    [Export] Label DietLabel;
     [Export] Label DescriptionLabel;
     [Export] Label HintLabel;
 
@@ -17,6 +21,8 @@ public partial class FishCatalogueUi : Control
 	public override void _Ready()
     {
         // CallDeferred(Control.MethodName.GrabFocus);
+
+        InitialiseFishCatalogue();
     }
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -37,6 +43,38 @@ public partial class FishCatalogueUi : Control
 			    // Visible = false;
             // FocusMode = FocusModeEnum.None;
         }
+    }
+
+    private void InitialiseFishCatalogue()
+    {
+        List<FishSpecies> allFishSpecies = FishRepository.Instance.FishSpeciesInformation;
+        List<FishDescription> allSpeciesDesc = FishRepository.Instance.FishDescription;
+
+        foreach (FishSpecies species in allFishSpecies)
+        {
+            CatalogueButton selectionButton = new ();
+            selectionButton.ButtonId = species.FishId;
+            selectionButton.TextureNormal = species.SpriteTexture; // It works, but not as well as I think cuz of the sprite size, might need to create individual button?
+            // OR, create the border, and put the fish as a textureRect like the sprite texture
+            selectionButton.CustomMinimumSize = new Vector2(48, 48);
+            selectionButton.FishSelectionChanged = UpdateSpeciesInformationDisplay; // just assign, cuz only 1
+
+            FishSelectionButtonsContainer.AddChild(selectionButton);
+        }
+
+        // For the information, just use the first one
+        FishSpecies firstFishSpecies = allFishSpecies[0];
+        FishSpriteDisplay.Texture = firstFishSpecies.SpriteTexture;
+        FishSpriteDisplay.CustomMinimumSize = firstFishSpecies.SpriteTexture.GetSize() * 2; // So (16, 16) --> (32, 32)
+        SpeciesNameLabel.Text = "Species: " + firstFishSpecies.SpeciesName;
+        NumbersCaughtLabel.Text = "Numbers Caught: " + 0; // change later
+        // LocationLabel.Text = "Location: " + firstFishSpecies.SpawnLocations.ToString(); // yeah probably won't work
+        LocationLabel.Text = FormatLocationString(firstFishSpecies);
+        SpawnTimeLabel.Text = FormatSpawnTimeString(firstFishSpecies);
+        SizeLabel.Text = "Size: " + firstFishSpecies.Size.ToString();
+        DietLabel.Text = "Diet: " + firstFishSpecies.DietType.ToString();
+        DescriptionLabel.Text = allSpeciesDesc[0].SpeciesDescription;
+        HintLabel.Text = allSpeciesDesc[0].Hint;
     }
 
     private void HandleCatalogueOpened(object sender, EventArgs e)
@@ -69,6 +107,64 @@ public partial class FishCatalogueUi : Control
         // FUCKING IDIOT, WE'VE ALREADY TALK THIS THROUGH BEFORE
         // Need to be autoload, since other systems will rely on this and need to access the information
         // JUST, we only need to execute these on ready to establish the content of the catalogue
+    }
+
+    private void UpdateSpeciesInformationDisplay(int buttonId)
+    {
+        List<FishSpecies> speciesList = FishRepository.Instance.FishSpeciesInformation;
+        List<FishDescription> descList = FishRepository.Instance.FishDescription;
+
+        FishSpecies targetSpecies = speciesList[buttonId];
+        FishSpriteDisplay.Texture = targetSpecies.SpriteTexture;
+        FishSpriteDisplay.CustomMinimumSize = targetSpecies.SpriteTexture.GetSize() * 2; // So (16, 16) --> (32, 32)
+        SpeciesNameLabel.Text = "Species: " + targetSpecies.SpeciesName;
+        NumbersCaughtLabel.Text = "Numbers Caught: " + 0; // change later
+        // LocationLabel.Text = "Location: " + firstFishSpecies.SpawnLocations.ToString(); // yeah probably won't work
+        LocationLabel.Text = FormatLocationString(targetSpecies);
+        SpawnTimeLabel.Text = FormatSpawnTimeString(targetSpecies);
+        SizeLabel.Text = "Size: " + targetSpecies.Size.ToString();
+        DietLabel.Text = "Diet: " + targetSpecies.DietType.ToString();
+        DescriptionLabel.Text = descList[buttonId].SpeciesDescription;
+        HintLabel.Text = descList[buttonId].Hint;
+    }
+
+    private string FormatSpawnTimeString(FishSpecies fish)
+    {
+        StringBuilder spawnTime = new ();
+        spawnTime.Append("Active Times: \n");
+        
+        List<string> timeConditions = new ();
+        if (fish.IsDayActive) {timeConditions.Add("Day");}
+        if (fish.IsNightActive) {timeConditions.Add("Night");}
+        if (fish.IsDawnActive) {timeConditions.Add("Dawn");}
+        if (fish.IsDuskActive) {timeConditions.Add("Dusk");}
+
+        for (int i = 0; i < timeConditions.Count; i++)
+        {
+            spawnTime.Append("    " + timeConditions[i]);
+
+            if (i != timeConditions.Count - 1)
+                spawnTime.Append("\n");
+        }
+
+
+        return spawnTime.ToString();
+    }
+
+    private string FormatLocationString(FishSpecies fish)
+    {
+        StringBuilder location = new ();
+        location.Append("Locations: \n");
+        
+        for (int i = 0; i < fish.SpawnLocations.Length; i++)
+        {
+            location.Append("    " + fish.SpawnLocations[i]); // somehow \t doesn't work
+
+            if (i != fish.SpawnLocations.Length - 1)
+                location.Append("\n");
+        }
+
+        return location.ToString();
     }
 
 
