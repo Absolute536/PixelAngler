@@ -27,6 +27,7 @@ public partial class FishWanderState : State
     {
         MovementTimer.Timeout -= RandomiseWanderParameters;
         DetectionRadius.AreaEntered -= HandleBobberEntered;
+        GD.Print("Exit tree in Wander happens");
     }
 
     public override void EnterState(string previousState)

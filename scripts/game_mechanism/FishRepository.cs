@@ -80,14 +80,14 @@ public partial class FishRepository : Node
         }
     }
 
-    public List<FishSpecies> filterSpeciesByTimeAndLocation(TimeOfDay time, string location)
+    public List<FishSpecies> FilterSpeciesByTimeAndLocation(TimeOfDay time, string location, FishRarity rarity)
     {
         return time switch // oh wow, switch expression huh (like a functional form) good job VSC
         {
-            TimeOfDay.Day => _fishSpeciesInformation.FindAll(x => x.IsDayActive && x.SpawnLocations.Contains(location)),
-            TimeOfDay.Night => _fishSpeciesInformation.FindAll(x => x.IsNightActive && x.SpawnLocations.Contains(location)),
-            TimeOfDay.Dusk => _fishSpeciesInformation.FindAll(x => x.IsDuskActive && x.SpawnLocations.Contains(location)),
-            TimeOfDay.Dawn => _fishSpeciesInformation.FindAll(x => x.IsDawnActive && x.SpawnLocations.Contains(location)),
+            TimeOfDay.Day => _fishSpeciesInformation.FindAll(x => x.IsDayActive && x.Rarity == rarity && x.SpawnLocations.Contains(location)),
+            TimeOfDay.Night => _fishSpeciesInformation.FindAll(x => x.IsNightActive && x.Rarity == rarity && x.SpawnLocations.Contains(location)),
+            TimeOfDay.Dusk => _fishSpeciesInformation.FindAll(x => x.IsDuskActive && x.Rarity == rarity && x.SpawnLocations.Contains(location)),
+            TimeOfDay.Dawn => _fishSpeciesInformation.FindAll(x => x.IsDawnActive && x.Rarity == rarity && x.SpawnLocations.Contains(location)),
             _ => [],// return empty list as default case, though it will never happen LMAO (cuz enum right?)
         };
     }

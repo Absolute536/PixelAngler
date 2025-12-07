@@ -69,7 +69,7 @@ public partial class InGameTime : Node
         return minutesPassedInDay / MinuteInHour;
     }
 
-    public TimeOfDay GetTimeOfDay() // wait, maybe we'll just use this?
+    public TimeOfDay GetCurrentTimeOfDay() // wait, maybe we'll just use this?
     {
         int hours = GetHours();
         if (hours >= 7 && hours <= 16)

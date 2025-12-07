@@ -5,8 +5,13 @@ using SignalBusNS;
 public partial class Fish : CharacterBody2D
 {
     [Export] public Sprite2D FishSprite;
+
+    [Export] public CollisionShape2D MovementCollisionShape;
+    [Export] public CollisionShape2D DetectionRadiusShape;
     [Export] public Area2D InteractionRadius;
     [Export] public RayCast2D ObstacleDetectionRaycast;
+
+    [Export] public FishSpecies SpeciesInformation; // make it exported for now, need to assign on instantiation by the spawn point later
 
     private Bobber _bobber;
     public Bobber LatchTarget
@@ -86,7 +91,23 @@ public partial class Fish : CharacterBody2D
             }
         }
     }
-            
+
+    private void InitialiseFishParameters()
+    {
+        Texture2D spriteTexture = SpeciesInformation.SpriteTexture;
+        FishSprite.Texture = spriteTexture;
+        Vector2 textureSize = spriteTexture.GetSize();
+        FishSprite.Offset = new Vector2(-textureSize.X, textureSize.Y / 2);
+
+        // Adjust the collision shapes
+        CapsuleShape2D movementShape = MovementCollisionShape.Shape as CapsuleShape2D;
+        CircleShape2D detectionShape = DetectionRadiusShape.Shape as CircleShape2D;
+
+        movementShape.Radius = textureSize.Y;
+        movementShape.Height = textureSize.X;
+        detectionShape.Radius = textureSize.X - 16 + 48; // 16 wide -> 48, 24 wide -> 56, 32 wide -> 64 I guess it's still fine
+
+    }     
 
     private void AlignToMovementDirection()
     {
@@ -95,8 +116,8 @@ public partial class Fish : CharacterBody2D
             if (Velocity.X < 0)
             {
                 FishSprite.FlipH = true;
-                InteractionRadius.Position = Vector2.Left * 16;
-                ObstacleDetectionRaycast.Position = Vector2.Left * 16;
+                InteractionRadius.Position = Vector2.Left * FishSprite.Texture.GetSize().X;
+                ObstacleDetectionRaycast.Position = Vector2.Left * FishSprite.Texture.GetSize().X;
             }
             else if (Velocity.X >= 0)
             {
@@ -123,8 +144,8 @@ public partial class Fish : CharacterBody2D
         if (Velocity.X < 0)
         {
             FishSprite.FlipH = true;
-            InteractionRadius.Position = Vector2.Left * 16;
-            ObstacleDetectionRaycast.Position = Vector2.Left * 16;
+            InteractionRadius.Position = Vector2.Left * FishSprite.Texture.GetSize().X;
+            ObstacleDetectionRaycast.Position = Vector2.Left * FishSprite.Texture.GetSize().X;
         }
         else if (Velocity.X >= 0)
         {

@@ -8,7 +8,7 @@ public abstract partial class State : Node, StateAction
     public delegate void TransitionedEventHandler(string nextState);
     public event TransitionedEventHandler StateTransitioned;
 
-    protected bool IsCurrentlyActive;
+    protected bool IsCurrentlyActive = false;
 
     public string StateName { get; set; }
 

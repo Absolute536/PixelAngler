@@ -9,7 +9,7 @@ public partial class FishNibbleState : State
     [Export] Fish Fish;
     [Export] Area2D InteractionRadius;
     [Export] CollisionShape2D MovementCollisionShape;
-    [Export] FishSpecies SpeciesInformation; // probably should be in the root "Fish", but testing for now (YES, it works)
+    // [Export] FishSpecies SpeciesInformation; // probably should be in the root "Fish", but testing for now (YES, it works)
     private Random _random = new Random();
 
     private int _nibbleCountRequired;
@@ -45,6 +45,7 @@ public partial class FishNibbleState : State
         InteractionRadius.AreaEntered -= OnAreaEntered;
         SignalBus.Instance.FishBite -= RevertToDefaultState;
         SignalBus.Instance.AnglingCancelled -= RevertToDefaultState;
+        GD.Print("Exit Tree in Nibble happens."); // OK.... Somehow, it only happens if I build in VSC, but not in the Godot engine
     }
 
     public override void EnterState(string previousState) // Quick note here regarding the statemachine initial state hehe
@@ -217,7 +218,7 @@ public partial class FishNibbleState : State
         // May be replaced with unique values based on the FishStat(?) resource in the future
         _nibbleCountRequired = 2;
         _currentNibbleCount = 0;
-        _nibbleSpeed = SpeciesInformation.MovementSpeed;
+        _nibbleSpeed = Fish.SpeciesInformation.MovementSpeed;
     }
 
     // Connected/Subscribed to the signal/event via the editor already
@@ -260,6 +261,8 @@ public partial class FishNibbleState : State
     private void RevertToDefaultState(object sender, EventArgs e)
     {
         if (IsCurrentlyActive)
-            OnStateTransitioned("FishWanderState");
+            // I think it's because of this that other fishes not in Nibble, but still invoked this, causing the disconnection?
+            // Nah, IsCurrentlyActive would've handled that. It's the _ExitTree 
+            OnStateTransitioned("FishStartledState");
     }
 }

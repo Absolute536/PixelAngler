@@ -65,11 +65,3 @@ public enum FishDiet
     Carnivorous,
     Omnivorous
 }
-
-public enum BaitType
-{
-    SmallHerbivoreBait,
-    LargeHerbivoreBait,
-    SmallCarnivoreBait,
-    LargeCarnivoreBait
-}
