@@ -8,6 +8,7 @@ public partial class FishPoolGenerator
     {
         FishRarity rarity = GetRandomRarity();
         TimeOfDay time = InGameTime.Instance.GetCurrentTimeOfDay();
+        // GD.Print(time.ToString());
 
         return FishRepository.Instance.FilterSpeciesByTimeAndLocation(time, spawnLocation, rarity);
     }

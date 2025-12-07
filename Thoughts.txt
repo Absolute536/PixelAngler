@@ -291,3 +291,7 @@ FishAttractedState
 
 - Note: probably need a raycast in Fish
 - if raycast detected collision in the direction of bobber, don't transit to nibble state
+
+07/12/2025
+- IMPORTANT NOTE: on ExitTree, only disconnect the signals connected to the SignalBus?
+- Yup, not need to explicitly disconnect, cuz it's all already handled in the Enter Exit State Cycle

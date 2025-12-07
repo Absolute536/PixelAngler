@@ -13,6 +13,8 @@ public partial class Player : CharacterBody2D
 	[Export] public AudioStreamPlayer2D AudioPlayer;
 	[Export] public float Speed = 60.0f;
 
+	[Export] public Camera2D PlayerCamera;
+
 	// FOR FUTURE USE
 	private int _money = 0;
 	public int Money
@@ -59,14 +61,17 @@ public partial class Player : CharacterBody2D
 
 	public override void _Ready()
 	{
-		
+		// initialise camera limit
+		World worldTileMap = GetTree().GetFirstNodeInGroup("World") as World;
+		Rect2I worldRect = worldTileMap.WorldLayer.GetUsedRect();
+		// can use tileset, then get the cell size for this but we'll just use 16, 16 for convenience sake
+
+		// I think should -1 (for right and bottom) & + 1 (for top and left) to like enforce a 1 tile padding?
+		PlayerCamera.LimitLeft = (worldRect.Position.X + 1) * 16;
+		PlayerCamera.LimitRight = (worldRect.End.X - 1) * 16;
+		PlayerCamera.LimitTop = (worldRect.Position.Y + 1) * 16;
+		PlayerCamera.LimitBottom = (worldRect.End.Y - 1) * 16;
 	}
-
-	public delegate TileType PositionChangedEventHandler(Vector2 worldCoordinate);
-	public PositionChangedEventHandler PositionChanged;
-
-	public delegate string LocationChangedEventHandler(Vector2 worldCoordinate);
-	public LocationChangedEventHandler LocationChanged;
 
 	public void Relocate()
 	{

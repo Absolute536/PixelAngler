@@ -7,7 +7,7 @@ public partial class FishAttractedState : State
 {
     [Export] Fish Fish;
     
-    private int _movementSpeed = 8; // set as 15 so that it moves really slowly?
+    private int _movementSpeed = 10; // 10 as default
     private Vector2 _movementDirection;
 
     public override void _Ready()
@@ -29,6 +29,7 @@ public partial class FishAttractedState : State
         SignalBus.Instance.FishBite += RevertToDefaultState;
 
         // Similar to startle state, we set some timer here
+        _movementSpeed = (int) (Fish.SpeciesInformation.MovementSpeed * 0.2); // 20% of its original movement speed
         _movementDirection = Fish.GlobalPosition.DirectionTo(Fish.LatchTarget.GlobalPosition);
 
         // Force alignment to flip the fish if necessary while EnableAlignment is false
@@ -38,7 +39,7 @@ public partial class FishAttractedState : State
         // only move the Y component, move away if < 2 tiles
         // yeah, make it like this FOR NOW
         _movementDirection.X = 0;
-        if (Fish.GlobalPosition.DistanceTo(Fish.LatchTarget.GlobalPosition + new Vector2(0, 16)) < 32) // less than 2 tiles?
+        if (Fish.GlobalPosition.DistanceTo(Fish.LatchTarget.GlobalPosition) < 32) // less than 2 tiles?
             _movementDirection.Y *= -1;
         
      

@@ -13,6 +13,9 @@ public partial class Fish : CharacterBody2D
 
     [Export] public FishSpecies SpeciesInformation; // make it exported for now, need to assign on instantiation by the spawn point later
 
+    // For debug
+    [Export] public Label DebugText;
+
     private Bobber _bobber;
     public Bobber LatchTarget
     {
@@ -48,12 +51,20 @@ public partial class Fish : CharacterBody2D
         set => _isCaught = value;
     }
 
+    private bool _toDespawn = false;
+    public bool ToDespawn
+    {
+        get => _toDespawn;
+        set => _toDespawn = value;
+    }
+
 
     private Random spawnPositionRandomiser = new Random();
 
     public override void _Ready()
     {
         Position = new Vector2(spawnPositionRandomiser.Next(4, 13), spawnPositionRandomiser.Next(5, 15));
+        InitialiseFishParameters(); // try calling it here
     }
 
     public override void _PhysicsProcess(double delta)
@@ -94,10 +105,13 @@ public partial class Fish : CharacterBody2D
 
     private void InitialiseFishParameters()
     {
+        // Debug
+        DebugText.Text = SpeciesInformation.SpeciesName;
+
         Texture2D spriteTexture = SpeciesInformation.SpriteTexture;
         FishSprite.Texture = spriteTexture;
         Vector2 textureSize = spriteTexture.GetSize();
-        FishSprite.Offset = new Vector2(-textureSize.X, textureSize.Y / 2);
+        FishSprite.Offset = new Vector2(-textureSize.X, -textureSize.Y / 2);
 
         // Adjust the collision shapes
         CapsuleShape2D movementShape = MovementCollisionShape.Shape as CapsuleShape2D;

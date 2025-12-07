@@ -77,6 +77,11 @@ public partial class FishHookedState : State
             }
                 
         };
+
+        // aggressiveness
+        // a value between 0 ~ 1
+        // for those with duration, we want > aggro = < duration (so 1 - aggroValue)
+        // for those with clicks (YELLOW), we want to generate a random value based on the aggro, with > aggro = > clicks required
     }
 
     public override void ExitState()

@@ -36,7 +36,7 @@ public enum TileType
 public partial class World : Node2D
 {
 	[Export] TileMapLayer DisplayLayer;
-	[Export] TileMapLayer WorldLayer;
+	[Export] public TileMapLayer WorldLayer;
 	[Export] Vector2I GrassTileWorldAtlas;
 	[Export] Vector2I DirtTileWorldAtlas;
 	[Export] Vector2I PathTileWorldAtlas;

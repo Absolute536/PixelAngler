@@ -42,9 +42,9 @@ public partial class FishNibbleState : State
 
     public override void _ExitTree()
     {
-        InteractionRadius.AreaEntered -= OnAreaEntered;
-        SignalBus.Instance.FishBite -= RevertToDefaultState;
-        SignalBus.Instance.AnglingCancelled -= RevertToDefaultState;
+        // InteractionRadius.AreaEntered -= OnAreaEntered;
+        // SignalBus.Instance.FishBite -= RevertToDefaultState;
+        // SignalBus.Instance.AnglingCancelled -= RevertToDefaultState;
         GD.Print("Exit Tree in Nibble happens."); // OK.... Somehow, it only happens if I build in VSC, but not in the Godot engine
     }
 
@@ -218,7 +218,7 @@ public partial class FishNibbleState : State
         // May be replaced with unique values based on the FishStat(?) resource in the future
         _nibbleCountRequired = 2;
         _currentNibbleCount = 0;
-        _nibbleSpeed = Fish.SpeciesInformation.MovementSpeed;
+        _nibbleSpeed = (int) (Fish.SpeciesInformation.MovementSpeed * 0.5); // I guess nibble speed should be half as slow
     }
 
     // Connected/Subscribed to the signal/event via the editor already
@@ -252,8 +252,9 @@ public partial class FishNibbleState : State
         // Add a 16 pixel offset to the left (of the target) if the fish is flipped (facing left)
         // Because the actual position will be at the tail, and we want the snout/head to contact with the bobber
         // So the direction should be towards the right of the bobber by 16 pixels, so that the mouth coincides with the bobber
+        // Update 07/12/2025: should be according to the width of the sprite now.
         if (Fish.FishSprite.FlipH)
-            return fishPosition.DirectionTo(bobberPosition + new Vector2(16, 0));
+            return fishPosition.DirectionTo(bobberPosition + new Vector2(Fish.SpeciesInformation.SpriteTexture.GetSize().X, 0));
 
         return fishPosition.DirectionTo(bobberPosition);
     }

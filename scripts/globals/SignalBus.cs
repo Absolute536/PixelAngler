@@ -144,6 +144,12 @@ public partial class SignalBus : Node
         InGameTimeChanged?.Invoke(scaledTotalMinutes, day, hours, minutes);
     }
 
+    public event EventHandler TimeOfDayChanged;
+    public void OnTimeOfDayChanged(object sender, EventArgs e)
+    {
+        TimeOfDayChanged?.Invoke(sender, e);
+    }
+
 
 
 

@@ -25,8 +25,8 @@ public partial class FishWanderState : State
 
     public override void _ExitTree()
     {
-        MovementTimer.Timeout -= RandomiseWanderParameters;
-        DetectionRadius.AreaEntered -= HandleBobberEntered;
+        // MovementTimer.Timeout -= RandomiseWanderParameters;
+        // DetectionRadius.AreaEntered -= HandleBobberEntered;
         GD.Print("Exit tree in Wander happens");
     }
 
@@ -38,7 +38,8 @@ public partial class FishWanderState : State
         MovementTimer.Timeout += RandomiseWanderParameters;
 
         RandomiseWanderParameters();
-        _wanderSpeed = _parameterRandomiser.Next(15, 36); // yeah, I think this is better (if based on species as well)
+        // _wanderSpeed = _parameterRandomiser.Next(15, 36); // yeah, I think this is better (if based on species as well)
+        _wanderSpeed = Fish.SpeciesInformation.MovementSpeed; // Replaced with movement speed of the species
 
         MovementTimer.Start(_wanderDuration);
 
@@ -78,6 +79,11 @@ public partial class FishWanderState : State
 
     public override void PhysicsProcessUpdate(double delta)
     {
+        // Include transition to a despawn state
+        // Only in the Wander state to prevent a hooked fish from despawning
+        if (Fish.ToDespawn)
+            OnStateTransitioned("FishDespawnState");
+
         // wandering behaviour
         // randomly select a direction and speed (+ movement angle I guess, so that it won't be just 4 directions only)
         // also need a timer to set the duration of moving via the randomised parameters

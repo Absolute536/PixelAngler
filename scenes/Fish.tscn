@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://eii05j1pdh14"]
+[gd_scene load_steps=21 format=3 uid="uid://eii05j1pdh14"]
 
 [ext_resource type="Script" uid="uid://cu4l4rhqag1e7" path="res://scripts/fish/Fish.cs" id="1_nub35"]
 [ext_resource type="Resource" uid="uid://bt7anp5yfoc1i" path="res://resources/fish_species/fish_species_0.tres" id="2_k2ocq"]
@@ -14,6 +14,8 @@
 [ext_resource type="Script" uid="uid://dryk3s2pqfhvn" path="res://scripts/states/fish_states/FishWrestleState.cs" id="12_8hrfi"]
 [ext_resource type="Script" uid="uid://bw4l8x01c18wn" path="res://scripts/states/fish_states/FishDivingState.cs" id="13_ex20v"]
 [ext_resource type="Script" uid="uid://bftje352nck6l" path="res://scripts/states/fish_states/FishCaughtState.cs" id="14_k2ocq"]
+[ext_resource type="Script" uid="uid://dscwriuegnfkb" path="res://scripts/states/fish_states/FishDespawnState.cs" id="15_dy0hy"]
+[ext_resource type="FontFile" uid="uid://cibnl77dc0ji7" path="res://resources/fonts/prstartk.ttf" id="15_gfhab"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6lgmd"]
 resource_local_to_scene = true
@@ -33,7 +35,7 @@ resource_local_to_scene = true
 radius = 1.0
 height = 2.0
 
-[node name="Fish" type="CharacterBody2D" node_paths=PackedStringArray("FishSprite", "MovementCollisionShape", "DetectionRadiusShape", "InteractionRadius", "ObstacleDetectionRaycast")]
+[node name="Fish" type="CharacterBody2D" node_paths=PackedStringArray("FishSprite", "MovementCollisionShape", "DetectionRadiusShape", "InteractionRadius", "ObstacleDetectionRaycast", "DebugText")]
 collision_layer = 2
 motion_mode = 1
 script = ExtResource("1_nub35")
@@ -43,6 +45,7 @@ DetectionRadiusShape = NodePath("DetectionRadius/DetectionRadiusShape")
 InteractionRadius = NodePath("InteractionRadius")
 ObstacleDetectionRaycast = NodePath("ObstacleDetectionRayCast")
 SpeciesInformation = ExtResource("2_k2ocq")
+DebugText = NodePath("DebugText")
 
 [node name="FishMovementCollisionShape" type="CollisionShape2D" parent="."]
 position = Vector2(-8, 0)
@@ -116,6 +119,11 @@ script = ExtResource("14_k2ocq")
 Fish = NodePath("../..")
 metadata/_custom_type_script = "uid://bftje352nck6l"
 
+[node name="FishDespawnState" type="Node" parent="StateMachine" node_paths=PackedStringArray("Fish")]
+script = ExtResource("15_dy0hy")
+Fish = NodePath("../..")
+metadata/_custom_type_script = "uid://dscwriuegnfkb"
+
 [node name="DetectionRadius" type="Area2D" parent="."]
 position = Vector2(-8, 0)
 collision_layer = 2
@@ -138,3 +146,11 @@ shape = SubResource("CapsuleShape2D_wpvan")
 
 [node name="ObstacleDetectionRayCast" type="RayCast2D" parent="."]
 modulate = Color(0.692405, 0, 0.0468403, 1)
+
+[node name="DebugText" type="Label" parent="."]
+visible = false
+offset_top = -16.0
+offset_right = 1.0
+offset_bottom = -11.0
+theme_override_fonts/font = ExtResource("15_gfhab")
+theme_override_font_sizes/font_size = 8

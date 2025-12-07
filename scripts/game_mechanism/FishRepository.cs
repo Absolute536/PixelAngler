@@ -40,6 +40,16 @@ public partial class FishRepository : Node
         {
             // just use res:// for now
             FishSpecies speciesInfo = GD.Load<FishSpecies>($"res://resources/fish_species/fish_species_{i}.tres");
+            // https://www.reddit.com/r/godot/comments/13u9w0j/loading_resources_in_exported_projects/ (handy for export)
+            // FishSpecies speciesInfo = GD.Load<FishSpecies>(resourcePath.PathJoin($"fish_species_{i}.tres"));
+
+            // test for export
+            // if (OS.HasFeature("windows"))
+            // {
+            //     ConfigFile remapFile = GD.Load<ConfigFile>(resourcePath.PathJoin($"fish_species_{i}.tres.remap"));
+            //     speciesInfo = GD.Load<FishSpecies>(remapFile.GetValue("remap", "path").ToString());
+            //     GD.Print(remapFile.GetValue("remap", "path").ToString());
+            // }
             _fishSpeciesInformation.Add(speciesInfo);
         }
 

@@ -56,6 +56,7 @@ public partial class FishBitingState : State
     {
         if (IsCurrentlyActive)
         {
+            // QTE Success, instantiate the progress bar and pass the reference to MinigameManager
             PackedScene progressBarScene = GD.Load<PackedScene>("res://scenes/fishing_progress.tscn");
             FishingProgress fishingProgress = progressBarScene.Instantiate<FishingProgress>();
             fishingProgress.Position = new Vector2(-8, 8);

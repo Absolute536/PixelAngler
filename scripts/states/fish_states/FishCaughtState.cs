@@ -15,6 +15,7 @@ public partial class FishCaughtState : State
         base.EnterState(previousState);
         Fish.Velocity = Vector2.Zero;
         Fish.FishSprite.Material = null;
+        GetTree().CreateTimer(3.0, false, true).Timeout += () => {Fish.QueueFree();}; // test queue free after 3 seconds
     }
 
     public override void ExitState()
