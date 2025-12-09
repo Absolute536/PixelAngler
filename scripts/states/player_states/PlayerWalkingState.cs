@@ -60,7 +60,7 @@ public partial class PlayerWalkingState : State
             Player.FacingDirection = direction;
             PlayWalkingAnimation(direction);
         }
-        // Stop and transition to IDLE when no direction input & lmb is pressed
+        // Stop and transition to IDLE when no direction input or lmb is pressed
         else if (direction == Vector2.Zero || Input.IsActionJustPressed("Action"))
         {
             // Use MoveToward for the x & y component of velocity to smooth stopping movement (? look into this further)
@@ -86,6 +86,10 @@ public partial class PlayerWalkingState : State
         Player.Velocity = velocity;
         // Call the player's MoveAndSlide to actually move the node
         Player.MoveAndSlide();
+
+        // 08/12/2025 try rounding camera
+        // Player.PlayerCamera.GlobalPosition = Player.GlobalPosition.Round();
+
         // GD.Print("Player Position: " + player.Position);
 
         // Hmm... Is this needed? Yeah I think we need this

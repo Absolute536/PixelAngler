@@ -8,6 +8,7 @@ public partial class CatalogueButton : TextureButton
     // 1 delegate is probably enough
     public delegate void FishIconPressedEventHandler(int buttonId);
     public FishIconPressedEventHandler FishSelectionChanged;
+    public TextureRect IconSprite = new TextureRect();
 
     public override void _Ready()
     {

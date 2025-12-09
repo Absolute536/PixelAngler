@@ -63,6 +63,7 @@ public partial class MinigameManager : Node
                 }
                 else
                     promptStyleBox.BgColor = Colors.Red;
+
                 _fishingProgress.GameActionPrompt.AddThemeStyleboxOverride("normal", promptStyleBox);
                 _fishingProgress.GameActionPrompt.AddThemeColorOverride("default_color", Colors.White);
                 // _progressBar.Value += 0.16667; // 10 per second
@@ -99,12 +100,15 @@ public partial class MinigameManager : Node
             // try win only first
             if (_fishingProgress.GameProgressBar.Value >= _fishingProgress.GameProgressBar.MaxValue)
                 WinMinigame();
+            
+            if (_fishingProgress.GameProgressBar.Value == _fishingProgress.GameProgressBar.MinValue)
+                LoseMinigame();
         }
     }
 
     public void StartQTE(object sender, EventArgs e)
     {
-        QTE.StartQuickTimeEvent(0.7f, "Action");  
+        QTE.StartQuickTimeEvent(0.7f, "Action"); // 0.7 seconds 
     }
 
     public void StartMinigame(FishingProgress fishingProgress)
@@ -132,6 +136,12 @@ public partial class MinigameManager : Node
     {
         EndMinigame();
         SignalBus.Instance.OnFishCaught(this, EventArgs.Empty);
+    }
+
+    private void LoseMinigame()
+    {
+        EndMinigame();
+        SignalBus.Instance.OnFishLost(this, EventArgs.Empty);
     }
 
     

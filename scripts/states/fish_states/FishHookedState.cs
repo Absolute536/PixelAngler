@@ -34,21 +34,12 @@ public partial class FishHookedState : State
         // make the direction constant on enter state?
 
         MovementTimer.Timeout += ChangeMovementAngle;
-        // MovementTimer.Timeout += ChangeBehaviour;
         MovementTimer.Start(1.0); // every 3s?
         // SignalBus.Instance.OnFishBehaviourChanged(FishBehaviour.Green, 0);
         MinigameManager.Instance.CurrentBehaviour = FishBehaviour.Green;
 
         SignalBus.Instance.FishCaught += HandleFishCaught;
-        // PackedScene progressBarScene = GD.Load<PackedScene>("res://scenes/fishing_progress.tscn");
-        // MarginContainer progressBarRoot = progressBarScene.Instantiate<MarginContainer>();
-        // FishingProgressBar progressBar = progressBarRoot.GetChild(0) as FishingProgressBar; // fix later :P
-        // // GD.Print("Size: " + progressBar.Size); // size is 0? (cuz only controlled by parent?)
-        // // progressBar.Size = new Vector2(40, 3);
-        // progressBarRoot.Position = new Vector2(-8, 8);
-
-        // Fish.AddChild(progressBarRoot);
-        // MinigameManager.Instance.StartMinigame(progressBarRoot);
+        SignalBus.Instance.FishLost += HandleFishLost;
 
         /*
          * ImageTexture
@@ -64,6 +55,8 @@ public partial class FishHookedState : State
         // Wrestle -> Yellow
         // Separate states
         // Always start with green
+
+        // this duration depends on the Aggressiveness of the fish
         SceneTreeTimer greenTimer = GetTree().CreateTimer(3.0, false, true);
         greenTimer.Timeout += () =>
         {
@@ -91,6 +84,7 @@ public partial class FishHookedState : State
         MovementTimer.Timeout -= ChangeMovementAngle;
         MovementTimer.Stop();
         SignalBus.Instance.FishCaught -= HandleFishCaught;
+        SignalBus.Instance.FishLost -= HandleFishLost;
     }
 
     public override void HandleInput(InputEvent @event)
@@ -119,12 +113,15 @@ public partial class FishHookedState : State
 
     private void ChangeMovementAngle()
     {
-        _movementAngle = Mathf.DegToRad(90 - _movementRandomiser.Next(181));
-    }
+        _movementAngle = Mathf.DegToRad(90 - _movementRandomiser.Next(181)); // -90 ~ 90 degree
+        // ok, so for this one, we want to prevent it from going out of the camera's view
+        // Or... we can just make the camera follow the fish (ugh)
+        
+        // I guess we need some sort of boundary, facing left or right, (x = ...., a vertical line)
+        // then for up or down, (y = ....,, a horizontal line)
+        // so like, can move away if within bound (camera.Position + screen width / 2 AND - screen width / 2), same for height
+        // so, move in any direction, if reached boundary, move in opposite direction
 
-    private void ChangeBehaviour()
-    {
-        // SignalBus.Instance.OnFishBehaviourChanged("Interact");
     }
 
     private void HandleFishCaught(object sender, EventArgs e) // since this is duplicated across the three state, maybe can extract into an interface?
@@ -135,6 +132,16 @@ public partial class FishHookedState : State
             Fish.LatchTarget.IsLatchedOn = false;
             Fish.IsCaught = true;
             OnStateTransitioned("FishCaughtState");
+        }
+    }
+
+    private void HandleFishLost(object sender, EventArgs e) // remember to place this in all in-game states as well
+    {
+        if (IsCurrentlyActive)
+        {
+            Fish.IsHooked = false;
+            Fish.LatchTarget.IsLatchedOn = false;
+            OnStateTransitioned("FishStartledState");
         }
     }
 

@@ -16,15 +16,12 @@ public partial class EntitySpawnPoint : Node2D
 
     private FishPoolGenerator _fishPoolGenerator = new ();
 
-    private bool _toSpawnFullCapacity = false;
-    private int _currentActiveFishCount = 0;
-
     // OK idea, once fish is hooked, change it to TopLevel (if needed actually, let's not first)
 
     public override void _Ready()
     {
         // Try spawnning on ready for now, should move this call to some event handler of a timer (in-game time) later
-        SpawnMax();
+        SpawnAtFullCapacity();
         SignalBus.Instance.FishCaught += HandleFishCaught;
         SignalBus.Instance.TimeOfDayChanged += HandleTimeOfDayChanged;
     }
@@ -33,17 +30,9 @@ public partial class EntitySpawnPoint : Node2D
     {
         // it's either we check per physics frame, or we use signal to check after every catch (yeah.)
         // just subscribe to the fish caught event
-
-        // just testing here
-        // if (GetChildren().Count == 0) // cuz we check 0, so that's why it won't spawn if one is hooked
-        // {
-        //     SpawnMax();
-           
-        //     // _toSpawnFullCapacity = false;
-        // }
     }
 
-    private Fish SpawnFish()
+    private Fish GetRandomFish()
     {
         string spawnLocation = GameInfo.Instance.GetWorldLocation(GlobalPosition);
         List<FishSpecies> spawnList = _fishPoolGenerator.GetRandomFishPool(spawnLocation);
@@ -66,32 +55,42 @@ public partial class EntitySpawnPoint : Node2D
         return fish;
     }
 
-    private void SpawnMax()
+    private void SpawnAtFullCapacity()
     {
         // Oh yeah, no need to wait for the fish to be freed, cuz we're using a loop
-        // if (GetChildren().Count == 0)
-        // {
-            
-        // }
         for (int i = 0; i < MaxEntityCount; i++)
-            AddChild(SpawnFish());
-    
-        _currentActiveFishCount = MaxEntityCount;
-        
+            AddChild(GetRandomFish()); 
     }
 
     // hmm, this will be broadcasted to all spawn points, but I suppose it's better than checking per physics frame
     private void HandleFishCaught(object sender, EventArgs e)
     {
-        if (GetChildren().Count == 0)
+        int stillActive = GetChildren().Count;
+        // should be 1 cuz if the last fish is caught, there's some delay before it's queued freed, and also if it's hooked there'll still be one left
+        // if all fish are caught
+        if (stillActive == 1) 
+            SpawnAtFullCapacity();
+        else
         {
-            
-        }
+            // 15 to 25 seconds (in-game minutes), probably need to scale properly based on game speed
+            SceneTreeTimer spawnTimer = GetTree().CreateTimer(GD.RandRange(15, 25), false, true);
+            spawnTimer.Timeout += () =>
+            {
+                if (GetChildren().Count < MaxEntityCount)
+                    AddChild(GetRandomFish());
+                // so after the delay, if not at max capacity, spawn the fish
+                // if time of day changes afterwards, it'll be despawned
+                // if time of day changes before, it would be at max capacity, so the addchild wouldn't be executed.
+
+                // NICE! It works fine now
+                // just there's some problem with the disabling of bobber's area, cuz some fish can still detect it (I think it's when yanking out the fish if others are in range)
+            };
+        }  
     }
 
     private void HandleTimeOfDayChanged(object sender, EventArgs e)
     {
-        // Despawn all
+        // Mark all active fish for despawn
         foreach(Fish spawnedFish in GetChildren().Cast<Fish>())
         {
             spawnedFish.ToDespawn = true;
@@ -103,8 +102,8 @@ public partial class EntitySpawnPoint : Node2D
         // just the call needs to go through
         // maybe just flip a flag or something
         // _toSpawnFullCapacity = true;
-        _currentActiveFishCount = 0;
-        SpawnMax();
+        // _currentActiveFishCount = 0;
+        SpawnAtFullCapacity();
     }
 
     // So now we need to dynamically spawn the fishes
@@ -136,5 +135,6 @@ public partial class EntitySpawnPoint : Node2D
     // If no fish left, respawn max
     // If n fish is caught, if not at max capacity yet, respawn one by one until n gradually
     // Ok, time of day changes works 
+    // here
 
 }

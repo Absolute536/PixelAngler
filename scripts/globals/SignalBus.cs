@@ -116,24 +116,21 @@ public partial class SignalBus : Node
         QTEFailed?.Invoke(sender, e);
     }
 
-    public delegate void FishBehaviourChangedEventHandler(FishBehaviour behaviour, int actionRepeat);
-    public event FishBehaviourChangedEventHandler FishBehaviourChanged;
-
-    public void OnFishBehaviourChanged(FishBehaviour behaviour, int actionRepeat)
-    {
-        FishBehaviourChanged?.Invoke(behaviour, actionRepeat);
-    }
-
     public event EventHandler FishWrestleCompleted;
     public void OnFishWrestleCompleted(object sender, EventArgs e)
     {
         FishWrestleCompleted?.Invoke(sender, e);
     }
 
+    public event EventHandler FishLost;
     public event EventHandler FishCaught;
     public void OnFishCaught(object sender, EventArgs e)
     {
         FishCaught?.Invoke(sender, e);
+    }
+    public void OnFishLost (object sender, EventArgs e)
+    {
+        FishLost?.Invoke(sender, e);
     }
 
     public delegate void InGameTimeChangedEventHandler(float scaledTotalMinutes, int day, int hours, int minutes);
@@ -148,6 +145,13 @@ public partial class SignalBus : Node
     public void OnTimeOfDayChanged(object sender, EventArgs e)
     {
         TimeOfDayChanged?.Invoke(sender, e);
+    }
+
+    public delegate void CatchProgressUpdatedEventHandler(int fishId);
+    public event CatchProgressUpdatedEventHandler CatchProgressUpdated;
+    public void OnCatchProgressUpdated(int fishId)
+    {
+        CatchProgressUpdated?.Invoke(fishId);
     }
 
 

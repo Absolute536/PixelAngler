@@ -17,7 +17,7 @@ public partial class FishDivingState : State
         base.EnterState(previousState);
         Fish.Velocity = Vector2.Zero; // not moving
         // change sprite to the diving thingy or animation
-        // SignalBus.Instance.OnFishBehaviourChanged(FishBehaviour.Red, 0);
+
         MinigameManager.Instance.CurrentBehaviour = FishBehaviour.Red;
 
         SceneTreeTimer divingTimer = GetTree().CreateTimer(3.0, false, true);
@@ -28,12 +28,14 @@ public partial class FishDivingState : State
         };
 
         SignalBus.Instance.FishCaught += HandleFishCaught;
+        SignalBus.Instance.FishLost += HandleFishLost;
     }
 
     public override void ExitState()
     {
         base.ExitState();
         SignalBus.Instance.FishCaught -= HandleFishCaught;
+        SignalBus.Instance.FishLost -= HandleFishLost;
     }
 
     public override void HandleInput(InputEvent @event)
@@ -59,6 +61,16 @@ public partial class FishDivingState : State
             Fish.LatchTarget.IsLatchedOn = false;
             Fish.IsCaught = true;
             OnStateTransitioned("FishCaughtState");
+        }
+    }
+
+    private void HandleFishLost(object sender, EventArgs e) // remember to place this in all in-game states as well
+    {
+        if (IsCurrentlyActive)
+        {
+            Fish.IsHooked = false;
+            Fish.LatchTarget.IsLatchedOn = false;
+            OnStateTransitioned("FishStartledState");
         }
     }
 }

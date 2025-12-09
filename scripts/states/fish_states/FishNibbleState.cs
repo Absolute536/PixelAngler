@@ -202,6 +202,7 @@ public partial class FishNibbleState : State
 
             Fish.Velocity = _targetVelocity;
             Fish.MoveAndSlide();
+            // Fish.GlobalPosition = Fish.GlobalPosition.Round();
 
             // OK, improvements.
             // Sprite flipping, so that rotation looks correct (maybe no rotation, who knows)
@@ -218,7 +219,7 @@ public partial class FishNibbleState : State
         // May be replaced with unique values based on the FishStat(?) resource in the future
         _nibbleCountRequired = 2;
         _currentNibbleCount = 0;
-        _nibbleSpeed = (int) (Fish.SpeciesInformation.MovementSpeed * 0.5); // I guess nibble speed should be half as slow
+        _nibbleSpeed = (int) (Fish.SpeciesInformation.MovementSpeed * 0.75); // I guess nibble speed should be half as slow
     }
 
     // Connected/Subscribed to the signal/event via the editor already

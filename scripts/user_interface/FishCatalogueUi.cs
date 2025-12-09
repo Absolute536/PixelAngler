@@ -1,4 +1,5 @@
 using Godot;
+using SignalBusNS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,12 +18,18 @@ public partial class FishCatalogueUi : Control
     [Export] Label DescriptionLabel;
     [Export] Label HintLabel;
 
+    [Export] ScrollContainer FishSelectionScrollContainer;
+    [Export] ScrollContainer FishInformationScrollContainer;
+
+    private List<CatalogueButton> FishSelectionButtons = new ();
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
     {
         // CallDeferred(Control.MethodName.GrabFocus);
 
         InitialiseFishCatalogue();
+        SignalBus.Instance.CatchProgressUpdated += HandleProgressUpdate;
     }
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -31,7 +38,8 @@ public partial class FishCatalogueUi : Control
         
     }
 
-    public override void _GuiInput(InputEvent @event)
+    // use unhandled_input, cuz the child control doesn't consume the OpenCatalogue event. Using Gui_input doesn't work, cuz the children has focus, as their will be triggered instead
+    public override void _UnhandledInput(InputEvent @event)
     {
         if (@event.IsActionPressed("OpenCatalogue"))
         {
@@ -45,36 +53,81 @@ public partial class FishCatalogueUi : Control
         }
     }
 
+    public void OpenCatalogue()
+    {
+        Visible = true;
+        GrabFocus();
+        FocusMode = FocusModeEnum.All;
+
+        UpdateSpeciesInformationDisplay(0);
+        FishSelectionScrollContainer.ScrollVertical = 0;
+        FishInformationScrollContainer.ScrollVertical = 0;
+    }
+
     private void InitialiseFishCatalogue()
     {
         List<FishSpecies> allFishSpecies = FishRepository.Instance.FishSpeciesInformation;
         List<FishDescription> allSpeciesDesc = FishRepository.Instance.FishDescription;
 
+        Shader shadowShader = GD.Load<Shader>("res://resources/shaders/fish.gdshader"); // load first
+
         foreach (FishSpecies species in allFishSpecies)
         {
             CatalogueButton selectionButton = new ();
             selectionButton.ButtonId = species.FishId;
-            selectionButton.TextureNormal = species.SpriteTexture; // It works, but not as well as I think cuz of the sprite size, might need to create individual button?
+
+            // selectionButton.TextureNormal = species.SpriteTexture; // It works, but not as well as I think cuz of the sprite size, might need to create individual button?
+            selectionButton.AddChild(selectionButton.IconSprite);
+            selectionButton.IconSprite.Texture = species.SpriteTexture;
+            selectionButton.IconSprite.SetAnchorsPreset(LayoutPreset.Center, true);
+            selectionButton.IconSprite.CustomMinimumSize = new Vector2(species.SpriteTexture.GetSize().X, 16); // just use the original size, cuz 48, 48 can contain it?
+
             // OR, create the border, and put the fish as a textureRect like the sprite texture
             selectionButton.CustomMinimumSize = new Vector2(48, 48);
             selectionButton.FishSelectionChanged = UpdateSpeciesInformationDisplay; // just assign, cuz only 1
+
+            FishSelectionButtons.Add(selectionButton);
+            // shoudl be up there
+            // so we're initialising the icons based on progress (which would be loaded from the save file already)
+            if (FishRepository.Instance.FishCatchProgress[species.FishId] == 0)
+            {
+                selectionButton.IconSprite.Material = new ShaderMaterial() {Shader = shadowShader};
+            }
+                
 
             FishSelectionButtonsContainer.AddChild(selectionButton);
         }
 
         // For the information, just use the first one
-        FishSpecies firstFishSpecies = allFishSpecies[0];
-        FishSpriteDisplay.Texture = firstFishSpecies.SpriteTexture;
-        FishSpriteDisplay.CustomMinimumSize = firstFishSpecies.SpriteTexture.GetSize() * 2; // So (16, 16) --> (32, 32)
-        SpeciesNameLabel.Text = "Species: " + firstFishSpecies.SpeciesName;
-        NumbersCaughtLabel.Text = "Numbers Caught: " + 0; // change later
-        // LocationLabel.Text = "Location: " + firstFishSpecies.SpawnLocations.ToString(); // yeah probably won't work
-        LocationLabel.Text = FormatLocationString(firstFishSpecies);
-        SpawnTimeLabel.Text = FormatSpawnTimeString(firstFishSpecies);
-        SizeLabel.Text = "Size: " + firstFishSpecies.Size.ToString();
-        DietLabel.Text = "Diet: " + firstFishSpecies.DietType.ToString();
-        DescriptionLabel.Text = allSpeciesDesc[0].SpeciesDescription;
-        HintLabel.Text = allSpeciesDesc[0].Hint;
+        // FishSpecies firstFishSpecies = allFishSpecies[0];
+        // FishSpriteDisplay.Texture = firstFishSpecies.SpriteTexture;
+        // FishSpriteDisplay.CustomMinimumSize = firstFishSpecies.SpriteTexture.GetSize() * 2; // So (16, 16) --> (32, 32)
+        // SpeciesNameLabel.Text = "Species: " + firstFishSpecies.SpeciesName;
+        // NumbersCaughtLabel.Text = "Numbers Caught: " + 0; // change later
+        // // LocationLabel.Text = "Location: " + firstFishSpecies.SpawnLocations.ToString(); // yeah probably won't work
+        // LocationLabel.Text = FormatLocationString(firstFishSpecies);
+        // SpawnTimeLabel.Text = FormatSpawnTimeString(firstFishSpecies);
+        // SizeLabel.Text = "Size: " + firstFishSpecies.Size.ToString();
+        // DietLabel.Text = "Diet: " + firstFishSpecies.DietType.ToString();
+        // DescriptionLabel.Text = allSpeciesDesc[0].SpeciesDescription;
+        // HintLabel.Text = allSpeciesDesc[0].Hint;
+        UpdateSpeciesInformationDisplay(0); // can I just do this LMAO? Yep.
+    }
+
+    private void HandleProgressUpdate(int fishId)
+    {
+        // so this one will subscribe AFTER the repository to ensure the repository update is triggered first, then update here
+        // Or.... we subscribe to a delegate from the repository itself?
+        // yeah it works, just... not very good
+        // it relies on the repository being invoked first? [YES] --> this works
+        // Wait, not really, cuz the fishId information is propagated here too
+        // just, I think it's probably better if it is encapsulated within the FishRepository
+        CatalogueButton targetBtn = FishSelectionButtons[fishId];
+        if (targetBtn.ButtonId == fishId && FishRepository.Instance.FishCatchProgress[fishId] > 0)
+        {
+            targetBtn.IconSprite.Material = null;
+        }
+        // I guess this is safe?
     }
 
     private void HandleCatalogueOpened(object sender, EventArgs e)
@@ -116,16 +169,37 @@ public partial class FishCatalogueUi : Control
 
         FishSpecies targetSpecies = speciesList[buttonId];
         FishSpriteDisplay.Texture = targetSpecies.SpriteTexture;
-        FishSpriteDisplay.CustomMinimumSize = targetSpecies.SpriteTexture.GetSize() * 2; // So (16, 16) --> (32, 32)
-        SpeciesNameLabel.Text = "Species: " + targetSpecies.SpeciesName;
-        NumbersCaughtLabel.Text = "Numbers Caught: " + 0; // change later
-        // LocationLabel.Text = "Location: " + firstFishSpecies.SpawnLocations.ToString(); // yeah probably won't work
-        LocationLabel.Text = FormatLocationString(targetSpecies);
-        SpawnTimeLabel.Text = FormatSpawnTimeString(targetSpecies);
-        SizeLabel.Text = "Size: " + targetSpecies.Size.ToString();
-        DietLabel.Text = "Diet: " + targetSpecies.DietType.ToString();
-        DescriptionLabel.Text = descList[buttonId].SpeciesDescription;
-        HintLabel.Text = descList[buttonId].Hint;
+
+        int numbersCaught = FishRepository.Instance.FishCatchProgress[targetSpecies.FishId];
+        if (numbersCaught == 0)
+        {
+            // ok, probably gonna try to use the shader or the hard way is to create versions of the sprite
+            // FishSpriteDisplay.Texture = 
+            // ahh, guess it'll just make it a texture rect like the display one
+            // then the button's texture can have a proper border (yeah.)
+            FishSpriteDisplay.Material = new ShaderMaterial() {Shader = GD.Load<Shader>("res://resources/shaders/fish.gdshader")};
+            SpeciesNameLabel.Text = "Species: Undiscovered.";
+            LocationLabel.Text = "Locations: \n    Undiscovered.";
+            SpawnTimeLabel.Text = "Active Times: \n    Undiscovered.";
+            SizeLabel.Text = "Size: " + "Undiscovered.";
+            DietLabel.Text = "Diet: " + "Undiscovered.";
+            DescriptionLabel.Text = "Undiscovered.";
+        }
+        else
+        {
+            FishSpriteDisplay.Material = null; // remove the shader
+            FishSpriteDisplay.CustomMinimumSize = targetSpecies.SpriteTexture.GetSize() * 2; // So (16, 16) --> (32, 32)
+            SpeciesNameLabel.Text = "Species: " + targetSpecies.SpeciesName;
+            LocationLabel.Text = FormatLocationString(targetSpecies);
+            SpawnTimeLabel.Text = FormatSpawnTimeString(targetSpecies);
+            SizeLabel.Text = "Size: " + targetSpecies.Size.ToString();
+            DietLabel.Text = "Diet: " + targetSpecies.DietType.ToString();
+            DescriptionLabel.Text = descList[buttonId].SpeciesDescription;
+        }
+        // NumbersCaughtLabel.Text = "Numbers Caught: " + 0; // change later
+
+        NumbersCaughtLabel.Text = "Numbers Caught: " + numbersCaught.ToString(); // it works
+        HintLabel.Text = descList[buttonId].Hint; // hint must be revealed
     }
 
     private string FormatSpawnTimeString(FishSpecies fish)

@@ -29,12 +29,24 @@ public partial class FishAttractedState : State
         SignalBus.Instance.FishBite += RevertToDefaultState;
 
         // Similar to startle state, we set some timer here
-        _movementSpeed = (int) (Fish.SpeciesInformation.MovementSpeed * 0.2); // 20% of its original movement speed
+        _movementSpeed = (int) (Fish.SpeciesInformation.MovementSpeed * 0.25); // 25% of its original movement speed
         _movementDirection = Fish.GlobalPosition.DirectionTo(Fish.LatchTarget.GlobalPosition);
 
         // Force alignment to flip the fish if necessary while EnableAlignment is false
         Fish.Velocity = _movementDirection;
         Fish.ForceAlignmentToMovementDirection();
+
+        // display the attracted icon
+        Texture2D attractedTexture = GD.Load<Texture2D>("res://assets/ui_design/fish_attracted_icon.png");
+        Sprite2D attractedIcon = new Sprite2D
+        {
+          Texture = attractedTexture,
+          Position = Fish.FishSprite.FlipH ? new Vector2(-Fish.SpeciesInformation.SpriteTexture.GetSize().X, -8) : new Vector2(0, -8)
+        };
+        Fish.AddChild(attractedIcon);
+        GetTree().CreateTimer(0.5, false, true).Timeout += () => {attractedIcon.QueueFree();};
+        // maybe after the force alignment? Yep
+        // and play a sfx after this (or not?, maybe a little)
 
         // only move the Y component, move away if < 2 tiles
         // yeah, make it like this FOR NOW

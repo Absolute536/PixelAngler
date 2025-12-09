@@ -94,6 +94,7 @@ public partial class FishWanderState : State
         Fish.Velocity = _wanderDirection.Rotated(_wanderAngle) * (float) _wanderSpeed;
 
         Fish.MoveAndSlide();
+        Fish.GlobalPosition = Fish.GlobalPosition.Round();
     }
 
     private void RandomiseWanderParameters()

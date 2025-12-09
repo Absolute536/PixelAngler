@@ -14,7 +14,7 @@ font_size = 8
 font_color = Color(0, 0, 0, 1)
 shadow_size = 0
 
-[node name="FishCatalogue" type="Control" node_paths=PackedStringArray("FishSelectionButtonsContainer", "FishSpriteDisplay", "SpeciesNameLabel", "NumbersCaughtLabel", "LocationLabel", "SpawnTimeLabel", "SizeLabel", "DietLabel", "DescriptionLabel", "HintLabel")]
+[node name="FishCatalogue" type="Control" node_paths=PackedStringArray("FishSelectionButtonsContainer", "FishSpriteDisplay", "SpeciesNameLabel", "NumbersCaughtLabel", "LocationLabel", "SpawnTimeLabel", "SizeLabel", "DietLabel", "DescriptionLabel", "HintLabel", "FishSelectionScrollContainer", "FishInformationScrollContainer")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -33,6 +33,8 @@ SizeLabel = NodePath("FishCatalogueContainer/FishSpeciesInformation/MarginContai
 DietLabel = NodePath("FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer/CatchConditions/Diet")
 DescriptionLabel = NodePath("FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer/Description/SpeciesDescription")
 HintLabel = NodePath("FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer/Catch Hint/CatchHint")
+FishSelectionScrollContainer = NodePath("FishCatalogueContainer/FishSpeciesSelections")
+FishInformationScrollContainer = NodePath("FishCatalogueContainer/FishSpeciesInformation")
 metadata/_edit_lock_ = true
 
 [node name="Background" type="TextureRect" parent="."]

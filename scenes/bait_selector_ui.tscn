@@ -1,0 +1,117 @@
+[gd_scene load_steps=12 format=3 uid="uid://wadqbrbgdp0v"]
+
+[ext_resource type="FontFile" uid="uid://cibnl77dc0ji7" path="res://resources/fonts/prstartk.ttf" id="1_2g7sy"]
+[ext_resource type="Texture2D" uid="uid://db8vn106q6tyc" path="res://assets/fish/Fish.png" id="1_dtpam"]
+[ext_resource type="Script" uid="uid://cq5m6botkisii" path="res://scripts/user_interface/BaitSelectorUi.cs" id="1_kkq23"]
+[ext_resource type="Script" uid="uid://c64xfilpctsuo" path="res://scripts/game_mechanism/FishingBait.cs" id="2_6af6s"]
+[ext_resource type="Script" uid="uid://3u4esss33awl" path="res://scripts/user_interface/BaitSelectionButton.cs" id="2_p34w1"]
+
+[sub_resource type="Resource" id="Resource_rjjtw"]
+script = ExtResource("2_6af6s")
+BaitName = "Pea"
+BaitType = 0
+BaitSize = 0
+metadata/_custom_type_script = "uid://c64xfilpctsuo"
+
+[sub_resource type="Resource" id="Resource_ygg8h"]
+script = ExtResource("2_6af6s")
+BaitName = "Bread"
+BaitType = 0
+BaitSize = 1
+metadata/_custom_type_script = "uid://c64xfilpctsuo"
+
+[sub_resource type="Resource" id="Resource_hym50"]
+script = ExtResource("2_6af6s")
+BaitName = "Dough Ball"
+BaitType = 0
+BaitSize = 2
+metadata/_custom_type_script = "uid://c64xfilpctsuo"
+
+[sub_resource type="Resource" id="Resource_moaim"]
+script = ExtResource("2_6af6s")
+BaitName = "Worm"
+BaitType = 1
+BaitSize = 0
+metadata/_custom_type_script = "uid://c64xfilpctsuo"
+
+[sub_resource type="Resource" id="Resource_po45a"]
+script = ExtResource("2_6af6s")
+BaitName = "Small Fish"
+BaitType = 1
+BaitSize = 1
+metadata/_custom_type_script = "uid://c64xfilpctsuo"
+
+[sub_resource type="Resource" id="Resource_f8pyj"]
+script = ExtResource("2_6af6s")
+BaitName = "Fish Flesh Chunk"
+BaitType = 1
+BaitSize = 2
+metadata/_custom_type_script = "uid://c64xfilpctsuo"
+
+[node name="BaitSelector" type="Control" node_paths=PackedStringArray("PreviousBait", "NextBait", "SelectedBaitDisplay", "BaitName", "DisplayTimer")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_kkq23")
+PreviousBait = NodePath("VBoxContainer/GridContainer/PreviousBait")
+NextBait = NodePath("VBoxContainer/GridContainer/NextBait")
+SelectedBaitDisplay = NodePath("VBoxContainer/GridContainer/TextureRect")
+BaitName = NodePath("VBoxContainer/BaitNameDisplay")
+DisplayTimer = NodePath("DisplayTimer")
+FishingBaitsAvailable = Array[Object]([SubResource("Resource_rjjtw"), SubResource("Resource_ygg8h"), SubResource("Resource_hym50"), SubResource("Resource_moaim"), SubResource("Resource_po45a"), SubResource("Resource_f8pyj")])
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = -24.0
+offset_right = 64.0
+offset_bottom = -8.0
+grow_vertical = 0
+
+[node name="BaitNameDisplay" type="Label" parent="VBoxContainer"]
+custom_minimum_size = Vector2(56, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_fonts/font = ExtResource("1_2g7sy")
+theme_override_font_sizes/font_size = 8
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+columns = 3
+
+[node name="PreviousBait" type="Button" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+focus_mode = 0
+theme_override_fonts/font = ExtResource("1_2g7sy")
+theme_override_font_sizes/font_size = 8
+text = "<"
+script = ExtResource("2_p34w1")
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+texture = ExtResource("1_dtpam")
+stretch_mode = 2
+
+[node name="NextBait" type="Button" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+focus_mode = 0
+theme_override_fonts/font = ExtResource("1_2g7sy")
+theme_override_font_sizes/font_size = 8
+text = ">"
+script = ExtResource("2_p34w1")
+
+[node name="DisplayTimer" type="Timer" parent="."]
+process_callback = 0
+one_shot = true

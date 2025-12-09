@@ -1,4 +1,5 @@
 using Godot;
+using SignalBusNS;
 using System;
 
 [GlobalClass]
@@ -13,6 +14,11 @@ public partial class FishCaughtState : State
     public override void EnterState(string previousState)
     {
         base.EnterState(previousState);
+
+        SignalBus.Instance.OnCatchProgressUpdated(Fish.SpeciesInformation.FishId); // only update progress update if the fish is caught
+        // also when the fish is caught, other fish can detect bobber when we're reeling in the fish
+        // so, we probably should enable the monitoring or the IsLatchedOn here?
+
         Fish.Velocity = Vector2.Zero;
         Fish.FishSprite.Material = null;
         GetTree().CreateTimer(3.0, false, true).Timeout += () => {Fish.QueueFree();}; // test queue free after 3 seconds

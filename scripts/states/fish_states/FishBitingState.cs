@@ -21,6 +21,16 @@ public partial class FishBitingState : State
     public override void EnterState(string previousState)
     {
         base.EnterState(previousState);
+
+        Texture2D biteAlertTexture = GD.Load<Texture2D>("res://assets/ui_design/fish_bite_alert_icon.png");
+        Sprite2D biteAlertIcon = new Sprite2D
+        {
+          Texture = biteAlertTexture,
+          Position = Fish.FishSprite.FlipH ? new Vector2(-Fish.SpeciesInformation.SpriteTexture.GetSize().X, -8) : new Vector2(0, -8)
+        };
+        Fish.AddChild(biteAlertIcon);
+        GetTree().CreateTimer(0.6, false, true).Timeout += biteAlertIcon.QueueFree; // 0.7 just like the QTE window? (nah, make it -1)
+
         SignalBus.Instance.QTESucceeded += HandleQTESuccess;
         SignalBus.Instance.QTEFailed += HandleQTEFailed;
 

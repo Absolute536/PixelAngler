@@ -148,7 +148,6 @@ shape = SubResource("CapsuleShape2D_wpvan")
 modulate = Color(0.692405, 0, 0.0468403, 1)
 
 [node name="DebugText" type="Label" parent="."]
-visible = false
 offset_top = -16.0
 offset_right = 1.0
 offset_bottom = -11.0

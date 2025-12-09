@@ -40,10 +40,15 @@ public partial class PlayerIdleState : State
         // just testing (hahaha......)
         if (inputEvent.IsActionPressed("OpenCatalogue"))
         {
-            Control catalogue = GetNode<Control>("/root/Main/HUD/FishCatalogue");
-            catalogue.Visible = true;
-            catalogue.FocusMode = Control.FocusModeEnum.All;
-            catalogue.GrabFocus();
+            FishCatalogueUi catalogue = GetNode<FishCatalogueUi>("/root/Main/HUD/FishCatalogue");
+            // catalogue.Visible = true;
+            // catalogue.FocusMode = Control.FocusModeEnum.All;
+            // catalogue.GrabFocus();
+            
+
+            // just quick testing (nice)
+            // FishRepository.Instance.FishCatchProgress[0] += 1; this works
+            catalogue.OpenCatalogue(); // add 1 before open
             OnStateTransitioned("PlayerUiState");
         }
     }
@@ -66,20 +71,20 @@ public partial class PlayerIdleState : State
         else if (Input.IsActionPressed("Action")) // if I use JustPressed, then we can't trasition from walking to this while holding LMB, wait, maybe we can use presed in walking
         {
             GD.Print(Name + ": " + "Action");
-
-            string currentSelectedItem = Player.SelectedItem;
-            switch (currentSelectedItem)
-            {
-                case "Fishing Rod":
-                    OnStateTransitioned("PlayerCastingState");
-                    break;
-                case "Bug Net":
-                    OnStateTransitioned("PlayerNetState");
-                    break;
-                default:
-                    GD.Print("Selected Item Unidentified.");
-                    break;
-            }
+            OnStateTransitioned("PlayerCastingState");
+            // string currentSelectedItem = Player.SelectedItem;
+            // switch (currentSelectedItem)
+            // {
+            //     case "Fishing Rod":
+            //         OnStateTransitioned("PlayerCastingState");
+            //         break;
+            //     case "Bug Net":
+            //         OnStateTransitioned("PlayerNetState");
+            //         break;
+            //     default:
+            //         GD.Print("Selected Item Unidentified.");
+            //         break;
+            // }
 
             // OnStateTransitioned("PlayerActionState");
         }

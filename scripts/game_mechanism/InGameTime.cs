@@ -14,7 +14,7 @@ public partial class InGameTime : Node
     // we'll get the in-game duration for 1 minute
     // so... 1440 is to 1 minute? (nah, this doesn't control this)
     private const float TimeCycleToRealMinute = Mathf.Tau / MinuteInDay;
-    private const float GameSpeed = 40.0f;
+    private const float GameSpeed = 1.0f;
     private int _initialHour = 12;
 
     private float _time; // time is in the in-game minutes passed, scaled to values on the sin function

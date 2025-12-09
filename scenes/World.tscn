@@ -1,8 +1,8 @@
 [gd_scene load_steps=6 format=4 uid="uid://dmw15ruxpndyg"]
 
 [ext_resource type="Script" uid="uid://px2ssn7icrho" path="res://scripts/World.cs" id="1_7g83o"]
-[ext_resource type="TileSet" uid="uid://ddgpbpwjrig08" path="res://resources/WorldLayer.tres" id="2_7g83o"]
-[ext_resource type="TileSet" uid="uid://du35ilwys81fd" path="res://resources/DisplayLayer.tres" id="3_d1c63"]
+[ext_resource type="TileSet" uid="uid://ddgpbpwjrig08" path="res://resources/world_layer.tres" id="2_7g83o"]
+[ext_resource type="TileSet" uid="uid://du35ilwys81fd" path="res://resources/display_layer.tres" id="3_d1c63"]
 [ext_resource type="PackedScene" uid="uid://bd2sgwdtpfwaj" path="res://scenes/player.tscn" id="4_d1c63"]
 [ext_resource type="PackedScene" uid="uid://ckgrplkw2a0y2" path="res://scenes/spawn_point.tscn" id="5_71j4m"]
 

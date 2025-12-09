@@ -33,12 +33,14 @@ public partial class FishWrestleState : State
         // MinigameManager.Instance.ActionRepeat = clicksNeeded;
 
         SignalBus.Instance.FishCaught += HandleFishCaught;
+        SignalBus.Instance.FishLost += HandleFishLost;
     }
 
     public override void ExitState()
     {
         base.ExitState();
         SignalBus.Instance.FishCaught -= HandleFishCaught;
+        SignalBus.Instance.FishLost -= HandleFishLost;
         SignalBus.Instance.FishWrestleCompleted -= HandleFishWrestleCompleted;
     }
 
@@ -75,6 +77,16 @@ public partial class FishWrestleState : State
             OnStateTransitioned("FishCaughtState");
         }
     }
+    private void HandleFishLost(object sender, EventArgs e) // remember to place this in all in-game states as well
+    {
+        if (IsCurrentlyActive)
+        {
+            Fish.IsHooked = false;
+            Fish.LatchTarget.IsLatchedOn = false;
+            OnStateTransitioned("FishStartledState");
+        }
+    }
+
     private void HandleFishWrestleCompleted(object sender, EventArgs e)
     {
         if (IsCurrentlyActive)

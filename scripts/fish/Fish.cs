@@ -73,6 +73,8 @@ public partial class Fish : CharacterBody2D
         // Transform2D current = GetTransform();
         // maybe can change to if LatchTarget is not null, then proceed with the operations
         AlignToMovementDirection();
+        // GlobalPosition = GlobalPosition.Round();
+        // Rounding works, but only when them movement speed is high enough, otherwise the position changed by MoveAndSlide will be rounded back
 
         // If Fish is hooked, fix the bobber's position at the fish's snout every frame
         // Since bobber's physics process will be halted once it reaches its destination

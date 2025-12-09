@@ -18,6 +18,7 @@ public partial class PlayerFishingState : State
     {
         base.EnterState(previousState);
         SignalBus.Instance.FishCaught += HandleFishCaught;
+        SignalBus.Instance.FishLost += HandleFishLost;
         SignalBus.Instance.ReverseBobberMotionEnded += HandleReverseBobberMotionEnded;
     }
 
@@ -25,6 +26,7 @@ public partial class PlayerFishingState : State
     {
         base.ExitState();
         SignalBus.Instance.FishCaught -= HandleFishCaught;
+        SignalBus.Instance.FishLost -= HandleFishLost;
         SignalBus.Instance.ReverseBobberMotionEnded += HandleReverseBobberMotionEnded;
     }
 
@@ -56,6 +58,12 @@ public partial class PlayerFishingState : State
     {
         if (IsCurrentlyActive)
             Bobber.ReverseBobberMotion();      
+    }
+
+    private void HandleFishLost(object sender, EventArgs e)
+    {
+        if (IsCurrentlyActive)
+            Bobber.ReverseBobberMotion();
     }
 
     private void HandleReverseBobberMotionEnded(object sender, EventArgs e)
