@@ -147,11 +147,11 @@ public partial class SignalBus : Node
         TimeOfDayChanged?.Invoke(sender, e);
     }
 
-    public delegate void CatchProgressUpdatedEventHandler(int fishId);
+    public delegate void CatchProgressUpdatedEventHandler(int fishId, float sizeMeasurement);
     public event CatchProgressUpdatedEventHandler CatchProgressUpdated;
-    public void OnCatchProgressUpdated(int fishId)
+    public void OnCatchProgressUpdated(int fishId, float sizeMeasurement)
     {
-        CatchProgressUpdated?.Invoke(fishId);
+        CatchProgressUpdated?.Invoke(fishId, sizeMeasurement);
     }
 
     public event EventHandler FishObtained;

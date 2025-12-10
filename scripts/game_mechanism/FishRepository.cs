@@ -2,7 +2,6 @@ using Godot;
 using SignalBusNS;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -19,8 +18,8 @@ public partial class FishRepository : Node
     public List<FishDescription> FishDescription {get => _fishDescriptions;}
     private List<FishDescription> _fishDescriptions = new ();
 
-    public Dictionary<int, int> FishCatchProgress {get => _fishCatchProgress;}
-    private Dictionary<int, int> _fishCatchProgress = new ();
+    public Dictionary<int, FishCatchRecord> FishCatchProgress {get => _fishCatchProgress;}
+    private Dictionary<int, FishCatchRecord> _fishCatchProgress = new ();
     
     // the delegate for catalogue to subscribe to?
     public delegate void RepositoryChangedEventHandler(int fishId);
@@ -87,7 +86,10 @@ public partial class FishRepository : Node
         // string jsonString = File.ReadAllText(ProjectSettings.GlobalizePath("user://fish_species_desc.json"));
 
         // hmm.. this one will only work on my device
-        string jsonString = File.ReadAllText(ProjectSettings.GlobalizePath("res://resources/fish_species/fish_species_desc.json"));
+        // idk if this works for exported projects (Yes it works)
+        using Godot.FileAccess jsonFile = Godot.FileAccess.Open("res://resources/fish_species/fish_species_desc.json", Godot.FileAccess.ModeFlags.Read);
+        // string jsonString = File.ReadAllText(ProjectSettings.GlobalizePath("res://resources/fish_species/fish_species_desc.json"));
+        string jsonString = jsonFile.GetAsText();
         // GD.Print(jsonString);
         FishSpeciesDescriptionJSON descriptionJson = JsonSerializer.Deserialize<FishSpeciesDescriptionJSON>(jsonString); // apparently '!' means null forgiving operator
         GD.Print(descriptionJson.WrittenDescription.Count);
@@ -104,15 +106,24 @@ public partial class FishRepository : Node
         // int i = 0;
         foreach (FishSpecies species in _fishSpeciesInformation)
         {
-            _fishCatchProgress.Add(species.FishId, 0); // 0 for now
+
+            _fishCatchProgress.Add(species.FishId, new FishCatchRecord(){FishId = species.FishId, NumbersCaught = 0, LargestCaught = 0, SmallestCaught = 0}); // 0 for now
             // i++; // just increment to test it for now
         }
     }
 
-    private void HandleProgressUpdate(int fishId)
+    private void HandleProgressUpdate(int fishId, float sizeMeasurement)
     {
-        _fishCatchProgress[fishId] += 1;
-        // RepositoryChanged?.Invoke(fishId); // wait, this is still the same
+        FishCatchRecord record = _fishCatchProgress[fishId];
+
+        record.NumbersCaught += 1;
+
+        // Update size record if 0 or record broken
+        if (Mathf.IsZeroApprox(record.LargestCaught) || record.LargestCaught < sizeMeasurement)
+            record.LargestCaught = sizeMeasurement;
+        
+        if (Mathf.IsZeroApprox(record.SmallestCaught) || record.SmallestCaught > sizeMeasurement)
+            record.SmallestCaught = sizeMeasurement;
     }
 
     private string GetAbsolutePathToResourcesDirectory()
@@ -158,7 +169,7 @@ public partial class FishRepository : Node
 public class FishSpeciesDescriptionJSON
 {
     [JsonInclude]
-    public IList<FishDescription>? WrittenDescription = new List<FishDescription>();
+    public IList<FishDescription> WrittenDescription {get; set;}
 }
 
 // Class containing the information on each fish's description

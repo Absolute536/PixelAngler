@@ -42,6 +42,7 @@ public partial class EntitySpawnPoint : Node2D
         // 17:37, 07/12/2025 -> I see what's happening now
         // Cuz the randomiser selected a rare rarity, but there are no available "rare" fish that satisfy such condition (AHHHH~~~)
         // So, we use a loop to keep rolling I guess (is this dangerous? probably fine)
+        // 11/12/2025, 6:00am: also kinda a duplication, so probably should use the loop to first initialise?
         while (spawnList.Count == 0)
             spawnList = _fishPoolGenerator.GetRandomFishPool(spawnLocation);
         
@@ -51,6 +52,7 @@ public partial class EntitySpawnPoint : Node2D
         // Fish fish = new ();// wait, need to instantiate the scene first probably
         Fish fish = EntityScene.Instantiate<Fish>();
         fish.SpeciesInformation = chosenSpecies;
+        fish.CurrentSizeMeasurement = GetRandomSizeMeasurement(chosenSpecies);
 
         return fish;
     }
@@ -104,6 +106,13 @@ public partial class EntitySpawnPoint : Node2D
         // _toSpawnFullCapacity = true;
         // _currentActiveFishCount = 0;
         SpawnAtFullCapacity();
+    }
+
+    private float GetRandomSizeMeasurement(FishSpecies species)
+    {
+        int size = GD.RandRange((int) (species.MinSizeMeasurement * 100) + 1, (int) (species.MaxSizeMeasurement * 100));
+
+        return (float) size / 100; // note: float division, so that it's not integer division and becomes 0
     }
 
     // So now we need to dynamically spawn the fishes

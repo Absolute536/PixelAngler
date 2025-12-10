@@ -290,8 +290,22 @@ FishAttractedState
 - Or else, I'll never get this thing done.
 
 - Note: probably need a raycast in Fish
-- if raycast detected collision in the direction of bobber, don't transit to nibble state
+- if raycast detected collision in the direction of bobber, don't transit to nibble state (crisis averted)
 
 07/12/2025
 - IMPORTANT NOTE: on ExitTree, only disconnect the signals connected to the SignalBus?
 - Yup, not need to explicitly disconnect, cuz it's all already handled in the Enter Exit State Cycle
+
+Save file
+- Player position
+- current time (in-game minutes passed) --> _time field
+- catch progress
+- maybe I can put a game settings here as well OR, make a config file (yeah, we'll use a config file I guess)
+
+- VERY IMPORTANT
+- may need to readjust the size of the fishing catalogue if we want to account for a longer fish name
+
+- Why am I so stupid
+- IT'S "F2", NOT "2F" stupid (wasted 20 minutes of my time, GREAT.)
+
+- yeah, also remember to adjust the bobber's area, so that other fish won't detect is while hooked

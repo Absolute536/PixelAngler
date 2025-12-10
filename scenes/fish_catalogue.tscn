@@ -14,7 +14,7 @@ font_size = 8
 font_color = Color(0, 0, 0, 1)
 shadow_size = 0
 
-[node name="FishCatalogue" type="Control" node_paths=PackedStringArray("FishSelectionButtonsContainer", "FishSpriteDisplay", "SpeciesNameLabel", "NumbersCaughtLabel", "LocationLabel", "SpawnTimeLabel", "SizeLabel", "DietLabel", "DescriptionLabel", "HintLabel", "FishSelectionScrollContainer", "FishInformationScrollContainer")]
+[node name="FishCatalogue" type="Control" node_paths=PackedStringArray("FishSelectionButtonsContainer", "FishSpriteDisplay", "SpeciesNameLabel", "RarityLabel", "NumbersCaughtLabel", "LargestCaughtLabel", "SmallestCaughtLabel", "LocationLabel", "SpawnTimeLabel", "SizeLabel", "DietLabel", "DescriptionLabel", "HintLabel", "FishSelectionScrollContainer", "FishInformationScrollContainer")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -26,7 +26,10 @@ script = ExtResource("1_5or32")
 FishSelectionButtonsContainer = NodePath("FishCatalogueContainer/FishSpeciesSelections/FishIcons/FishIconButtons")
 FishSpriteDisplay = NodePath("FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer/FishDisplayBackground/FishDisplaySprite")
 SpeciesNameLabel = NodePath("FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer/Species")
+RarityLabel = NodePath("FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer/Rarity")
 NumbersCaughtLabel = NodePath("FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer/NumberCaught")
+LargestCaughtLabel = NodePath("FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer/LargestCaught")
+SmallestCaughtLabel = NodePath("FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer/SmallestCaught")
 LocationLabel = NodePath("FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer/CatchConditions/Location")
 SpawnTimeLabel = NodePath("FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer/CatchConditions/Time")
 SizeLabel = NodePath("FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer/CatchConditions/Size")
@@ -144,6 +147,17 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("4_0jd5l")
 theme_override_font_sizes/font_size = 8
 text = "Species: Fish"
+autowrap_mode = 3
+
+[node name="Rarity" type="RichTextLabel" parent="FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(128, 8)
+layout_mode = 2
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_fonts/normal_font = ExtResource("4_0jd5l")
+theme_override_font_sizes/normal_font_size = 8
+bbcode_enabled = true
+text = "Rarity: [color=4185c0]Common[/color]"
+autowrap_mode = 0
 
 [node name="NumberCaught" type="Label" parent="FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(128, 8)
@@ -154,10 +168,27 @@ theme_override_font_sizes/font_size = 8
 text = "Numbers Caught: 0"
 autowrap_mode = 3
 
+[node name="LargestCaught" type="Label" parent="FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(128, 8)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("4_0jd5l")
+theme_override_font_sizes/font_size = 8
+text = "Largest Caught: 0.00m"
+autowrap_mode = 3
+
+[node name="SmallestCaught" type="Label" parent="FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(128, 8)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("4_0jd5l")
+theme_override_font_sizes/font_size = 8
+text = "Smallest Caught: 0.00m"
+
 [node name="CatchConditions" type="VBoxContainer" parent="FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(176, 0)
 layout_mode = 2
-theme_override_constants/separation = 6
+theme_override_constants/separation = 8
 alignment = 1
 
 [node name="Label" type="Label" parent="FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer/CatchConditions"]
@@ -189,7 +220,7 @@ label_settings = SubResource("LabelSettings_yn27h")
 [node name="Description" type="VBoxContainer" parent="FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(176, 0)
 layout_mode = 2
-theme_override_constants/separation = 4
+theme_override_constants/separation = 8
 alignment = 1
 
 [node name="Label" type="Label" parent="FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer/Description"]
@@ -209,7 +240,7 @@ autowrap_mode = 3
 [node name="Catch Hint" type="VBoxContainer" parent="FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(176, 0)
 layout_mode = 2
-theme_override_constants/separation = 4
+theme_override_constants/separation = 8
 alignment = 1
 
 [node name="Label" type="Label" parent="FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer/Catch Hint"]

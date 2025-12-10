@@ -17,7 +17,7 @@ public partial class InGameTime : Node
     private const float GameSpeed = 1.0f;
     private int _initialHour = 12;
 
-    private float _time; // time is in the in-game minutes passed, scaled to values on the sin function
+    private float _time; // time is in the in-game minutes passed, scaled to values on the sin function (2pi / total minutes in day --> value per minute)
     private int _previousMinute = -1; // this is used to determine if 1 minute (in game) has passed to raise time update events
     private TimeOfDay _previousTimeOfDay;
     public override void _Ready()
@@ -28,7 +28,8 @@ public partial class InGameTime : Node
         // So this must be below SignalBus
 
         // 10/12/2025: this one should be the fallback, should come from save file (if time == 0), then this, else use the save file
-        _time = TimeCycleToRealMinute * MinuteInHour * _initialHour;
+        // initial hour * minutes in hour -> total minutes passed for the initial hour that we set, then scale to the values on the sin function (kinda?)
+        _time = TimeCycleToRealMinute * MinuteInHour * _initialHour; 
         _previousTimeOfDay = GetCurrentTimeOfDay();
 
     }

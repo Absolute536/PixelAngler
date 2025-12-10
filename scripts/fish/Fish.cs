@@ -12,6 +12,7 @@ public partial class Fish : CharacterBody2D
     [Export] public RayCast2D ObstacleDetectionRaycast;
 
     [Export] public FishSpecies SpeciesInformation; // make it exported for now, need to assign on instantiation by the spawn point later
+    public float CurrentSizeMeasurement {get; set;}
 
     // For debug
     [Export] public Label DebugText;

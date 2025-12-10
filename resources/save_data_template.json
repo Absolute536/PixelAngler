@@ -1,0 +1,266 @@
+{
+    "PlayerGlobalPositionX": 0.0,
+    "PlayerGlobalPositionY": 0.0,
+    "MinutesPassed": 0.0,
+    "CatchRecords":
+    [
+        {
+            "FishId": 0,
+            "NumbersCaught": 0,
+            "LargestRecord": 0.0,
+            "SmallestRecord": 0.0
+        },
+
+        {
+            "FishId": 1,
+            "NumbersCaught": 0,
+            "LargestRecord": 0.0,
+            "SmallestRecord": 0.0
+        },
+
+        {
+            "FishId": 2,
+            "NumbersCaught": 0,
+            "LargestRecord": 0.0,
+            "SmallestRecord": 0.0
+        },
+
+        {
+            "FishId": 3,
+            "NumbersCaught": 0,
+            "LargestRecord": 0.0,
+            "SmallestRecord": 0.0
+        },
+
+        {
+            "FishId": 4,
+            "NumbersCaught": 0,
+            "LargestRecord": 0.0,
+            "SmallestRecord": 0.0
+        },
+
+        {
+            "FishId": 5,
+            "NumbersCaught": 0,
+            "LargestRecord": 0.0,
+            "SmallestRecord": 0.0
+        },
+
+        {
+            "FishId": 6,
+            "NumbersCaught": 0,
+            "LargestRecord": 0.0,
+            "SmallestRecord": 0.0
+        },
+
+        {
+            "FishId": 7,
+            "NumbersCaught": 0,
+            "LargestRecord": 0.0,
+            "SmallestRecord": 0.0
+        },
+
+        {
+            "FishId": 8,
+            "NumbersCaught": 0,
+            "LargestRecord": 0.0,
+            "SmallestRecord": 0.0
+        },
+
+        {
+            "FishId": 9,
+            "NumbersCaught": 0,
+            "LargestRecord": 0.0,
+            "SmallestRecord": 0.0
+        },
+
+        {
+            "FishId": 10,
+            "NumbersCaught": 0,
+            "LargestRecord": 0.0,
+            "SmallestRecord": 0.0
+        },
+
+        {
+            "FishId": 11,
+            "NumbersCaught": 0,
+            "LargestRecord": 0.0,
+            "SmallestRecord": 0.0
+        },
+
+        {
+            "FishId": 12,
+            "NumbersCaught": 0,
+            "LargestRecord": 0.0,
+            "SmallestRecord": 0.0
+        },
+
+        {
+            "FishId": 13,
+            "NumbersCaught": 0,
+            "LargestRecord": 0.0,
+            "SmallestRecord": 0.0
+        },
+
+        {
+            "FishId": 14,
+            "NumbersCaught": 0,
+            "LargestRecord": 0.0,
+            "SmallestRecord": 0.0
+        },
+
+        {
+            "FishId": 15,
+            "NumbersCaught": 0,
+            "LargestRecord": 0.0,
+            "SmallestRecord": 0.0
+        },
+
+        {
+            "FishId": 16,
+            "NumbersCaught": 0,
+            "LargestRecord": 0.0,
+            "SmallestRecord": 0.0
+        },
+
+        {
+            "FishId": 17,
+            "NumbersCaught": 0,
+            "LargestRecord": 0.0,
+            "SmallestRecord": 0.0
+        },
+
+        {
+            "FishId": 18,
+            "NumbersCaught": 0,
+            "LargestRecord": 0.0,
+            "SmallestRecord": 0.0
+        },
+
+        {
+            "FishId": 19,
+            "NumbersCaught": 0,
+            "LargestRecord": 0.0,
+            "SmallestRecord": 0.0
+        },
+
+        {
+            "FishId": 20,
+            "NumbersCaught": 0,
+            "LargestRecord": 0.0,
+            "SmallestRecord": 0.0
+        },
+
+        {
+            "FishId": 21,
+            "NumbersCaught": 0,
+            "LargestRecord": 0.0,
+            "SmallestRecord": 0.0
+        },
+
+        {
+            "FishId": 22,
+            "NumbersCaught": 0,
+            "LargestRecord": 0.0,
+            "SmallestRecord": 0.0
+        },
+
+        {
+            "FishId": 23,
+            "NumbersCaught": 0,
+            "LargestRecord": 0.0,
+            "SmallestRecord": 0.0
+        },
+
+        {
+            "FishId": 24,
+            "NumbersCaught": 0,
+            "LargestRecord": 0.0,
+            "SmallestRecord": 0.0
+        },
+
+        {
+            "FishId": 25,
+            "NumbersCaught": 0,
+            "LargestRecord": 0.0,
+            "SmallestRecord": 0.0
+        },
+
+        {
+            "FishId": 26,
+            "NumbersCaught": 0,
+            "LargestRecord": 0.0,
+            "SmallestRecord": 0.0
+        },
+
+        {
+            "FishId": 27,
+            "NumbersCaught": 0,
+            "LargestRecord": 0.0,
+            "SmallestRecord": 0.0
+        },
+
+        {
+            "FishId": 28,
+            "NumbersCaught": 0,
+            "LargestRecord": 0.0,
+            "SmallestRecord": 0.0
+        },
+
+        {
+            "FishId": 29,
+            "NumbersCaught": 0,
+            "LargestRecord": 0.0,
+            "SmallestRecord": 0.0
+        },
+
+        {
+            "FishId": 30,
+            "NumbersCaught": 0,
+            "LargestRecord": 0.0,
+            "SmallestRecord": 0.0
+        },
+
+        {
+            "FishId": 31,
+            "NumbersCaught": 0,
+            "LargestRecord": 0.0,
+            "SmallestRecord": 0.0
+        },
+
+        {
+            "FishId": 32,
+            "NumbersCaught": 0,
+            "LargestRecord": 0.0,
+            "SmallestRecord": 0.0
+        },
+
+        {
+            "FishId": 33,
+            "NumbersCaught": 0,
+            "LargestRecord": 0.0,
+            "SmallestRecord": 0.0
+        },
+
+        {
+            "FishId": 34,
+            "NumbersCaught": 0,
+            "LargestRecord": 0.0,
+            "SmallestRecord": 0.0
+        },
+
+        {
+            "FishId": 35,
+            "NumbersCaught": 0,
+            "LargestRecord": 0.0,
+            "SmallestRecord": 0.0
+        },
+
+        {
+            "FishId": 36,
+            "NumbersCaught": 0,
+            "LargestRecord": 0.0,
+            "SmallestRecord": 0.0
+        }
+    ]
+}

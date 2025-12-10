@@ -14,6 +14,9 @@ public partial class FishSpecies : Resource
     [Export] public SizeClass Size;
     [Export] public FishDiet DietType;
 
+    [Export] public float MinSizeMeasurement;
+    [Export] public float MaxSizeMeasurement;
+
     // Cuz we only need to check for hours before spawnning
     // Diurnal (Day only)
     // Noctural (Night only)
