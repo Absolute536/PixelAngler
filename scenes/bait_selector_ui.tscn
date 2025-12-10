@@ -1,10 +1,16 @@
-[gd_scene load_steps=12 format=3 uid="uid://wadqbrbgdp0v"]
+[gd_scene load_steps=18 format=3 uid="uid://wadqbrbgdp0v"]
 
 [ext_resource type="FontFile" uid="uid://cibnl77dc0ji7" path="res://resources/fonts/prstartk.ttf" id="1_2g7sy"]
 [ext_resource type="Texture2D" uid="uid://db8vn106q6tyc" path="res://assets/fish/Fish.png" id="1_dtpam"]
 [ext_resource type="Script" uid="uid://cq5m6botkisii" path="res://scripts/user_interface/BaitSelectorUi.cs" id="1_kkq23"]
 [ext_resource type="Script" uid="uid://c64xfilpctsuo" path="res://scripts/game_mechanism/FishingBait.cs" id="2_6af6s"]
 [ext_resource type="Script" uid="uid://3u4esss33awl" path="res://scripts/user_interface/BaitSelectionButton.cs" id="2_p34w1"]
+[ext_resource type="Texture2D" uid="uid://dgtsftglubskg" path="res://assets/ui_design/previous_bait_btn_normal.png" id="4_f8pyj"]
+[ext_resource type="Texture2D" uid="uid://ddnc6vuutxt6r" path="res://assets/ui_design/previous_bait_btn_press.png" id="5_olfpk"]
+[ext_resource type="Texture2D" uid="uid://bucunmgcfntkr" path="res://assets/ui_design/previous_bait_btn_hover.png" id="6_xb60k"]
+[ext_resource type="Texture2D" uid="uid://blrxmeshrio1n" path="res://assets/ui_design/next_bait_btn_normal.png" id="9_euwcb"]
+[ext_resource type="Texture2D" uid="uid://mil3ox26pvvv" path="res://assets/ui_design/next_bait_btn_press.png" id="10_wgo41"]
+[ext_resource type="Texture2D" uid="uid://c3jowscyo6wgn" path="res://assets/ui_design/next_bait_btn_hover.png" id="11_15e4e"]
 
 [sub_resource type="Resource" id="Resource_rjjtw"]
 script = ExtResource("2_6af6s")
@@ -90,12 +96,14 @@ custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
 columns = 3
 
-[node name="PreviousBait" type="Button" parent="VBoxContainer/GridContainer"]
+[node name="PreviousBait" type="TextureButton" parent="VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
 focus_mode = 0
-theme_override_fonts/font = ExtResource("1_2g7sy")
-theme_override_font_sizes/font_size = 8
-text = "<"
+texture_normal = ExtResource("4_f8pyj")
+texture_pressed = ExtResource("5_olfpk")
+texture_hover = ExtResource("6_xb60k")
+stretch_mode = 0
 script = ExtResource("2_p34w1")
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer/GridContainer"]
@@ -104,12 +112,14 @@ layout_mode = 2
 texture = ExtResource("1_dtpam")
 stretch_mode = 2
 
-[node name="NextBait" type="Button" parent="VBoxContainer/GridContainer"]
+[node name="NextBait" type="TextureButton" parent="VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
 focus_mode = 0
-theme_override_fonts/font = ExtResource("1_2g7sy")
-theme_override_font_sizes/font_size = 8
-text = ">"
+texture_normal = ExtResource("9_euwcb")
+texture_pressed = ExtResource("10_wgo41")
+texture_hover = ExtResource("11_15e4e")
+stretch_mode = 0
 script = ExtResource("2_p34w1")
 
 [node name="DisplayTimer" type="Timer" parent="."]

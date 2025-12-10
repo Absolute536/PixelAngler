@@ -25,7 +25,7 @@ public partial class FishStartledState : State
         _movementSpeed = _random.Next(30, 51); // 30 ~ 50?
         _duration = _random.Next(1, 3) + _random.NextDouble(); // 1.xx to 2.00
 
-        SceneTreeTimer startleTimer = GetTree().CreateTimer(_duration, true, true);
+        SceneTreeTimer startleTimer = GetTree().CreateTimer(_duration, false, true);
         startleTimer.Timeout += EndStartleState;
     }
 

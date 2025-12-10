@@ -48,7 +48,7 @@ public partial class FishWanderState : State
         {
             DetectionRadius.Monitoring = false;
 
-            SceneTreeTimer disableTimer = GetTree().CreateTimer(5.0f, true, true); // disable the detection radius for 5 second
+            SceneTreeTimer disableTimer = GetTree().CreateTimer(5.0f, false, true); // disable the detection radius for 5 second
             disableTimer.Timeout += () => 
             { 
                 DetectionRadius.Monitoring = true;

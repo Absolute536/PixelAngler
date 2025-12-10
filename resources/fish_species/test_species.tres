@@ -12,5 +12,5 @@ SpriteTexture = ExtResource("1_d7ydg")
 MinSpawnHours = 6
 MaxSpawnHours = 2
 SpawnLocation = "Pond"
-Aggresiveness = 0.1
+Aggressiveness = 0.1
 metadata/_custom_type_script = "uid://cfyrovpd32dc0"

@@ -51,6 +51,10 @@ public partial class PlayerIdleState : State
             catalogue.OpenCatalogue(); // add 1 before open
             OnStateTransitioned("PlayerUiState");
         }
+        else if (inputEvent.IsActionPressed("Action"))
+        {
+            OnStateTransitioned("PlayerCastingState");
+        }
     }
 
     public override void ProcessUpdate(double delta)
@@ -68,26 +72,26 @@ public partial class PlayerIdleState : State
             OnStateTransitioned("PlayerWalkingState");
         // If no movement input and Action is pressed (continuously as well), transition to action state
         // So that it's gonna be like -> clicked -> action -> start casting or something
-        else if (Input.IsActionPressed("Action")) // if I use JustPressed, then we can't trasition from walking to this while holding LMB, wait, maybe we can use presed in walking
-        {
-            GD.Print(Name + ": " + "Action");
-            OnStateTransitioned("PlayerCastingState");
-            // string currentSelectedItem = Player.SelectedItem;
-            // switch (currentSelectedItem)
-            // {
-            //     case "Fishing Rod":
-            //         OnStateTransitioned("PlayerCastingState");
-            //         break;
-            //     case "Bug Net":
-            //         OnStateTransitioned("PlayerNetState");
-            //         break;
-            //     default:
-            //         GD.Print("Selected Item Unidentified.");
-            //         break;
-            // }
+        // else if (Input.IsActionPressed("Action")) // if I use JustPressed, then we can't trasition from walking to this while holding LMB, wait, maybe we can use presed in walking
+        // {
+        //     GD.Print(Name + ": " + "Action");
+        //     OnStateTransitioned("PlayerCastingState");
+        //     // string currentSelectedItem = Player.SelectedItem;
+        //     // switch (currentSelectedItem)
+        //     // {
+        //     //     case "Fishing Rod":
+        //     //         OnStateTransitioned("PlayerCastingState");
+        //     //         break;
+        //     //     case "Bug Net":
+        //     //         OnStateTransitioned("PlayerNetState");
+        //     //         break;
+        //     //     default:
+        //     //         GD.Print("Selected Item Unidentified.");
+        //     //         break;
+        //     // }
 
-            // OnStateTransitioned("PlayerActionState");
-        }
+        //     // OnStateTransitioned("PlayerActionState");
+        // }
 
     }
 

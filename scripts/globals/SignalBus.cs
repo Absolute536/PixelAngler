@@ -154,6 +154,11 @@ public partial class SignalBus : Node
         CatchProgressUpdated?.Invoke(fishId);
     }
 
+    public event EventHandler FishObtained;
+    public void OnFishObtained(object sender, EventArgs e)
+    {
+        FishObtained?.Invoke(sender, e);
+    }
 
 
 

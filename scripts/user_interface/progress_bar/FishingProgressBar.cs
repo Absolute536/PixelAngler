@@ -9,7 +9,7 @@ public partial class FishingProgressBar : ProgressBar
 	public override void _Ready()
 	{
 		// SelfModulate = new Color(214 / 255, 174 / 255, 85 / 255, 1);
-		Value = MaxValue / 2;
+		Value = MaxValue / 4; // 25% filled on instantiation
 		Size = new Vector2(50, 3);
 		// fillColor = GD.Load<StyleBoxFlat>("res://resources/shaders/fishing_progress_fill.tres");
 		

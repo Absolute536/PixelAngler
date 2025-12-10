@@ -26,6 +26,8 @@ public partial class InGameTime : Node
         // IMPORTANT: the instantiation order of autoloads is dependent on the ordering int he Globals Tab
         // So autoloads that depend on another autoload must be instantiated later
         // So this must be below SignalBus
+
+        // 10/12/2025: this one should be the fallback, should come from save file (if time == 0), then this, else use the save file
         _time = TimeCycleToRealMinute * MinuteInHour * _initialHour;
         _previousTimeOfDay = GetCurrentTimeOfDay();
 

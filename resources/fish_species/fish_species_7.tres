@@ -17,5 +17,5 @@ IsNightActive = true
 IsDuskActive = false
 IsDawnActive = true
 SpawnLocations = PackedStringArray("Pond", "Forest")
-Aggresiveness = 0.2
+Aggressiveness = 0.2
 metadata/_custom_type_script = "uid://cfyrovpd32dc0"

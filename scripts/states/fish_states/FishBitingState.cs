@@ -78,6 +78,7 @@ public partial class FishBitingState : State
             // progressBarRoot.Position = new Vector2(-8, 8);
 
             Fish.AddChild(fishingProgress);
+            MinigameManager.Instance.CurrentSpeciesInGame = Fish.SpeciesInformation;
             MinigameManager.Instance.StartMinigame(fishingProgress);
 
             OnStateTransitioned("FishHookedState");

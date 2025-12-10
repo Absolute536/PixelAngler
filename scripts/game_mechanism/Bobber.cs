@@ -127,7 +127,8 @@ public partial class Bobber : Area2D
 	public void ReverseBobberMotion()
 	{
 		// Swap the starting and ending position
-		(_endPosition, _startPosition) = (_startPosition, _endPosition);
+		// new start position should be the current position
+		(_endPosition, _startPosition) = (_startPosition, GlobalPosition);
 		
 		// Recalculate parameters using the negative angle (values)
         _initialVelocity = (_endPosition.X - _startPosition.X) / TimeLimit * (1 / _negativeCosineLaunchAngle);

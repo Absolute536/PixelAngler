@@ -20,7 +20,7 @@ public partial class FishDivingState : State
 
         MinigameManager.Instance.CurrentBehaviour = FishBehaviour.Red;
 
-        SceneTreeTimer divingTimer = GetTree().CreateTimer(3.0, false, true);
+        SceneTreeTimer divingTimer = GetTree().CreateTimer(3.0 * (1 - Fish.SpeciesInformation.Aggressiveness), false, true);
         divingTimer.Timeout += () =>
         {
             if (IsCurrentlyActive)

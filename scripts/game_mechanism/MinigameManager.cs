@@ -17,6 +17,9 @@ public partial class MinigameManager : Node
     public FishBehaviour CurrentBehaviour { get => _currentBehaviour; set => _currentBehaviour = value; }
     private FishBehaviour _currentBehaviour;
 
+    public FishSpecies CurrentSpeciesInGame{get => _currentSpeciesInGame; set => _currentSpeciesInGame = value;}
+    private FishSpecies _currentSpeciesInGame;
+
     public int ClicksNeeded { get => _clicksNeeded; set => _clicksNeeded = value; }
     private int _clicksNeeded;
 
@@ -48,11 +51,16 @@ public partial class MinigameManager : Node
             {
                 if (Input.IsActionPressed(_behaviourInputPair[CurrentBehaviour]))
                 {
-                    _fishingProgress.GameProgressBar.Value += 0.25;
+                    // Only increase the progress when green
+                    // For red, the progress won't decrease when RMB is held (try it first?) -> this is better
+                    // also scale based on aggressiveness?
+                    if (CurrentBehaviour == FishBehaviour.Green)
+                        _fishingProgress.GameProgressBar.Value += 0.40 * (1 - _currentSpeciesInGame.Aggressiveness);
+
                     GD.Print("Mouse pressed detected");
                 }
                 else
-                    _fishingProgress.GameProgressBar.Value -= 0.2;
+                    _fishingProgress.GameProgressBar.Value -= 0.30 * _currentSpeciesInGame.Aggressiveness;
                 
                 // just quick test
                 StyleBoxFlat promptStyleBox = _fishingProgress.GameActionPrompt.GetThemeStylebox("normal").Duplicate() as StyleBoxFlat;
@@ -84,7 +92,7 @@ public partial class MinigameManager : Node
                     // _progressBar.Value += 0.25;
                 }
                 else
-                    _fishingProgress.GameProgressBar.Value -= 0.2; // 20 per second
+                    _fishingProgress.GameProgressBar.Value -= 0.20 * _currentSpeciesInGame.Aggressiveness; // 20 per second
                 
                 if (ClicksNeeded <= 0)
                 {
@@ -115,15 +123,12 @@ public partial class MinigameManager : Node
     {
         _fishingProgress = fishingProgress;
         _gameStarted = true;
-        // SignalBus.Instance.FishBehaviourChanged += HandleFishBehaviourChanged;
     }
 
     public void EndMinigame()
     {
         _gameStarted = false;
-        // _progressBar.QueueFree();
         _fishingProgress.QueueFree();
-        // SignalBus.Instance.FishBehaviourChanged -= HandleFishBehaviourChanged;
     }
 
     // public void HandleFishBehaviourChanged(FishBehaviour behaviour, int repeatNumber)

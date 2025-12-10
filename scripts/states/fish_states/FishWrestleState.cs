@@ -8,7 +8,13 @@ public partial class FishWrestleState : State
 {
     [Export] public Fish Fish;
     [Export] public Timer MovementTimer;
-    private double _directionDuration;
+
+    private Vector2 _wrestleDirection;
+
+    private const int MinClickCount = 8;
+    private const int MaxClickCount = 20;
+
+    private const float WrestleDirectionDuration = 0.5f; // make it a constant, then scale with aggressiveness
     private Random _directionRandomiser = new ();
 
     private int clicksNeeded;
@@ -22,15 +28,25 @@ public partial class FishWrestleState : State
     {
         base.EnterState(previousState);
         
-        clicksNeeded = _directionRandomiser.Next(3, 8); // random for now, can derive from FishInfo later
+        int lowerBound = (int) (MinClickCount * Fish.SpeciesInformation.Aggressiveness) + 3; // Min: 3 clicks (for min)
+        int upperBound = (int) (MaxClickCount * Fish.SpeciesInformation.Aggressiveness) + 5; // Min: 5 clicks (for max)
+        clicksNeeded = _directionRandomiser.Next(lowerBound, upperBound + 1); // random for now, can derive from FishInfo later
         GD.Print("Clicks Needed: " + clicksNeeded);
+
+        if (_directionRandomiser.Next(2) == 0)
+            _wrestleDirection = Vector2.Left;
+        else
+            _wrestleDirection = Vector2.Right;
+        
+        MovementTimer.Timeout += ChangeWrestleDirection;
+        MovementTimer.WaitTime = WrestleDirectionDuration * (1 - Fish.SpeciesInformation.Aggressiveness);
+        MovementTimer.Start();
 
         // SignalBus.Instance.OnFishBehaviourChanged(FishBehaviour.Yellow, clicksNeeded);
         MinigameManager.Instance.CurrentBehaviour = FishBehaviour.Yellow;
         MinigameManager.Instance.ClicksNeeded = clicksNeeded;
         
         SignalBus.Instance.FishWrestleCompleted += HandleFishWrestleCompleted;
-        // MinigameManager.Instance.ActionRepeat = clicksNeeded;
 
         SignalBus.Instance.FishCaught += HandleFishCaught;
         SignalBus.Instance.FishLost += HandleFishLost;
@@ -39,6 +55,7 @@ public partial class FishWrestleState : State
     public override void ExitState()
     {
         base.ExitState();
+        MovementTimer.Timeout -= ChangeWrestleDirection;
         SignalBus.Instance.FishCaught -= HandleFishCaught;
         SignalBus.Instance.FishLost -= HandleFishLost;
         SignalBus.Instance.FishWrestleCompleted -= HandleFishWrestleCompleted;
@@ -56,15 +73,21 @@ public partial class FishWrestleState : State
 
     public override void PhysicsProcessUpdate(double delta)
     {
-        // Fish.MoveAndSlide();
-        // if (clicksNeeded <= 0)
-        //     OnStateTransitioned("FishHookedState");
-        // signal from minigame to change state
+        Fish.Velocity = _wrestleDirection * Fish.SpeciesInformation.MovementSpeed; // 100% speed first?
+        Fish.MoveAndSlide();
     }
 
     public override void ProcessUpdate(double delta)
     {
         // nothing
+    }
+
+    private void ChangeWrestleDirection()
+    {
+        if (_wrestleDirection == Vector2.Left)
+            _wrestleDirection = Vector2.Right;
+        else
+            _wrestleDirection = Vector2.Left;
     }
 
     private void HandleFishCaught(object sender, EventArgs e)

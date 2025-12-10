@@ -44,7 +44,7 @@ public partial class FishAttractedState : State
           Position = Fish.FishSprite.FlipH ? new Vector2(-Fish.SpeciesInformation.SpriteTexture.GetSize().X, -8) : new Vector2(0, -8)
         };
         Fish.AddChild(attractedIcon);
-        GetTree().CreateTimer(0.5, false, true).Timeout += () => {attractedIcon.QueueFree();};
+        GetTree().CreateTimer(0.5, false, true).Timeout += attractedIcon.QueueFree;
         // maybe after the force alignment? Yep
         // and play a sfx after this (or not?, maybe a little)
 

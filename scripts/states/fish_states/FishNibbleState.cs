@@ -241,7 +241,7 @@ public partial class FishNibbleState : State
     private void StartNibbleDelay(double duration)
     {
         _nibbleActive = false;
-        SceneTreeTimer nibbleDelayTimer = GetTree().CreateTimer(duration, true, true);
+        SceneTreeTimer nibbleDelayTimer = GetTree().CreateTimer(duration, false, true);
         nibbleDelayTimer.Timeout += () => { _nibbleActive = true; };
     }
 

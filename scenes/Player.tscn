@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://bd2sgwdtpfwaj"]
+[gd_scene load_steps=16 format=3 uid="uid://bd2sgwdtpfwaj"]
 
 [ext_resource type="SpriteFrames" uid="uid://chi3wqli78166" path="res://resources/player_sprite.tres" id="1_p0vlq"]
 [ext_resource type="Script" uid="uid://dwkgu7hv8ofdd" path="res://scripts/player/Player.cs" id="1_v6fml"]
@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://1w1wporxjcab" path="res://scenes/bobber.tscn" id="9_ur7pv"]
 [ext_resource type="Script" uid="uid://cqssj2uf3ydm3" path="res://scripts/states/player_states/PlayerUiState.cs" id="10_jej6c"]
 [ext_resource type="PackedScene" uid="uid://d1r8eckfg8xw" path="res://scenes/fishing_line.tscn" id="11_d2wvv"]
+[ext_resource type="Script" uid="uid://bb4isq5khb2k3" path="res://scripts/states/player_states/PlayerShowOffState.cs" id="11_f1ej7"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_p0vlq"]
 radius = 4.0
@@ -82,6 +83,11 @@ metadata/_custom_type_script = "uid://b5c6xmf5euuwj"
 script = ExtResource("10_jej6c")
 Player = NodePath("../..")
 metadata/_custom_type_script = "uid://cqssj2uf3ydm3"
+
+[node name="PlayerShowOffState" type="Node" parent="StateMachine" node_paths=PackedStringArray("Player")]
+script = ExtResource("11_f1ej7")
+Player = NodePath("../..")
+metadata/_custom_type_script = "uid://bb4isq5khb2k3"
 
 [node name="ActionUI" type="Node2D" parent="."]
 

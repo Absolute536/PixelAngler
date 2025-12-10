@@ -60,8 +60,8 @@ public partial class PlayerWalkingState : State
             Player.FacingDirection = direction;
             PlayWalkingAnimation(direction);
         }
-        // Stop and transition to IDLE when no direction input or lmb is pressed
-        else if (direction == Vector2.Zero || Input.IsActionJustPressed("Action"))
+        // Stop and transition to IDLE when no direction input (update 10/12/2025: only when no directional input)
+        else if (direction == Vector2.Zero)
         {
             // Use MoveToward for the x & y component of velocity to smooth stopping movement (? look into this further)
             // Cuz it's generated automatically

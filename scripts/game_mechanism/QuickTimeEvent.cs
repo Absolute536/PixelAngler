@@ -27,7 +27,7 @@ public partial class QuickTimeEvent : Node
         _isActive = true;
         _isSuccessful = false;
 
-        SceneTreeTimer reactionTimer = GetTree().CreateTimer(_duration, true, true);
+        SceneTreeTimer reactionTimer = GetTree().CreateTimer(_duration, false, true);
         reactionTimer.Timeout += EndQuickTimeEvent;
     }
 

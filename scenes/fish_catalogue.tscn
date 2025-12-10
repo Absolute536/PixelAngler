@@ -3,9 +3,9 @@
 [ext_resource type="Script" uid="uid://d3u0mloua7er" path="res://scripts/user_interface/FishCatalogueUi.cs" id="1_5or32"]
 [ext_resource type="Texture2D" uid="uid://62tskre4i8wf" path="res://assets/ui_design/catalogue_background_book.png" id="1_in17x"]
 [ext_resource type="Texture2D" uid="uid://db8vn106q6tyc" path="res://assets/fish/Fish.png" id="2_kbqgc"]
-[ext_resource type="Texture2D" uid="uid://brvxyx0j1nui" path="res://assets/ui_design/catalogue_display_forest.png" id="2_nf8fy"]
 [ext_resource type="Theme" uid="uid://fhofu6vf4lby" path="res://resources/ui_styles/scroll_bar_theme.tres" id="2_yn27h"]
 [ext_resource type="FontFile" uid="uid://cibnl77dc0ji7" path="res://resources/fonts/prstartk.ttf" id="4_0jd5l"]
+[ext_resource type="Texture2D" uid="uid://xa32vm1urvb" path="res://assets/ui_design/catalogue_display_background.png" id="4_yn27h"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_yn27h"]
 line_spacing = 2.0
@@ -112,12 +112,12 @@ custom_minimum_size = Vector2(176, 80)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
-texture = ExtResource("2_nf8fy")
+texture = ExtResource("4_yn27h")
 region_rect = Rect2(6, 6, 100, 36)
-patch_margin_left = 3
-patch_margin_top = 3
-patch_margin_right = 3
-patch_margin_bottom = 3
+patch_margin_left = 12
+patch_margin_top = 12
+patch_margin_right = 12
+patch_margin_bottom = 12
 
 [node name="FishDisplaySprite" type="TextureRect" parent="FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer/FishDisplayBackground"]
 custom_minimum_size = Vector2(32, 32)

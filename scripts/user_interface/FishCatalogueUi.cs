@@ -38,7 +38,7 @@ public partial class FishCatalogueUi : Control
         
     }
 
-    // use unhandled_input, cuz the child control doesn't consume the OpenCatalogue event. Using Gui_input doesn't work, cuz the children has focus, as their will be triggered instead
+    // use unhandled_input, cuz the child control doesn't consume the OpenCatalogue event. Using Gui_input doesn't work, cuz the children has focus, and theirs will be triggered instead
     public override void _UnhandledInput(InputEvent @event)
     {
         if (@event.IsActionPressed("OpenCatalogue"))

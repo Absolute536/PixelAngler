@@ -40,7 +40,7 @@ public partial class FishSpecies : Resource
 
     [Export] public string[] SpawnLocations;
 
-    [Export] public float Aggresiveness;
+    [Export] public float Aggressiveness;
 
     // requirement can be here as well
 }

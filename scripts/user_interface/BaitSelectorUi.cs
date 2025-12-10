@@ -3,8 +3,8 @@ using System;
 
 public partial class BaitSelectorUi : Control
 {
-	[Export] public Button PreviousBait;
-	[Export] public Button NextBait;
+	[Export] public TextureButton PreviousBait;
+	[Export] public TextureButton NextBait;
 	[Export] public TextureRect SelectedBaitDisplay;
 	[Export] public Label BaitName;
 	[Export] public Timer DisplayTimer;

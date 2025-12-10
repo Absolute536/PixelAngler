@@ -28,13 +28,13 @@ public partial class FishHookedState : State
 
         _player = GetTree().GetFirstNodeInGroup("Player") as Player; // ohhh, oooor we make player information as an autoload? (hmm~ or is it a hassle?)
 
-        _movementDirection = Fish.GlobalPosition.DirectionTo(_player.GlobalPosition);
-        _movementDirection *= -1;
-        ChangeMovementAngle();
+        // _movementDirection = Fish.GlobalPosition.DirectionTo(_player.GlobalPosition);
+        // _movementDirection *= -1;
+        ChangeMovementParameter();
         // make the direction constant on enter state?
 
-        MovementTimer.Timeout += ChangeMovementAngle;
-        MovementTimer.Start(1.0); // every 3s?
+        MovementTimer.Timeout += ChangeMovementParameter;
+        MovementTimer.Start(2.0 * (1 - Fish.SpeciesInformation.Aggressiveness)); // every 2s, scaled by aggressiveness?
         // SignalBus.Instance.OnFishBehaviourChanged(FishBehaviour.Green, 0);
         MinigameManager.Instance.CurrentBehaviour = FishBehaviour.Green;
 
@@ -57,7 +57,7 @@ public partial class FishHookedState : State
         // Always start with green
 
         // this duration depends on the Aggressiveness of the fish
-        SceneTreeTimer greenTimer = GetTree().CreateTimer(3.0, false, true);
+        SceneTreeTimer greenTimer = GetTree().CreateTimer(4.0 * (1 - Fish.SpeciesInformation.Aggressiveness), false, true);
         greenTimer.Timeout += () =>
         {
             if (IsCurrentlyActive)
@@ -81,7 +81,7 @@ public partial class FishHookedState : State
     {
         base.ExitState();
         // set it like this for now, may be different later (need to wait until animation finished)
-        MovementTimer.Timeout -= ChangeMovementAngle;
+        MovementTimer.Timeout -= ChangeMovementParameter;
         MovementTimer.Stop();
         SignalBus.Instance.FishCaught -= HandleFishCaught;
         SignalBus.Instance.FishLost -= HandleFishLost;
@@ -107,12 +107,31 @@ public partial class FishHookedState : State
 
         // float movementAngle = Mathf.DegToRad(90 - _movementRandomiser.Next(181)); // -90 to 90 degree
 
-        Fish.Velocity = _movementDirection.Rotated(_movementAngle) * 50; // movement speed fixed as 40 first;
+        Fish.Velocity = _movementDirection.Rotated(_movementAngle) * (Fish.SpeciesInformation.MovementSpeed * 0.8f); // 80% of original speed (hooked, so slower)
         Fish.MoveAndSlide();
     }
 
-    private void ChangeMovementAngle()
+    private void ChangeMovementParameter()
     {
+        int direction = _movementRandomiser.Next(4);
+        switch (direction)
+        {
+            case 0:
+                _movementDirection = Vector2.Up;
+                break;
+            case 1:
+                _movementDirection = Vector2.Right;
+                break;
+            case 2:
+                _movementDirection = Vector2.Down;
+                break;
+            case 3:
+                _movementDirection = Vector2.Left;
+                break;
+            default:
+                _movementDirection = Vector2.Right;
+                break;
+        } 
         _movementAngle = Mathf.DegToRad(90 - _movementRandomiser.Next(181)); // -90 ~ 90 degree
         // ok, so for this one, we want to prevent it from going out of the camera's view
         // Or... we can just make the camera follow the fish (ugh)
@@ -122,6 +141,7 @@ public partial class FishHookedState : State
         // so like, can move away if within bound (camera.Position + screen width / 2 AND - screen width / 2), same for height
         // so, move in any direction, if reached boundary, move in opposite direction
 
+        // LMAO camera thing works
     }
 
     private void HandleFishCaught(object sender, EventArgs e) // since this is duplicated across the three state, maybe can extract into an interface?
