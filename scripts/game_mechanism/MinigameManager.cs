@@ -67,10 +67,10 @@ public partial class MinigameManager : Node
                 // Color textColour = _fishingProgress.GameActionPrompt.GetThemeColor("default_color");
                 if (CurrentBehaviour == FishBehaviour.Green)
                 {
-                    promptStyleBox.BgColor = Colors.Green;
+                    promptStyleBox.BgColor = Colors.LimeGreen;
                 }
                 else
-                    promptStyleBox.BgColor = Colors.Red;
+                    promptStyleBox.BgColor = Colors.Crimson;
 
                 _fishingProgress.GameActionPrompt.AddThemeStyleboxOverride("normal", promptStyleBox);
                 _fishingProgress.GameActionPrompt.AddThemeColorOverride("default_color", Colors.White);

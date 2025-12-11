@@ -178,7 +178,12 @@ public partial class FishWanderState : State
             ObstacleDetectionRaycast.Enabled = true;
             ObstacleDetectionRaycast.ForceRaycastUpdate();
 
-            if (!ObstacleDetectionRaycast.IsColliding()) // and the bait conditions as well
+            // Because of omnivorous, need to match for both carnivorous and herbivorous
+            // and the bait conditions as well
+
+            if (!ObstacleDetectionRaycast.IsColliding() && 
+                Fish.LatchTarget.SelectedBait.BaitSize == Fish.SpeciesInformation.Size && 
+                (Fish.LatchTarget.SelectedBait.BaitType == Fish.SpeciesInformation.DietType || Fish.SpeciesInformation.DietType == FishDiet.Omnivorous)) 
                 OnStateTransitioned("FishAttractedState");
             
         }

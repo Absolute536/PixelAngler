@@ -1,0 +1,7 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://d33xbpl0us6yw"]
+
+[ext_resource type="Shader" uid="uid://dc5pxgc1k4cul" path="res://resources/shaders/fish.gdshader" id="1_f8que"]
+
+[resource]
+shader = ExtResource("1_f8que")
+shader_parameter/blue = 1.0

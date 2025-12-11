@@ -56,7 +56,8 @@ public partial class Bobber : Area2D
 	private bool _hasStopped = false; // Boolean flag to determine if the bobber has stopped (hmm ~)
 	private bool _reverseMotion = false; // Indicate if we are in reverse motion;
 
-	// public bool IsLatchedOn = false; // A boolean flag to indicate if a fish has latched on (Kinda Fragile and risky, but let's test it first)
+	public FishingBait SelectedBait {get => _selectedBait; set => _selectedBait = value;}
+	private FishingBait _selectedBait;
 
 	[Export] public GpuParticles2D waterSplash;
 	public override void _Ready()

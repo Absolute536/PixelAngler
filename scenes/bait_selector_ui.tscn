@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://wadqbrbgdp0v"]
+[gd_scene load_steps=19 format=3 uid="uid://wadqbrbgdp0v"]
 
 [ext_resource type="FontFile" uid="uid://cibnl77dc0ji7" path="res://resources/fonts/prstartk.ttf" id="1_2g7sy"]
 [ext_resource type="Texture2D" uid="uid://db8vn106q6tyc" path="res://assets/fish/Fish.png" id="1_dtpam"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://c64xfilpctsuo" path="res://scripts/game_mechanism/FishingBait.cs" id="2_6af6s"]
 [ext_resource type="Script" uid="uid://3u4esss33awl" path="res://scripts/user_interface/BaitSelectionButton.cs" id="2_p34w1"]
 [ext_resource type="Texture2D" uid="uid://dgtsftglubskg" path="res://assets/ui_design/previous_bait_btn_normal.png" id="4_f8pyj"]
+[ext_resource type="Theme" uid="uid://m850shrd7lmi" path="res://resources/ui_styles/default_tooltip_theme.tres" id="4_olfpk"]
 [ext_resource type="Texture2D" uid="uid://ddnc6vuutxt6r" path="res://assets/ui_design/previous_bait_btn_press.png" id="5_olfpk"]
 [ext_resource type="Texture2D" uid="uid://bucunmgcfntkr" path="res://assets/ui_design/previous_bait_btn_hover.png" id="6_xb60k"]
 [ext_resource type="Texture2D" uid="uid://blrxmeshrio1n" path="res://assets/ui_design/next_bait_btn_normal.png" id="9_euwcb"]
@@ -99,6 +100,8 @@ columns = 3
 [node name="PreviousBait" type="TextureButton" parent="VBoxContainer/GridContainer"]
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
+tooltip_text = "Previous (Scroll Up)"
+theme = ExtResource("4_olfpk")
 texture_normal = ExtResource("4_f8pyj")
 texture_pressed = ExtResource("5_olfpk")
 texture_hover = ExtResource("6_xb60k")
@@ -114,6 +117,8 @@ stretch_mode = 2
 [node name="NextBait" type="TextureButton" parent="VBoxContainer/GridContainer"]
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
+tooltip_text = "Next (Scroll Down)"
+theme = ExtResource("4_olfpk")
 texture_normal = ExtResource("9_euwcb")
 texture_pressed = ExtResource("10_wgo41")
 texture_hover = ExtResource("11_15e4e")

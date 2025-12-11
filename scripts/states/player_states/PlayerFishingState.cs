@@ -26,6 +26,8 @@ public partial class PlayerFishingState : State
         _isFishingSuccess = false;
         Player.PlayerCamera.TopLevel = true;
         Player.PlayerCamera.GlobalPosition = Player.GlobalPosition;
+
+        UiDisplayManager.Instance.CanSelectBait = false;
     }
 
     public override void ExitState()
@@ -37,6 +39,8 @@ public partial class PlayerFishingState : State
 
         Player.PlayerCamera.TopLevel = false;
         Player.PlayerCamera.Position = Vector2.Zero;
+
+        UiDisplayManager.Instance.CanSelectBait = true;
     }
 
     public override void HandleInput(InputEvent @event)

@@ -29,7 +29,9 @@ public partial class FishHookedState : State
         // So we disable it if a fish is hooked and don't enable it regardless if the fish is caught or not
         // It's only re-enabled once it lands into the water on another cast
         // So, does this mean we don't need IsLatchedOn? (I think so.)
-        Fish.LatchTarget.BobberCollisionShape.SetDeferred(CollisionShape2D.PropertyName.Disabled, true);
+        // Update 12/12/2025, 12:28am, this one should be in biting, so that once a fish bites,
+        // regardless of qte sucess/failure and minigame success/failure, player will need to cast again
+        // Fish.LatchTarget.BobberCollisionShape.SetDeferred(CollisionShape2D.PropertyName.Disabled, true);
 
         _player = GetTree().GetFirstNodeInGroup("Player") as Player; // ohhh, oooor we make player information as an autoload? (hmm~ or is it a hassle?)
 

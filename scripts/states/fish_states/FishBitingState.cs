@@ -22,6 +22,9 @@ public partial class FishBitingState : State
     {
         base.EnterState(previousState);
 
+        // Disable the collision shaped here so that on bite player would need to cast again
+        Fish.LatchTarget.BobberCollisionShape.SetDeferred(CollisionShape2D.PropertyName.Disabled, true);
+
         // Play the sound cue here (for the fish bite - start of QTE)
 
         Texture2D biteAlertTexture = GD.Load<Texture2D>("res://assets/ui_design/fish_bite_alert_icon.png");

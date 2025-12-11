@@ -21,6 +21,8 @@ public partial class PlayerAnglingState : State
         base.EnterState(previousState);
         SignalBus.Instance.ReverseBobberMotionEnded += HandleReverseBobberMotionEnded;
         SignalBus.Instance.QTESucceeded += HandleQTESuccess;
+
+        UiDisplayManager.Instance.CanSelectBait = false;
     }
 
     public override void ExitState()
@@ -28,6 +30,8 @@ public partial class PlayerAnglingState : State
         base.ExitState();
         SignalBus.Instance.ReverseBobberMotionEnded -= HandleReverseBobberMotionEnded;
         SignalBus.Instance.QTESucceeded += HandleQTESuccess;
+
+        UiDisplayManager.Instance.CanSelectBait = true;
     }
 
     public override void HandleInput(InputEvent @event)

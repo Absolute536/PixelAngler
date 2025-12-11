@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://birkglg70yi31"]
+[gd_scene load_steps=7 format=3 uid="uid://birkglg70yi31"]
 
 [ext_resource type="FontFile" uid="uid://cibnl77dc0ji7" path="res://resources/fonts/prstartk.ttf" id="1_1u22c"]
 [ext_resource type="StyleBox" uid="uid://cleabbows1gj4" path="res://resources/ui_styles/fishing_progress_background_stylebox_flat.tres" id="1_j6d8p"]
 [ext_resource type="Script" uid="uid://bbl1lpo8xgm6q" path="res://scripts/user_interface/progress_bar/FishingProgress.cs" id="1_pddit"]
 [ext_resource type="Script" uid="uid://gudm84r4jaqm" path="res://scripts/user_interface/progress_bar/FishingProgressBar.cs" id="2_1u22c"]
+[ext_resource type="Material" uid="uid://kjauxd6f4e5y" path="res://resources/shaders/unshaded_canvas_item_material.tres" id="2_eyn7m"]
 [ext_resource type="StyleBox" uid="uid://cidj02nwk8w0p" path="res://resources/ui_styles/fishing_clicks_needed_style_box_flat.tres" id="2_h6xbt"]
 
 [node name="FishingProgress" type="MarginContainer" node_paths=PackedStringArray("GameProgressBar", "GameActionPrompt")]
@@ -23,6 +24,7 @@ GameActionPrompt = NodePath("HBoxContainer/ActionPrompt")
 layout_mode = 2
 
 [node name="ActionPrompt" type="RichTextLabel" parent="HBoxContainer"]
+material = ExtResource("2_eyn7m")
 custom_minimum_size = Vector2(18, 18)
 layout_mode = 2
 theme_override_colors/default_color = Color(1, 1, 1, 1)
@@ -36,6 +38,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="ProgressBar" type="ProgressBar" parent="HBoxContainer"]
+material = ExtResource("2_eyn7m")
 custom_minimum_size = Vector2(50, 3)
 layout_mode = 2
 size_flags_vertical = 4
