@@ -15,7 +15,7 @@ public partial class PauseMenu : Control
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
     {
-        actualButton.Pressed += ShowPauseMenu;
+        actualButton.Pressed += ShowHidePauseMenu;
 
         FullscreenToggle.Toggled += (bool isToogled) =>
         {
@@ -28,7 +28,9 @@ public partial class PauseMenu : Control
         QuitButton.Pressed += () =>
         {
             // Invoke Save operation here
-            // then quit
+            // Interesting fact, quit on tree won't propagate the notificationWmQuit, need another method
+            // So we might be able to trigger the saving process without the use of groups?
+            // Eh, whatever, the current approach works
             GetTree().CallGroup("PersistentState", "SaveState");
             SaveLoadUtil.Instance.SaveGameStateToFile();
             
@@ -41,19 +43,20 @@ public partial class PauseMenu : Control
         InitialiseSettings();
     }
 
-    public override void _UnhandledInput(InputEvent @event)
-    {
-        if (@event.IsActionPressed("ShowPause"))
-        {
-            if  (PauseMenuContainer.Visible)
-            {
-                PauseMenuContainer.Visible = false;
-                ReleaseFocus();
+    // public override void _UnhandledInput(InputEvent @event)
+    // {
+    //     if (@event.IsActionPressed("ShowPause"))
+    //     {
+    //         // if  (PauseMenuContainer.Visible)
+    //         // {
+    //         //     PauseMenuContainer.Visible = false;
+    //         //     ReleaseFocus();
 
-                GetTree().Paused = false;
-            }
-        }
-    }
+    //         //     GetTree().Paused = false;
+    //         // }
+    //         GetTree().Paused = true;
+    //     }
+    // }
 
 
     private void InitialiseSettings()
@@ -75,9 +78,9 @@ public partial class PauseMenu : Control
         SaveLoadUtil.Instance.LoadedSettings.SetValue("Audio", "sfx_volume", SfxVolume.Value);
     }
 
-    public void ShowPauseMenu()
+    public void ShowHidePauseMenu()
     {
-        if (GetTree().Paused)
+        if (PauseMenuContainer.Visible) // change to visible to prevent unpausing when catalogue is open
         {
             GetTree().Paused = false;
             ReleaseFocus();

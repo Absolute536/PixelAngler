@@ -25,6 +25,7 @@ public partial class PlayerFishingState : State
 
         _isFishingSuccess = false;
         Player.PlayerCamera.TopLevel = true;
+        Player.PlayerCamera.GlobalPosition = Player.GlobalPosition;
     }
 
     public override void ExitState()
@@ -55,13 +56,7 @@ public partial class PlayerFishingState : State
 
     public override void PhysicsProcessUpdate(double delta)
     {
-        // if (Input.IsActionJustPressed("Action")) // How about we can reverse at anytime?
-        // {
-            // _IsFishing = false;
-            // Bobber.ReverseBobberMotion();
-            // SignalBus.Instance.OnAnglingCancelled(this, EventArgs.Empty); // Quick note, if not casted on water and fish detected, they will still home onto bobber [Solved 13/11/2025]
-            // _instancedFish.TopLevel = true;
-        // }
+
     }
 
     private void HandleFishCaught(object sender, EventArgs e)
@@ -101,6 +96,10 @@ public partial class PlayerFishingState : State
     // then it'll return us a reference to the fish object from the scene here
     private Vector2 LerpSmooth(Vector2 from, Vector2 to, float delta)
 	{
-		return to + (from - to) * Mathf.Exp(-25.0f * delta); // speed = 25.0f
+        // https://docs.godotengine.org/en/stable/tutorials/math/interpolation.html
+        // More on here: https://easings.net/#easeInSine
+        // Thanks random commenters
+        delta = (1 - Mathf.Cos(Mathf.Pi * delta)) / 2;
+		return to + (from - to) * Mathf.Exp(-75.0f * delta); // -speed * delta
 	}
 }

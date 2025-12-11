@@ -303,9 +303,12 @@ Save file
 - maybe I can put a game settings here as well OR, make a config file (yeah, we'll use a config file I guess)
 
 - VERY IMPORTANT
-- may need to readjust the size of the fishing catalogue if we want to account for a longer fish name
+- may need to readjust the size of the fishing catalogue if we want to account for a longer fish name (in the future)
 
 - Why am I so stupid
-- IT'S "F2", NOT "2F" stupid (wasted 20 minutes of my time, GREAT.)
+- IT'S "F2", NOT "2F" to format float in string
+- Stupid (wasted 20 minutes of my time, GREAT.)
 
 - yeah, also remember to adjust the bobber's area, so that other fish won't detect is while hooked
+- Aight DONE
+

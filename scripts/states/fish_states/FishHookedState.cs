@@ -39,7 +39,7 @@ public partial class FishHookedState : State
         // make the direction constant on enter state?
 
         MovementTimer.Timeout += ChangeMovementParameter;
-        MovementTimer.Start(2.0 * (1 - Fish.SpeciesInformation.Aggressiveness)); // every 2s, scaled by aggressiveness?
+        MovementTimer.Start(3.0 * (1 - Fish.SpeciesInformation.Aggressiveness)); // every 3s, scaled by aggressiveness?
         // SignalBus.Instance.OnFishBehaviourChanged(FishBehaviour.Green, 0);
         MinigameManager.Instance.CurrentBehaviour = FishBehaviour.Green;
 
@@ -61,8 +61,8 @@ public partial class FishHookedState : State
         // Separate states
         // Always start with green
 
-        // this duration depends on the Aggressiveness of the fish
-        SceneTreeTimer greenTimer = GetTree().CreateTimer(4.0 * (1 - Fish.SpeciesInformation.Aggressiveness), false, true);
+        // this duration depends on the Aggressiveness of the fish (increase to 5)
+        SceneTreeTimer greenTimer = GetTree().CreateTimer(5.0 * (1 - Fish.SpeciesInformation.Aggressiveness), false, true);
         greenTimer.Timeout += () =>
         {
             if (IsCurrentlyActive)
@@ -147,6 +147,14 @@ public partial class FishHookedState : State
         // so, move in any direction, if reached boundary, move in opposite direction
 
         // LMAO camera thing works
+
+        // Update: 11/12/2025, we'll just make it move opposite player and to player periodically
+        // Because freeze frame sucks if we move the camera, and ngl the camera works, but is a little janky
+        // We'll try this first and if it feels better we'll keep it, or else we scrap the freeze frame
+        // I think it feels better without the jolting of the camera
+
+        _movementDirection *= -1; // flip it
+
     }
 
     private void HandleFishCaught(object sender, EventArgs e) // since this is duplicated across the three state, maybe can extract into an interface?

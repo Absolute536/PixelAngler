@@ -105,12 +105,34 @@ public partial class MinigameManager : Node
             // it should be if value becomes 0 (min) --> Lose
             // value becomes >= 100 (max) --> Win
 
-            // try win only first
+            // hmm, idk about the freeze frame
             if (_fishingProgress.GameProgressBar.Value >= _fishingProgress.GameProgressBar.MaxValue)
-                WinMinigame();
+            {
+                // Play win sound cue
+
+                SceneTreeTimer freezeFrameTimer = GetTree().CreateTimer(0.25, true, true);
+                freezeFrameTimer.Timeout += () =>
+                {
+                    GetTree().Paused = false;
+                    WinMinigame();
+                };
+                GetTree().Paused = true;
+            }
+                
             
             if (_fishingProgress.GameProgressBar.Value == _fishingProgress.GameProgressBar.MinValue)
-                LoseMinigame();
+            {
+                // Play lose sound cue
+
+                SceneTreeTimer freezeFrameTimer = GetTree().CreateTimer(0.25, true, true);
+                freezeFrameTimer.Timeout += () =>
+                {
+                    GetTree().Paused = false;
+                    LoseMinigame();
+                };
+                GetTree().Paused = true;
+            }
+                
         }
     }
 

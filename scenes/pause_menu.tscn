@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://wogasyn6bm4b"]
+[gd_scene load_steps=10 format=3 uid="uid://wogasyn6bm4b"]
 
 [ext_resource type="Script" uid="uid://bw1i5x7lix6fs" path="res://scripts/user_interface/PauseMenu.cs" id="1_8gfrl"]
 [ext_resource type="Texture2D" uid="uid://ckst5stxry06n" path="res://assets/ui_design/pause_button_normal.png" id="1_rh5fn"]
+[ext_resource type="Theme" uid="uid://m850shrd7lmi" path="res://resources/ui_styles/default_tooltip_theme.tres" id="2_1s2dm"]
 [ext_resource type="Texture2D" uid="uid://b178cdiuvmx5w" path="res://assets/ui_design/pause_button_press.png" id="2_8gfrl"]
 [ext_resource type="Texture2D" uid="uid://iqiv4fple8nl" path="res://assets/ui_design/pause_button_hover.png" id="2_thq0x"]
 [ext_resource type="FontFile" uid="uid://cibnl77dc0ji7" path="res://resources/fonts/prstartk.ttf" id="5_7l7mv"]
@@ -30,6 +31,7 @@ MusicVolume = NodePath("TextureRect/VBoxContainer/GridContainer/MusicVolumeSlide
 SfxVolume = NodePath("TextureRect/VBoxContainer/GridContainer/SfxVolumeSlider")
 FullscreenToggle = NodePath("TextureRect/VBoxContainer/CheckButton")
 QuitButton = NodePath("TextureRect/VBoxContainer/TextureButton")
+metadata/_edit_lock_ = true
 
 [node name="TextureButton" type="TextureButton" parent="."]
 custom_minimum_size = Vector2(16, 16)
@@ -38,6 +40,8 @@ offset_left = 4.0
 offset_top = 4.0
 offset_right = 20.0
 offset_bottom = 20.0
+tooltip_text = "Pause (Esc)"
+theme = ExtResource("2_1s2dm")
 texture_normal = ExtResource("1_rh5fn")
 texture_pressed = ExtResource("2_8gfrl")
 texture_hover = ExtResource("2_thq0x")

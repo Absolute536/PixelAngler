@@ -38,34 +38,40 @@ public partial class FishCatalogueUi : Control
     // use unhandled_input, cuz the child control doesn't consume the OpenCatalogue event. Using Gui_input doesn't work, cuz the children has focus, and theirs will be triggered instead
     public override void _UnhandledInput(InputEvent @event)
     {
-        if (@event.IsActionPressed("ShowCatalogue"))
-        {
-            if (Visible)
-            {
-                Visible = false;
-                ReleaseFocus();
+        // if (@event.IsActionPressed("ShowCatalogue"))
+        // {
+        //     if (Visible)
+        //     {
+        //         Visible = false;
+        //         ReleaseFocus();
 
-                GetTree().Paused = false;
-            }
-			    // Visible = false;
-            // FocusMode = FocusModeEnum.None;
-        }
+        //         GetTree().Paused = false;
+        //     }
+		// 	    // Visible = false;
+        //     // FocusMode = FocusModeEnum.None;
+        // }
     }
 
-    public void OpenCatalogue()
+    public void ShowHideCatalogue()
     {
-        GetTree().Paused = true; // also pause on opening catalogue
+        if (Visible)
+        {
+            Visible = false;
+            ReleaseFocus();
+            GetTree().Paused = false;
+        }
+        else
+        {
+            GetTree().Paused = true;
 
-        Visible = true;
-        GrabFocus();
-        FocusMode = FocusModeEnum.All;
+            Visible = true;
+            GrabFocus();
+            FocusMode = FocusModeEnum.All;
 
-        // Default to first fish species on open
-        UpdateSpeciesInformationDisplay(0);
-        FishSelectionScrollContainer.ScrollVertical = 0;
-        // FishInformationScrollContainer.ScrollVertical = 0;
+            UpdateSpeciesInformationDisplay(0); // show first one
+            FishSelectionScrollContainer.ScrollVertical = 0; // fish buttons scroll to top
+        }  
     }
-
     private void InitialiseFishCatalogue()
     {
         List<FishSpecies> allFishSpecies = FishRepository.Instance.FishSpeciesInformation;

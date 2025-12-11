@@ -34,17 +34,7 @@ public partial class PlayerWalkingState : State
 
     public override void HandleInput(InputEvent inputEvent)
     {
-        // Also enable catalogue to be opened during walking state
-        if (inputEvent.IsActionPressed("ShowCatalogue"))
-        {
-            FishCatalogueUi catalogue = GetNode<FishCatalogueUi>("/root/Main/HUD/FishCatalogue");
-            // catalogue.Visible = true;
-            // catalogue.FocusMode = Control.FocusModeEnum.All;
-            // catalogue.GrabFocus();
-            
-            catalogue.OpenCatalogue();
-            OnStateTransitioned("PlayerUiState");
-        }
+        
     }
 
     public override void ProcessUpdate(double delta)
@@ -59,7 +49,7 @@ public partial class PlayerWalkingState : State
         Vector2 velocity = Player.Velocity;
 
         // If there is movement input
-        if (direction != Vector2.Zero && !Input.IsMouseButtonPressed(MouseButton.Left))
+        if (direction != Vector2.Zero)
         {
             // velocity.X = Mathf.Round(direction.X * Speed);
             // velocity.Y = Mathf.Round(direction.Y * Speed);
@@ -72,7 +62,7 @@ public partial class PlayerWalkingState : State
             PlayWalkingAnimation(direction);
         }
         // Stop and transition to IDLE when no direction input (update 10/12/2025: only when no directional input)
-        else if (direction == Vector2.Zero || Input.IsActionPressed("Action"))
+        else
         {
             // Use MoveToward for the x & y component of velocity to smooth stopping movement (? look into this further)
             // Cuz it's generated automatically
