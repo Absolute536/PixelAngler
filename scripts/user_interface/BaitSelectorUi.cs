@@ -33,22 +33,29 @@ public partial class BaitSelectorUi : Control
 
 	public void ToPreviousBait()
     {
-        if (_selectedBaitIndex == 0)
-			_selectedBaitIndex = FishingBaitsAvailable.Length - 1;
-		else
-			_selectedBaitIndex -= 1;
-		
-		UpdateBaitInformation();
+		if (UiDisplayManager.Instance.CanSelectBait)
+		{
+			if (_selectedBaitIndex == 0)
+				_selectedBaitIndex = FishingBaitsAvailable.Length - 1;
+			else
+				_selectedBaitIndex -= 1;
+			
+			UpdateBaitInformation();
+		}
+
     }
 
 	public void ToNextBait()
     {
-        if (_selectedBaitIndex == FishingBaitsAvailable.Length - 1)
-			_selectedBaitIndex = 0;
-		else
-			_selectedBaitIndex += 1;
-		
-		UpdateBaitInformation();
+		if (UiDisplayManager.Instance.CanSelectBait)
+		{
+			if (_selectedBaitIndex == FishingBaitsAvailable.Length - 1)
+				_selectedBaitIndex = 0;
+			else
+				_selectedBaitIndex += 1;
+			
+			UpdateBaitInformation();
+		}
     }
 
 	private void UpdateBaitInformation()
