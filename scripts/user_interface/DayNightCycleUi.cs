@@ -7,6 +7,7 @@ public partial class DayNightCycleUi : Control
 	[Export] public RichTextLabel DayLabel;
 	[Export] public RichTextLabel TimeLabel;
 	[Export] public TextureRect DayNightIcon;
+	[Export] public NinePatchRect DayNightBackground; // can change its customer minimum to make it dynamically resize
 
 	private int _previousHours = -1; // just to reduce the icon update frequency
 
@@ -22,7 +23,8 @@ public partial class DayNightCycleUi : Control
 
 	public void UpdateTimeInfo(float scaledTotalMinutes, int day, int hours, int minutes)
     {
-		DayLabel.Text = "Day " + (day + 1);
+		DayLabel.Text = "Day " + (day + 1); // So that first day is 0 + 1 = 1
+
 		TimeLabel.Text = To12Hours(hours) + ":" + FormatMinutes(minutes) + GetAmFm(hours);
 
 		if (_previousHours != hours)

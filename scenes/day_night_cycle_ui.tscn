@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://c6gruwfemeuhx" path="res://assets/ui_design/day_night_cycle_panel.png" id="1_7kwcf"]
 [ext_resource type="Texture2D" uid="uid://caf02j160lynb" path="res://assets/ui_design/day_icon.png" id="2_ukgtc"]
 
-[node name="DayNightCycleUI" type="Control" node_paths=PackedStringArray("DayLabel", "TimeLabel", "DayNightIcon")]
+[node name="DayNightCycleUI" type="Control" node_paths=PackedStringArray("DayLabel", "TimeLabel", "DayNightIcon", "DayNightBackground")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -17,9 +17,10 @@ script = ExtResource("1_2w82t")
 DayLabel = NodePath("PanelNinePatch/DayNightContent/TimeInformation/CenterContainer/DayLabel")
 TimeLabel = NodePath("PanelNinePatch/DayNightContent/TimeInformation/CenterContainer2/TimeLabel")
 DayNightIcon = NodePath("PanelNinePatch/DayNightContent/DayNightIcon")
+DayNightBackground = NodePath("PanelNinePatch")
 
 [node name="PanelNinePatch" type="NinePatchRect" parent="."]
-custom_minimum_size = Vector2(108, 44)
+custom_minimum_size = Vector2(124, 44)
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -36,7 +37,7 @@ patch_margin_top = 3
 patch_margin_right = 3
 patch_margin_bottom = 3
 
-[node name="DayNightContent" type="HBoxContainer" parent="PanelNinePatch"]
+[node name="DayNightContent" type="GridContainer" parent="PanelNinePatch"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -49,11 +50,14 @@ offset_right = 50.0
 offset_bottom = 18.0
 grow_horizontal = 2
 grow_vertical = 2
-alignment = 2
+theme_override_constants/h_separation = 4
+columns = 2
 
 [node name="TimeInformation" type="VBoxContainer" parent="PanelNinePatch/DayNightContent"]
 custom_minimum_size = Vector2(64, 32)
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="CenterContainer" type="CenterContainer" parent="PanelNinePatch/DayNightContent/TimeInformation"]
 custom_minimum_size = Vector2(64, 16)
@@ -65,6 +69,7 @@ layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("1_1bx0f")
 theme_override_font_sizes/normal_font_size = 8
 text = "Day 1"
+fit_content = true
 scroll_active = false
 autowrap_mode = 0
 horizontal_alignment = 1

@@ -43,6 +43,8 @@ public partial class PauseMenu : Control
         {
             // Invoke Save operation here
             // then quit
+            GetTree().CallGroup("PersistentState", "SaveState");
+            SaveLoadUtil.Instance.SaveGameStateToFile();
             GetTree().Quit();
         };
     }

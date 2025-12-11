@@ -71,6 +71,10 @@ public partial class Player : CharacterBody2D
 		PlayerCamera.LimitRight = (worldRect.End.X - 1) * 16;
 		PlayerCamera.LimitTop = (worldRect.Position.Y + 1) * 16;
 		PlayerCamera.LimitBottom = (worldRect.End.Y - 1) * 16;
+
+		float initialX = SaveLoadUtil.Instance.LoadedGameSave.PlayerGlobalPositionX;
+		float initialY = SaveLoadUtil.Instance.LoadedGameSave.PlayerGlobalPositionY;
+		GlobalPosition = new Vector2(initialX, initialY);
 	}
 
 	public void Relocate()
@@ -108,6 +112,12 @@ public partial class Player : CharacterBody2D
 		// DebugText.Text = SignalBus.Instance.InvokePositionChangedEvent(this, eventArgs).ToString() + "\n" + LocationChanged(Position);
 
 		// DebugText.Text = GameInfo.Instance.GetTileType(Position).ToString() + "\n" + GameInfo.Instance.GetWorldLocation(Position).ToString();
+	}
+
+	public void SaveState()
+	{
+		SaveLoadUtil.Instance.LoadedGameSave.PlayerGlobalPositionX = GlobalPosition.X;
+		SaveLoadUtil.Instance.LoadedGameSave.PlayerGlobalPositionY = GlobalPosition.Y;
 	}
 
 

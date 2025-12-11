@@ -32,6 +32,8 @@ public partial class FishRepository : Node
         InitialiseCatchProgress();
 
         SignalBus.Instance.CatchProgressUpdated += HandleProgressUpdate;
+
+        AddToGroup("PersistentState");
     }
 
     private void InitialiseFishInformation()
@@ -104,10 +106,9 @@ public partial class FishRepository : Node
         // We'll use i for now for testing, but it should come from the save file
         // along with some conditionals to check if the save file is loaded successfully I suppose
         // int i = 0;
-        foreach (FishSpecies species in _fishSpeciesInformation)
+        foreach (FishCatchRecord record in SaveLoadUtil.Instance.LoadedGameSave.CatchRecords)
         {
-
-            _fishCatchProgress.Add(species.FishId, new FishCatchRecord(){FishId = species.FishId, NumbersCaught = 0, LargestCaught = 0, SmallestCaught = 0}); // 0 for now
+            _fishCatchProgress.Add(record.FishId, record); // I guess just add the record reference like this (it's rebuilt on load anyways?)
             // i++; // just increment to test it for now
         }
     }
@@ -162,6 +163,11 @@ public partial class FishRepository : Node
             TimeOfDay.Dawn => _fishSpeciesInformation.FindAll(x => x.IsDawnActive && x.Rarity == rarity && x.SpawnLocations.Contains(location)),
             _ => [],// return empty list as default case, though it will never happen LMAO (cuz enum right?)
         };
+    }
+
+    public void SaveState()
+    {
+        SaveLoadUtil.Instance.LoadedGameSave.CatchRecords = _fishCatchProgress.Values.ToList<FishCatchRecord>();
     }
 }
 

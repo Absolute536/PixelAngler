@@ -19,7 +19,7 @@ public partial class InGameTime : Node
 
     private float _time; // time is in the in-game minutes passed, scaled to values on the sin function (2pi / total minutes in day --> value per minute)
     private int _previousMinute = -1; // this is used to determine if 1 minute (in game) has passed to raise time update events
-    private TimeOfDay _previousTimeOfDay;
+    private TimeOfDay _previousTimeOfDay; // this is also used to determine if the Time of day has changed to raise events
     public override void _Ready()
     {
         Instance = this;
@@ -29,8 +29,15 @@ public partial class InGameTime : Node
 
         // 10/12/2025: this one should be the fallback, should come from save file (if time == 0), then this, else use the save file
         // initial hour * minutes in hour -> total minutes passed for the initial hour that we set, then scale to the values on the sin function (kinda?)
-        _time = TimeCycleToRealMinute * MinuteInHour * _initialHour; 
+        if (Mathf.IsZeroApprox(SaveLoadUtil.Instance.LoadedGameSave.MinutesPassed))
+            _time = TimeCycleToRealMinute * MinuteInHour * _initialHour;
+            // _time = MinuteInHour * _initialHour;
+        else
+            _time = SaveLoadUtil.Instance.LoadedGameSave.MinutesPassed;
+
         _previousTimeOfDay = GetCurrentTimeOfDay();
+
+        AddToGroup("PersistentState");
 
     }
 
@@ -38,6 +45,7 @@ public partial class InGameTime : Node
     {
         // Increment time by delta, scaled to TimeCycleToRealMinute, multiplied by GameSpeed
         _time += (float) delta * TimeCycleToRealMinute * GameSpeed;
+        // GD.Print(_time);
         // Then update the time (every frame?)
         UpdateInGameTime();
     }
@@ -91,6 +99,11 @@ public partial class InGameTime : Node
 			return TimeOfDay.Dawn;
 		else
 			return TimeOfDay.Dusk;
+    }
+
+    public void SaveState()
+    {
+        SaveLoadUtil.Instance.LoadedGameSave.MinutesPassed = _time;
     }
 
 }

@@ -23,6 +23,8 @@ public partial class DayNightTint : CanvasModulate
 		// the start (time = 0) is at the peak of the sin func (y = 1) the brightest?
 		// and the gradient will also be offset accordingly(?)
         float sampleRatio = (float) ((Mathf.Sin(scaledTotalMinutes + 0.5 * Mathf.Pi) + 1.0) / 2.0);
+		// GD.Print(sampleRatio);
+		// float sampleRatio = totalMinutes / (1440 * (day + 1)); // remember to + 1
 		Color = DayNightGradient.Gradient.Sample(sampleRatio);
     }
 }

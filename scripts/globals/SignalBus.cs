@@ -133,7 +133,7 @@ public partial class SignalBus : Node
         FishLost?.Invoke(sender, e);
     }
 
-    public delegate void InGameTimeChangedEventHandler(float scaledTotalMinutes, int day, int hours, int minutes);
+    public delegate void InGameTimeChangedEventHandler(float totalMinutes, int day, int hours, int minutes);
     public event InGameTimeChangedEventHandler InGameTimeChanged;
 
     public void OnInGameTimeChanged(float scaledTotalMinutes, int day, int hours, int minutes)
