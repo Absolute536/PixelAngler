@@ -99,7 +99,6 @@ columns = 3
 [node name="PreviousBait" type="TextureButton" parent="VBoxContainer/GridContainer"]
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
-focus_mode = 0
 texture_normal = ExtResource("4_f8pyj")
 texture_pressed = ExtResource("5_olfpk")
 texture_hover = ExtResource("6_xb60k")
@@ -115,7 +114,6 @@ stretch_mode = 2
 [node name="NextBait" type="TextureButton" parent="VBoxContainer/GridContainer"]
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
-focus_mode = 0
 texture_normal = ExtResource("9_euwcb")
 texture_pressed = ExtResource("10_wgo41")
 texture_hover = ExtResource("11_15e4e")

@@ -15,6 +15,7 @@ font_color = Color(0, 0, 0, 1)
 shadow_size = 0
 
 [node name="FishCatalogue" type="Control" node_paths=PackedStringArray("FishSelectionButtonsContainer", "FishSpriteDisplay", "SpeciesNameLabel", "RarityLabel", "NumbersCaughtLabel", "LargestCaughtLabel", "SmallestCaughtLabel", "LocationLabel", "SpawnTimeLabel", "SizeLabel", "DietLabel", "DescriptionLabel", "HintLabel", "FishSelectionScrollContainer", "FishInformationScrollContainer")]
+process_mode = 3
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -147,7 +148,6 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("4_0jd5l")
 theme_override_font_sizes/font_size = 8
 text = "Species: Fish"
-autowrap_mode = 3
 
 [node name="Rarity" type="RichTextLabel" parent="FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(128, 8)

@@ -26,7 +26,7 @@ public partial class PlayerUiState : State
     {
         // No one-off input
         // just testing
-        if (inputEvent.IsActionPressed("OpenCatalogue"))
+        if (inputEvent.IsActionPressed("ShowCatalogue") || inputEvent.IsActionPressed("ShowPause"))
         {
             if (IsCurrentlyActive)
                 OnStateTransitioned("PlayerIdleState"); // should probably create like a player state machinie, and use signal from the catalogue to communicate

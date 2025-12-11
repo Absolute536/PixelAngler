@@ -178,7 +178,7 @@ public partial class FishWanderState : State
             ObstacleDetectionRaycast.Enabled = true;
             ObstacleDetectionRaycast.ForceRaycastUpdate();
 
-            if (!Fish.LatchTarget.IsLatchedOn && !ObstacleDetectionRaycast.IsColliding())
+            if (!ObstacleDetectionRaycast.IsColliding()) // and the bait conditions as well
                 OnStateTransitioned("FishAttractedState");
             
         }

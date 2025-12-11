@@ -79,15 +79,15 @@ Bobber = NodePath("../../ActionUI/Bobber")
 Player = NodePath("../..")
 metadata/_custom_type_script = "uid://b5c6xmf5euuwj"
 
-[node name="PlayerUiState" type="Node" parent="StateMachine" node_paths=PackedStringArray("Player")]
-script = ExtResource("10_jej6c")
-Player = NodePath("../..")
-metadata/_custom_type_script = "uid://cqssj2uf3ydm3"
-
 [node name="PlayerShowOffState" type="Node" parent="StateMachine" node_paths=PackedStringArray("Player")]
 script = ExtResource("11_f1ej7")
 Player = NodePath("../..")
 metadata/_custom_type_script = "uid://bb4isq5khb2k3"
+
+[node name="PlayerUiState" type="Node" parent="StateMachine" node_paths=PackedStringArray("Player")]
+script = ExtResource("10_jej6c")
+Player = NodePath("../..")
+metadata/_custom_type_script = "uid://cqssj2uf3ydm3"
 
 [node name="ActionUI" type="Node2D" parent="."]
 

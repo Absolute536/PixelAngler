@@ -20,14 +20,9 @@ public partial class PlayerIdleState : State
         
         // Comment out first cuz haven't made the animation yet
         // player.AnimationPlayer.Play("Idle");
-        if (previousState == "PlayerWalkingState")
-        {
-            Player.AnimationPlayer.Stop();
-            Player.Relocate(); // only call when relocate cuz the default is idle and on initialised, player is not loaded yet
-        }
         // Probably can call the get tile location function here to get player's location upon idling
 
-        }
+    }
 
     public override void ExitState()
     {
@@ -38,7 +33,7 @@ public partial class PlayerIdleState : State
     {
         // No one-off input
         // just testing (hahaha......)
-        if (inputEvent.IsActionPressed("OpenCatalogue"))
+        if (inputEvent.IsActionPressed("ShowCatalogue"))
         {
             FishCatalogueUi catalogue = GetNode<FishCatalogueUi>("/root/Main/HUD/FishCatalogue");
             // catalogue.Visible = true;
@@ -51,7 +46,17 @@ public partial class PlayerIdleState : State
             catalogue.OpenCatalogue(); // add 1 before open
             OnStateTransitioned("PlayerUiState");
         }
-        else if (inputEvent.IsActionPressed("Action"))
+        else if (inputEvent.IsActionPressed("ShowPause"))
+        {
+            PauseMenu pauseMenu = GetNode<PauseMenu>("/root/Main/HUD/PauseMenu");
+            pauseMenu.ShowPauseMenu();
+            OnStateTransitioned("PlayerUiState");
+            // for this no need to go to ui state, cuz everything is paused?
+            // WAIT, then maybe opening catalogue can be like this too?
+            // nevermind, we still need the ui state to ensure idle doesn't consume the event
+            
+        }
+        else if (inputEvent.IsActionPressed("Action", true)) // try allowing echo, so that after a delay when holding LMB in walking, it will cast?
         {
             OnStateTransitioned("PlayerCastingState");
         }

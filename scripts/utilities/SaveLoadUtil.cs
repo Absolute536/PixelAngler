@@ -14,8 +14,8 @@ public partial class SaveLoadUtil : Node
     public GameSave LoadedGameSave {get => _loadedGameSave;} // wait external classes can still modify the properties in this one (Dang it)
     private GameSave _loadedGameSave;
 
-    // public GameSave CurrentGameSave {get => _currentGameSave;}
-    // private GameSave _currentGameSave;
+    public ConfigFile LoadedSettings {get => _loadedSettings;}
+    private ConfigFile _loadedSettings = new ConfigFile();
 
     public int SaveStatePerformed = 0; // check against this?
 
@@ -23,6 +23,7 @@ public partial class SaveLoadUtil : Node
     {
         Instance = this;
         LoadGameStateFromFile();
+        LoadSettingsConfig();
     }
 
     // This one is to handle quit request from OS (like clicking on the X button)
@@ -32,6 +33,8 @@ public partial class SaveLoadUtil : Node
         {
             GetTree().CallGroup("PersistentState", "SaveState");
             SaveGameStateToFile();
+            SaveSettingsConfig();
+
             GetTree().Quit();
         }
     }
@@ -92,6 +95,27 @@ public partial class SaveLoadUtil : Node
         // it says "acts immediately on all selected nodes at once, which may cause stuttering in some performance-intensive situations"
         // so probably? (and there is a DEFERRED flag, not default)
         // while (SaveStatePerformed < GetTree().GetNodeCountInGroup("PresistentGroup"));
+    }
+
+    public void LoadSettingsConfig()
+    {
+        Error err = _loadedSettings.Load("user://settings.cfg");
+
+        // Initialise to default state if not exist
+        if (err != Error.Ok)
+        {
+            _loadedSettings.SetValue("Window", "fullscreen", false);
+            _loadedSettings.SetValue("Audio", "master_volume", 10.0);
+            _loadedSettings.SetValue("Audio", "music_volume", 10.0);
+            _loadedSettings.SetValue("Audio", "sfx_volume", 10.0);
+        }
+
+    }
+
+    public void SaveSettingsConfig()
+    {
+        // hmm, or maybe in pause menu?
+        _loadedSettings.Save("user://settings.cfg");
     }
 }
 

@@ -38,12 +38,14 @@ public partial class FishCatalogueUi : Control
     // use unhandled_input, cuz the child control doesn't consume the OpenCatalogue event. Using Gui_input doesn't work, cuz the children has focus, and theirs will be triggered instead
     public override void _UnhandledInput(InputEvent @event)
     {
-        if (@event.IsActionPressed("OpenCatalogue"))
+        if (@event.IsActionPressed("ShowCatalogue"))
         {
             if (Visible)
             {
                 Visible = false;
                 ReleaseFocus();
+
+                GetTree().Paused = false;
             }
 			    // Visible = false;
             // FocusMode = FocusModeEnum.None;
@@ -52,6 +54,8 @@ public partial class FishCatalogueUi : Control
 
     public void OpenCatalogue()
     {
+        GetTree().Paused = true; // also pause on opening catalogue
+
         Visible = true;
         GrabFocus();
         FocusMode = FocusModeEnum.All;

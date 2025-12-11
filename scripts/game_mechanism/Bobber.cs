@@ -56,7 +56,7 @@ public partial class Bobber : Area2D
 	private bool _hasStopped = false; // Boolean flag to determine if the bobber has stopped (hmm ~)
 	private bool _reverseMotion = false; // Indicate if we are in reverse motion;
 
-	public bool IsLatchedOn = false; // A boolean flag to indicate if a fish has latched on (Kinda Fragile and risky, but let's test it first)
+	// public bool IsLatchedOn = false; // A boolean flag to indicate if a fish has latched on (Kinda Fragile and risky, but let's test it first)
 
 	[Export] public GpuParticles2D waterSplash;
 	public override void _Ready()
@@ -138,6 +138,9 @@ public partial class Bobber : Area2D
 		_hasStopped = false;
 		_reverseMotion = true; // Flip the flag to indicate we're in reverse motion
 		Visible = true;
+
+		// For reverse motion, need to disable as well, in case it lands in water, and we reel back but the fish detects it
+		BobberCollisionShape.SetDeferred(CollisionShape2D.PropertyName.Disabled, true);
 
 		SetPhysicsProcess(true);
     }

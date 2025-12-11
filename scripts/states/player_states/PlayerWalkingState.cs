@@ -28,12 +28,23 @@ public partial class PlayerWalkingState : State
     public override void ExitState()
     {
         // player.AudioPlayer.Stop();
+        Player.AnimationPlayer.Stop();
         base.ExitState();
     }
 
     public override void HandleInput(InputEvent inputEvent)
     {
-        // Input Handling in PhysicsProcess (Polling method)
+        // Also enable catalogue to be opened during walking state
+        if (inputEvent.IsActionPressed("ShowCatalogue"))
+        {
+            FishCatalogueUi catalogue = GetNode<FishCatalogueUi>("/root/Main/HUD/FishCatalogue");
+            // catalogue.Visible = true;
+            // catalogue.FocusMode = Control.FocusModeEnum.All;
+            // catalogue.GrabFocus();
+            
+            catalogue.OpenCatalogue();
+            OnStateTransitioned("PlayerUiState");
+        }
     }
 
     public override void ProcessUpdate(double delta)
@@ -61,7 +72,7 @@ public partial class PlayerWalkingState : State
             PlayWalkingAnimation(direction);
         }
         // Stop and transition to IDLE when no direction input (update 10/12/2025: only when no directional input)
-        else if (direction == Vector2.Zero)
+        else if (direction == Vector2.Zero || Input.IsActionPressed("Action"))
         {
             // Use MoveToward for the x & y component of velocity to smooth stopping movement (? look into this further)
             // Cuz it's generated automatically

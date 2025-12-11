@@ -58,7 +58,7 @@ public partial class FishDivingState : State
         if (IsCurrentlyActive)
         {
             Fish.IsHooked = false;
-            Fish.LatchTarget.IsLatchedOn = false;
+            // Fish.LatchTarget.IsLatchedOn = false;
             Fish.IsCaught = true;
             OnStateTransitioned("FishCaughtState");
         }
@@ -69,7 +69,7 @@ public partial class FishDivingState : State
         if (IsCurrentlyActive)
         {
             Fish.IsHooked = false;
-            Fish.LatchTarget.IsLatchedOn = false;
+            // Fish.LatchTarget.IsLatchedOn = false;
             OnStateTransitioned("FishStartledState");
         }
     }

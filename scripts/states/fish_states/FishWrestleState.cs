@@ -95,7 +95,7 @@ public partial class FishWrestleState : State
         if (IsCurrentlyActive)
         {
             Fish.IsHooked = false;
-            Fish.LatchTarget.IsLatchedOn = false;
+            // Fish.LatchTarget.IsLatchedOn = false;
             Fish.IsCaught = true;
             OnStateTransitioned("FishCaughtState");
         }
@@ -105,7 +105,7 @@ public partial class FishWrestleState : State
         if (IsCurrentlyActive)
         {
             Fish.IsHooked = false;
-            Fish.LatchTarget.IsLatchedOn = false;
+            // Fish.LatchTarget.IsLatchedOn = false;
             OnStateTransitioned("FishStartledState");
         }
     }

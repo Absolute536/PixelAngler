@@ -20,7 +20,7 @@ public partial class FishCaughtState : State
         SignalBus.Instance.OnCatchProgressUpdated(Fish.SpeciesInformation.FishId, Fish.CurrentSizeMeasurement); // only update progress update if the fish is caught
         SignalBus.Instance.FishObtained += HandleFishObtained;
         // also when the fish is caught, other fish can detect bobber when we're reeling in the fish
-        // so, we probably should enable the monitoring or the IsLatchedOn here?
+        // so, we probably should enable the monitoring or the IsLatchedOn here? (NEGATIVE)
 
         Fish.Velocity = Vector2.Zero;
         Fish.FishSprite.Material = null;
