@@ -320,3 +320,4 @@ Audio
 -> maybe not, for the sfx, probably gonna instantiate on demand? And just pool the bgm, player (like action sound), and maybe ambient (switch out for diff. location)
 -> then in autoload I'll have a playsfx(parent, what you want to play) for sfx and add child to parent, then connect to finished signal to free itself
 -> player action also on demand I guess;
+-> Scrapped ambience sounds, cuz too distracting

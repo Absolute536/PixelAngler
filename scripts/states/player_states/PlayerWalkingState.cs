@@ -22,12 +22,13 @@ public partial class PlayerWalkingState : State
         // Nothing cuz we need to check the animation on enter first
         // Hmm, what to do for walking then?
 
-        // player.AudioPlayer.Play();
+        AudioManager.Instance.PlayActionAudio(PlayerActionAudio.Walking);
     }
 
     public override void ExitState()
     {
-        // player.AudioPlayer.Stop();
+        AudioManager.Instance.StopActionAudio(PlayerActionAudio.Walking);
+        
         Player.AnimationPlayer.Stop();
         base.ExitState();
     }

@@ -14,7 +14,20 @@ public partial class MinigameManager : Node
     private bool _gameStarted = false;
 
     // private string _currentBehaviour = "Action";
-    public FishBehaviour CurrentBehaviour { get => _currentBehaviour; set => _currentBehaviour = value; }
+    public FishBehaviour CurrentBehaviour 
+    { 
+        get => _currentBehaviour; 
+        set
+        {
+            _currentBehaviour = value;
+
+            // Ok, actually this shouldn't be here (most likely), but I'm gonna put it in just to test it first
+            if (value != FishBehaviour.Green)
+                AudioManager.Instance.StopActionAudio(PlayerActionAudio.FishingGreen);
+            else if (value != FishBehaviour.Red)
+                AudioManager.Instance.StopActionAudio(PlayerActionAudio.FishingRed);
+        }
+    }
     private FishBehaviour _currentBehaviour;
 
     public FishSpecies CurrentSpeciesInGame{get => _currentSpeciesInGame; set => _currentSpeciesInGame = value;}
@@ -36,6 +49,68 @@ public partial class MinigameManager : Node
         Instance = this;
         QTE = QuickTimeEvent.Instance; // get the static instance of quick time event (autoload)
         SignalBus.Instance.FishBite += StartQTE;
+    }
+
+    public override void _UnhandledInput(InputEvent @event)
+    {
+        // Handle the sound effects here
+        if (_gameStarted)
+        {
+            if (CurrentBehaviour == FishBehaviour.Green)
+            {
+                if (@event.IsActionPressed(_behaviourInputPair[CurrentBehaviour]))
+                {
+                    AudioManager.Instance.PlayActionAudio(PlayerActionAudio.FishingGreen);
+                }
+                else if (@event.IsActionReleased(_behaviourInputPair[CurrentBehaviour]))
+                {
+                    AudioManager.Instance.StopActionAudio(PlayerActionAudio.FishingGreen);
+                }
+            }
+            else if (CurrentBehaviour == FishBehaviour.Red)
+            {
+                if (@event.IsActionPressed(_behaviourInputPair[CurrentBehaviour]))
+                {
+                    AudioManager.Instance.PlayActionAudio(PlayerActionAudio.FishingRed);
+                }
+                else if (@event.IsActionReleased(_behaviourInputPair[CurrentBehaviour]))
+                {
+                    AudioManager.Instance.StopActionAudio(PlayerActionAudio.FishingRed);
+                }
+            }
+            else
+            {
+                if (@event.IsActionPressed(_behaviourInputPair[CurrentBehaviour]))
+                    AudioManager.Instance.PlayActionAudio(PlayerActionAudio.FishingYellow);
+            }
+
+        }
+    }
+
+    public override void _Notification(int what)
+    {
+        // Stop all gameplay audio when paused
+        if (what == NotificationPaused)
+        {
+            AudioManager.Instance.StopActionAudio(PlayerActionAudio.FishingGreen);
+            AudioManager.Instance.StopActionAudio(PlayerActionAudio.FishingRed);
+            AudioManager.Instance.StopActionAudio(PlayerActionAudio.FishingYellow);
+        }
+        else if (what == NotificationUnpaused) // Resume gameplay audio when unpaused (if input is provided)
+        {
+            if (_gameStarted) // because of the freeze frame, so we stop after the freeze frame
+            {
+                if (Input.IsActionPressed(_behaviourInputPair[CurrentBehaviour]))
+                {
+                    if (CurrentBehaviour == FishBehaviour.Green)
+                        AudioManager.Instance.PlayActionAudio(PlayerActionAudio.FishingGreen);
+                    else if (CurrentBehaviour == FishBehaviour.Red)
+                        AudioManager.Instance.PlayActionAudio(PlayerActionAudio.FishingRed);
+                    //not needed for yellow cuz it's not based on button hold
+                }
+            }
+
+        }
     }
 
     public override void _PhysicsProcess(double delta)
@@ -109,11 +184,18 @@ public partial class MinigameManager : Node
             if (_fishingProgress.GameProgressBar.Value >= _fishingProgress.GameProgressBar.MaxValue)
             {
                 // Play win sound cue
+                AudioManager.Instance.PlaySfx(this, SoundEffect.MinigameSuccess);
+
+
 
                 SceneTreeTimer freezeFrameTimer = GetTree().CreateTimer(0.25, true, true);
                 freezeFrameTimer.Timeout += () =>
                 {
                     GetTree().Paused = false;
+                    // Stop the fishing sound effects
+                    // Ok, need to stop it after the freeze frame in order to prevent the unpaused notification from play it
+                    AudioManager.Instance.StopActionAudio(PlayerActionAudio.FishingGreen);
+                    AudioManager.Instance.StopActionAudio(PlayerActionAudio.FishingRed);
                     WinMinigame();
                 };
                 GetTree().Paused = true;
@@ -123,11 +205,16 @@ public partial class MinigameManager : Node
             if (_fishingProgress.GameProgressBar.Value == _fishingProgress.GameProgressBar.MinValue)
             {
                 // Play lose sound cue
+                AudioManager.Instance.PlaySfx(this, SoundEffect.MinigameFailure);
+
+
 
                 SceneTreeTimer freezeFrameTimer = GetTree().CreateTimer(0.25, true, true);
                 freezeFrameTimer.Timeout += () =>
                 {
                     GetTree().Paused = false;
+                    AudioManager.Instance.StopActionAudio(PlayerActionAudio.FishingGreen);
+                    AudioManager.Instance.StopActionAudio(PlayerActionAudio.FishingRed);
                     LoseMinigame();
                 };
                 GetTree().Paused = true;

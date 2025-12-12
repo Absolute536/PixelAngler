@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using GamePlayer;
 using Godot;
 using SignalBusNS;
 
@@ -8,14 +7,19 @@ public partial class AudioManager : Node
 {
     public static AudioManager Instance {get; private set;}
 
-    public readonly AudioStreamPlayer BgmAudioPlayer = new ();
-    public readonly AudioStreamPlayer AmbienceAudioPlayer = new ();
+    private readonly AudioStreamPlayer _bgmAudioPlayer = new ();
+
+    private readonly Dictionary<PlayerActionAudio, AudioStreamPlayer> _playerActionAudioPlayers = new ()
+    {
+        
+    };
+
 
     // Hardcode it here?
-    private readonly Dictionary<SoundEffect, AudioStream> SfxAudioStreams = new ();
+    private readonly Dictionary<SoundEffect, AudioStream> _sfxAudioStreams = new ();
 
-    private readonly List<AudioStream> DayBgmAudioStreams = new ();
-    private readonly List<AudioStream> NightBgmAudioStreams = new ();
+    private readonly List<AudioStream> _dayBgmAudioStreams = new ();
+    private readonly List<AudioStream> _nightBgmAudioStreams = new ();
 
     private bool _isBgmFading = false;
     private TimeOfDay _currentTimeOfDay;
@@ -30,35 +34,36 @@ public partial class AudioManager : Node
         InitialiseDayTimeBgms();
         InitialiseNightTimeBgms();
         InitialiseSfxWavs();
+        InitialisePlayerActionPlayers();
 
-        AddChild(BgmAudioPlayer);
+        AddChild(_bgmAudioPlayer);
 
         _currentTimeOfDay = InGameTime.Instance.GetCurrentTimeOfDay();
 
-        BgmAudioPlayer.Finished += () =>
+        _bgmAudioPlayer.Finished += () =>
         {
             if (!_isBgmFading) // a flag to prevent switching abruptly if music finished when tweening
             {
                 GetTree().CreateTimer(GD.RandRange(5, 10), true, true).Timeout += () =>
                 {
                     if (_currentTimeOfDay == TimeOfDay.Day || _currentTimeOfDay == TimeOfDay.Dawn)
-                        BgmAudioPlayer.Stream = GetRandomDayBgm();
+                        _bgmAudioPlayer.Stream = GetRandomDayBgm();
                     else if (_currentTimeOfDay == TimeOfDay.Night || _currentTimeOfDay == TimeOfDay.Dusk)
-                        BgmAudioPlayer.Stream = GetRandomNightBgm();
+                        _bgmAudioPlayer.Stream = GetRandomNightBgm();
 
-                    BgmAudioPlayer.Play();
+                    _bgmAudioPlayer.Play();
                 };            
             }
 
         };
 
         if (_currentTimeOfDay == TimeOfDay.Day || _currentTimeOfDay == TimeOfDay.Dawn)
-            BgmAudioPlayer.Stream = GetRandomDayBgm();
+            _bgmAudioPlayer.Stream = GetRandomDayBgm();
         else
-            BgmAudioPlayer.Stream = GetRandomNightBgm();
+            _bgmAudioPlayer.Stream = GetRandomNightBgm();
         
-        BgmAudioPlayer.Bus = "Music";
-        BgmAudioPlayer.Play();
+        _bgmAudioPlayer.Bus = "Music";
+        _bgmAudioPlayer.Play();
 
         SignalBus.Instance.TimeOfDayChanged += HandleTimeOfDayChanged;
     }
@@ -67,13 +72,23 @@ public partial class AudioManager : Node
     {
         AudioStreamPlayer audioPlayer = new AudioStreamPlayer()
         {
-            Stream = SfxAudioStreams[sfx],
+            Stream = _sfxAudioStreams[sfx],
             Bus = "Sfx",
         };
-
+        audioPlayer.ProcessMode = ProcessModeEnum.Always;
         parent.AddChild(audioPlayer);
         audioPlayer.Play();
         audioPlayer.Finished += audioPlayer.QueueFree;
+    }
+
+    public void PlayActionAudio(PlayerActionAudio action)
+    {
+        _playerActionAudioPlayers[action].Play();
+    }
+
+    public void StopActionAudio(PlayerActionAudio action)
+    {
+        _playerActionAudioPlayers[action].Stop();
     }
 
     private void InitialiseDayTimeBgms()
@@ -81,14 +96,14 @@ public partial class AudioManager : Node
         // Imma hard code it now (loop 3 times, cuz only 3)
         // Proper way should be get directory, count files, then loop until count while loading each audio file
         for (int i = 0; i < 3; i++)
-            DayBgmAudioStreams.Add(AudioStreamMP3.LoadFromFile($"res://assets/audio/music/bgm_day_{i}.mp3"));
+            _dayBgmAudioStreams.Add(AudioStreamMP3.LoadFromFile($"res://assets/audio/music/bgm_day_{i}.mp3"));
     }
 
     private void InitialiseNightTimeBgms()
     {
         // Same for night time's
         for (int i = 0; i < 3; i++)
-            NightBgmAudioStreams.Add(AudioStreamMP3.LoadFromFile($"res://assets/audio/music/bgm_night_{i}.mp3"));
+            _nightBgmAudioStreams.Add(AudioStreamMP3.LoadFromFile($"res://assets/audio/music/bgm_night_{i}.mp3"));
     }
 
     private void InitialiseSfxWavs()
@@ -97,10 +112,51 @@ public partial class AudioManager : Node
         // There are better ways I guess
         // Organise the directory structure and use loop to load (Idk if this is good enough)
         // But for now, just hard code it first (here or use the collection expression?)
-        SfxAudioStreams.Add(SoundEffect.MinigameSuccess, AudioStreamWav.LoadFromFile("res://assets/audio/sound_effects/minigame_success.wav"));
-        SfxAudioStreams.Add(SoundEffect.MinigameFailure, AudioStreamWav.LoadFromFile("res://assets/audio/sound_effects/minigame_failure.wav"));
+        _sfxAudioStreams.Add(SoundEffect.MinigameSuccess, AudioStreamWav.LoadFromFile("res://assets/audio/sound_effects/minigame_success.wav"));
+        _sfxAudioStreams.Add(SoundEffect.MinigameFailure, AudioStreamWav.LoadFromFile("res://assets/audio/sound_effects/minigame_failure.wav"));
 
         // https://sfxr.me/ (sfx)
+    }
+
+    private void InitialisePlayerActionPlayers()
+    {
+        AudioStreamPlayer walkingPlayer = new AudioStreamPlayer()
+        {
+            Stream = AudioStreamWav.LoadFromFile("res://assets/audio/sound_effects/action_walking.wav"),
+            Bus = "Sfx",
+            ProcessMode = ProcessModeEnum.Pausable
+        };
+        _playerActionAudioPlayers.Add(PlayerActionAudio.Walking, walkingPlayer);
+        walkingPlayer.Finished += () => {walkingPlayer.Play();}; // somehow need this to loop, despite already set in the import menu
+        AddChild(walkingPlayer);
+
+        AudioStreamPlayer fishGreenPlayer = new AudioStreamPlayer()
+        {
+            Stream = AudioStreamWav.LoadFromFile("res://assets/audio/sound_effects/action_fishing_green.wav"),
+            Bus = "Sfx",
+            ProcessMode = ProcessModeEnum.Pausable
+        };
+        _playerActionAudioPlayers.Add(PlayerActionAudio.FishingGreen, fishGreenPlayer);
+        AddChild(fishGreenPlayer);
+
+        AudioStreamPlayer fishYellowPlayer = new AudioStreamPlayer()
+        {
+            Stream = AudioStreamWav.LoadFromFile("res://assets/audio/sound_effects/action_fishing_yellow.wav"),
+            Bus = "Sfx",
+            ProcessMode = ProcessModeEnum.Pausable,
+        };
+        
+        _playerActionAudioPlayers.Add(PlayerActionAudio.FishingYellow, fishYellowPlayer);
+        AddChild(fishYellowPlayer);
+
+        AudioStreamPlayer fishRedPlayer = new AudioStreamPlayer()
+        {
+            Stream = AudioStreamWav.LoadFromFile("res://assets/audio/sound_effects/action_fishing_red.wav"),
+            Bus = "Sfx",
+            ProcessMode = ProcessModeEnum.Pausable
+        };
+        _playerActionAudioPlayers.Add(PlayerActionAudio.FishingRed, fishRedPlayer);
+        AddChild(fishRedPlayer);
     }
 
     private void HandleTimeOfDayChanged(object sender, EventArgs e)
@@ -133,13 +189,13 @@ public partial class AudioManager : Node
 
             Tween volumeTween = CreateTween();
             // Tolol, it's DB (decibel), and I somehow use the linear value (should be -1.0f)
-            volumeTween.TweenProperty(BgmAudioPlayer, "volume_db", -80.0f, 5.0); // the volume value is an offset to the stream's volume (-80db guaranteed to be non-audible)
+            volumeTween.TweenProperty(_bgmAudioPlayer, "volume_db", -80.0f, 5.0); // the volume value is an offset to the stream's volume (-80db guaranteed to be non-audible)
             volumeTween.Finished += () =>
             {
-                BgmAudioPlayer.Stop();
-                BgmAudioPlayer.VolumeDb = 0.0f; // reset back
-                BgmAudioPlayer.Stream = stream;
-                BgmAudioPlayer.Play();
+                _bgmAudioPlayer.Stop();
+                _bgmAudioPlayer.VolumeDb = 0.0f; // reset back
+                _bgmAudioPlayer.Stream = stream;
+                _bgmAudioPlayer.Play();
 
                 _isBgmFading = false;
             };
@@ -150,18 +206,18 @@ public partial class AudioManager : Node
 
     private AudioStream GetRandomDayBgm()
     {
-        int selection = GD.RandRange(0, DayBgmAudioStreams.Count - 1); // remember to -1 cuz of inclusive
-        ShuffleListWithSideEffect<AudioStream>(DayBgmAudioStreams);
+        int selection = GD.RandRange(0, _dayBgmAudioStreams.Count - 1); // remember to -1 cuz of inclusive
+        ShuffleListWithSideEffect<AudioStream>(_dayBgmAudioStreams);
 
-        return DayBgmAudioStreams[selection];
+        return _dayBgmAudioStreams[selection];
     }
 
     private AudioStream GetRandomNightBgm()
     {
-        int selection = GD.RandRange(0, NightBgmAudioStreams.Count - 1);
-        ShuffleListWithSideEffect<AudioStream>(NightBgmAudioStreams);
+        int selection = GD.RandRange(0, _nightBgmAudioStreams.Count - 1);
+        ShuffleListWithSideEffect<AudioStream>(_nightBgmAudioStreams);
 
-        return NightBgmAudioStreams[selection];
+        return _nightBgmAudioStreams[selection];
     }
 
     // actually this can be an extension method for List OR should be in another utility kinda class
@@ -191,10 +247,20 @@ public enum SoundEffect
     MinigameFailure,
     QteNotification,
     WaterSplash,
+    CastMarkProgress,
     ForwardCast,
     ReverseCast,
-    FishCaughtNotification,
-    
+    FishCaughtShowOff, // ba ba ba ba ~ sth like that?
+    ButtonHover,
+    ButtonClick,
+    MenuShow,
+    MenuHide
+}
 
-
+public enum PlayerActionAudio
+{
+    Walking,
+    FishingGreen,
+    FishingYellow,
+    FishingRed
 }
