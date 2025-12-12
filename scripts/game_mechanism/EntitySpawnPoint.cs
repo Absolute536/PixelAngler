@@ -110,7 +110,7 @@ public partial class EntitySpawnPoint : Node2D
 
     private float GetRandomSizeMeasurement(FishSpecies species)
     {
-        int size = GD.RandRange((int) (species.MinSizeMeasurement * 100) + 1, (int) (species.MaxSizeMeasurement * 100));
+        int size = GD.RandRange((int) (species.MinSizeMeasurement * 100), (int) (species.MaxSizeMeasurement * 100));
 
         return (float) size / 100; // note: float division, so that it's not integer division and becomes 0
     }

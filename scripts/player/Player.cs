@@ -12,25 +12,6 @@ public partial class Player : CharacterBody2D
 
 	[Export] public Camera2D PlayerCamera;
 
-	// FOR FUTURE USE
-	private int _money = 0;
-	public int Money
-	{
-		set => _money = value;
-		get =>  _money;
-	}
-
-	// Hmm, kinda fishy.
-	private int _strength = 0;
-	public int Strength
-	{
-		set => _strength = value;
-		get => _strength;
-	}
-
-	public string[] Items = ["Fishing Rod", "Bug Net"];
-	// TODO: Implement the different action based on selected item and cast according to facing direction
-	public string SelectedItem = "Fishing Rod"; // use string for now
 	private Vector2 _facingDirection = Vector2.Down; // by default face down?
 	public Vector2 FacingDirection
 	{
@@ -181,10 +162,4 @@ public partial class Player : CharacterBody2D
 	 https://docs.godotengine.org/en/4.4/tutorials/math/interpolation.html
 	 Lerp Smoothing is broken video
 	 */
-
-	// public override void _PhysicsProcess(double delta)
-	// {
-	// 	// Removed the duplicated old stuffs
-	// 	// Leave it empty without commenting it out first, just in case there're things to be done here
-	// }
 }

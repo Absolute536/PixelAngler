@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using System.IO;
 public class SuperTest
 {
@@ -67,12 +68,36 @@ public partial class Testing : Node2D
 		// string path = OS.GetExecutablePath().GetBaseDir().PathJoin("resources/fish_species");
 		// OKK!!! It works
 		// So.. I'm gonna assume the exported version will work (for now)
-		string path = ProjectSettings.GlobalizePath("res://resources/fish_species");
-		int length = Directory.GetFiles(path).Length;
-		GD.Print("Path: " + path);
-		GD.Print("File count: " + length);
+		// string path = ProjectSettings.GlobalizePath("res://resources/fish_species");
+		// int length = Directory.GetFiles(path).Length;
+		// GD.Print("Path: " + path);
+		// GD.Print("File count: " + length);
+
+		// for (int i = 0; i < 10; i++)
+		// {
+		// 	GD.Print(GD.RandRange(0,3));
+		// }
+		List<int> list = [0, 1, 2, 3, 4, 5];
+		ShuffleListWithSideEffect<int>(list);
+		list.ForEach(x => GD.Print(x));
 
 	}
+
+	private void ShuffleListWithSideEffect<T>(List<T> list)
+    {
+        Random rand = new Random();
+
+        // stop at i >= 1 because we want it to try and swap if the list is not empty or only has 1 element
+        // basically we start from the back and gradually try to swap with elements in front, until we reach the second one (no more swapping to be done)
+        for (int i = list.Count - 1; i >= 1; i--)
+        {
+            int j = rand.Next(i + 1);
+
+            T temp = list[i]; // can use tuple to swap values
+            list[i] = list[j];
+            list[j] = temp;
+        }
+    }
 
     public override void _UnhandledInput(InputEvent @event)
     {
