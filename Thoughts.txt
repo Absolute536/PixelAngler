@@ -312,3 +312,10 @@ Save file
 - yeah, also remember to adjust the bobber's area, so that other fish won't detect is while hooked
 - Aight DONE
 
+Audio
+-> bgm, use some classical music (like those more soothing? ones from Blockheads, I miss you TAT)
+-> sfx, player sound effect (action), world (the ambient(if possible)), game sfx (globally)
+-> so need 1 player + 1 bgm + 1 sfx + 1 ambient = 4 total audiostreamplayers(?)
+-> guess I'll use a 4 audio stream players in the autoload and just 
+-> maybe not, for the sfx, probably gonna instantiate on demand? And just pool the bgm, player (like action sound), and maybe ambient (switch out for diff. location)
+-> then in autoload I'll have a playsfx(parent, what you want to play) for sfx and add child to parent, then connect to finished signal to free itself

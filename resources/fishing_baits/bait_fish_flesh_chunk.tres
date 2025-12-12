@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="FishingBait" load_steps=3 format=3 uid="uid://dxafgvscb52gk"]
+
+[ext_resource type="Texture2D" uid="uid://binas1jbmi7yc" path="res://assets/fishing_baits/bait_fish_flesh_chunk.png" id="1_j1ntf"]
+[ext_resource type="Script" uid="uid://c64xfilpctsuo" path="res://scripts/game_mechanism/FishingBait.cs" id="2_los2t"]
+
+[resource]
+script = ExtResource("2_los2t")
+BaitName = "Fish Flesh Chunk"
+BaitType = 1
+BaitSize = 2
+BaitTexture = ExtResource("1_j1ntf")
+metadata/_custom_type_script = "uid://c64xfilpctsuo"

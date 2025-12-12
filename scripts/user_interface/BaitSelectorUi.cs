@@ -18,7 +18,7 @@ public partial class BaitSelectorUi : Control
 	public override void _Ready()
     {
         _selectedBaitIndex = 0;
-		// SelectedBaitDisplay.Texture = _selectedBait.BaitTexture;
+		SelectedBaitDisplay.Texture = FishingBaitsAvailable[_selectedBaitIndex].BaitTexture;
 		PreviousBait.Pressed += ToPreviousBait;
 		NextBait.Pressed += ToNextBait;
 		DisplayTimer.Timeout += () => {BaitName.Visible = false;};
@@ -62,7 +62,7 @@ public partial class BaitSelectorUi : Control
     {
 		UpdatePlayerSelectedBait(_selectedBaitIndex);
 	
-		// SelectedBaitDisplay.Texture = FishingBaitsAvailable[_selectedBaitIndex].BaitTexture;
+		SelectedBaitDisplay.Texture = FishingBaitsAvailable[_selectedBaitIndex].BaitTexture;
         BaitName.Text = FishingBaitsAvailable[_selectedBaitIndex].BaitName;
 		BaitName.Visible = true;
 		DisplayTimer.Start(); // it will reset the timer if started already, so this works

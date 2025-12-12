@@ -14,7 +14,7 @@ public partial class InGameTime : Node
     // we'll get the in-game duration for 1 minute
     // so... 1440 is to 1 minute? (nah, this doesn't control this)
     private const float TimeCycleToRealMinute = Mathf.Tau / MinuteInDay;
-    private const float GameSpeed = 1.0f;
+    private const float GameSpeed = 40.0f;
     private int _initialHour = 12;
 
     private float _time; // time is in the in-game minutes passed, scaled to values on the sin function (2pi / total minutes in day --> value per minute)
@@ -76,10 +76,10 @@ public partial class InGameTime : Node
 
     public int GetHours()
     {
-        // 0300 - 0659 -> Dawn
-		// 0700 - 1659 -> Day
-		// 1700 - 2059 -> Dusk
-		// 2100 - 0259 -> Night
+        // 0400 - 0759 -> Dawn (4 hours)
+		// 0800 - 1559 -> Day (8 hours)
+		// 1600 - 1959 -> Dusk (4 hours)
+		// 2000 - 0359 -> Night (8 hours)
 
         // Hmm.. maybe consider using a property, cuz it's duplication
         int totalMinutesPassed = (int) (_time/TimeCycleToRealMinute);
@@ -91,11 +91,11 @@ public partial class InGameTime : Node
     public TimeOfDay GetCurrentTimeOfDay() // wait, maybe we'll just use this?
     {
         int hours = GetHours();
-        if (hours >= 7 && hours <= 16)
+        if (hours >= 8 && hours <= 15)
 			return TimeOfDay.Day;
-		else if (hours >= 21 || hours <= 2)
+		else if (hours >= 20 || hours <= 3)
 			return TimeOfDay.Night;
-		else if (hours >= 3 && hours <= 6)
+		else if (hours >= 4 && hours <= 7)
 			return TimeOfDay.Dawn;
 		else
 			return TimeOfDay.Dusk;

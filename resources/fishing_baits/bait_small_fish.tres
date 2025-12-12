@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="FishingBait" load_steps=3 format=3 uid="uid://oy3n1ugjhr7k"]
+
+[ext_resource type="Texture2D" uid="uid://cyfck4e3k4nlb" path="res://assets/fishing_baits/bait_small_fish.png" id="1_sp5v0"]
+[ext_resource type="Script" uid="uid://c64xfilpctsuo" path="res://scripts/game_mechanism/FishingBait.cs" id="2_kqevp"]
+
+[resource]
+script = ExtResource("2_kqevp")
+BaitName = "Small Fish"
+BaitType = 1
+BaitSize = 1
+BaitTexture = ExtResource("1_sp5v0")
+metadata/_custom_type_script = "uid://c64xfilpctsuo"

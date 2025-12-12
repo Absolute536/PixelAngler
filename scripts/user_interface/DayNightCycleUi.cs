@@ -65,16 +65,16 @@ public partial class DayNightCycleUi : Control
 
 	private CompressedTexture2D UpdateIcon (int hours)
     {
-        // 0300 - 0659 -> Dawn
-		// 0700 - 1659 -> Day
-		// 1700 - 2059 -> Dusk
-		// 2100 - 0259 -> Night
+        // 0400 - 0759 -> Dawn (4 hours)
+		// 0800 - 1559 -> Day (8 hours)
+		// 1600 - 1959 -> Dusk (4 hours)
+		// 2000 - 0359 -> Night (8 hours)
 
-		if (hours >= 7 && hours <= 16)
+		if (hours >= 8 && hours <= 15)
 			return GD.Load<CompressedTexture2D>("res://assets/ui_design/day_icon.png");
-		else if (hours >= 21 || hours <= 2)
+		else if (hours >= 20 || hours <= 3)
 			return GD.Load<CompressedTexture2D>("res://assets/ui_design/night_icon.png");
-		else if (hours >= 3 && hours <= 6)
+		else if (hours >= 4 && hours <= 7)
 			return GD.Load<CompressedTexture2D>("res://assets/ui_design/dawn_icon.png");
 		else
 			return GD.Load<CompressedTexture2D>("res://assets/ui_design/dusk_icon.png");
