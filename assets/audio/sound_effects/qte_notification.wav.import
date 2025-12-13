@@ -3,12 +3,12 @@
 importer="wav"
 type="AudioStreamWAV"
 uid="uid://bj5rqn4h06wig"
-path="res://.godot/imported/qte_notif.wav-31a7e433124d991bedc0fda2cd4cb8cb.sample"
+path="res://.godot/imported/qte_notification.wav-30e4e5ba0c1f6a0f3318fcf34306755e.sample"
 
 [deps]
 
-source_file="res://assets/audio/sound_effects/qte_notif.wav"
-dest_files=["res://.godot/imported/qte_notif.wav-31a7e433124d991bedc0fda2cd4cb8cb.sample"]
+source_file="res://assets/audio/sound_effects/qte_notification.wav"
+dest_files=["res://.godot/imported/qte_notification.wav-30e4e5ba0c1f6a0f3318fcf34306755e.sample"]
 
 [params]
 

@@ -171,7 +171,7 @@ public partial class MinigameManager : Node
                     // _progressBar.Value += 0.25;
                 }
                 else
-                    _fishingProgress.GameProgressBar.Value -= 0.20 * _currentSpeciesInGame.Aggressiveness; // 20 per second
+                    _fishingProgress.GameProgressBar.Value -= 0.30 * _currentSpeciesInGame.Aggressiveness; // 20 per second
                 
                 if (ClicksNeeded <= 0)
                 {
@@ -188,7 +188,7 @@ public partial class MinigameManager : Node
             if (_fishingProgress.GameProgressBar.Value >= _fishingProgress.GameProgressBar.MaxValue)
             {
                 // Play win sound cue
-                AudioManager.Instance.PlaySfx(this, SoundEffect.MinigameSuccess, true);
+                AudioManager.Instance.PlaySfx(this, SoundEffect.MinigameSuccess, false);
 
                 SceneTreeTimer freezeFrameTimer = GetTree().CreateTimer(0.25, true, true);
                 freezeFrameTimer.Timeout += () =>
@@ -200,7 +200,7 @@ public partial class MinigameManager : Node
                     AudioManager.Instance.StopActionAudio(PlayerActionAudio.FishingRed);
                     
                     // can play splashing sound
-                    AudioManager.Instance.PlaySfx(this, SoundEffect.FishCaught, true);
+                    AudioManager.Instance.PlaySfx(this, SoundEffect.FishCaught, false);
                     WinMinigame();
                 };
                 GetTree().Paused = true;
@@ -210,7 +210,7 @@ public partial class MinigameManager : Node
             if (_fishingProgress.GameProgressBar.Value == _fishingProgress.GameProgressBar.MinValue)
             {
                 // Play lose sound cue
-                AudioManager.Instance.PlaySfx(this, SoundEffect.MinigameFailure, true);
+                AudioManager.Instance.PlaySfx(this, SoundEffect.MinigameFailure, false);
 
 
 
@@ -230,7 +230,7 @@ public partial class MinigameManager : Node
 
     public void StartQTE(object sender, EventArgs e)
     {
-        QTE.StartQuickTimeEvent(0.7f, "Action"); // 0.7 seconds 
+        QTE.StartQuickTimeEvent(0.8f, "Action"); // 0.8 seconds 
     }
 
     public void StartMinigame(FishingProgress fishingProgress)

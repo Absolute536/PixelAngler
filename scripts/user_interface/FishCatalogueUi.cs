@@ -59,7 +59,7 @@ public partial class FishCatalogueUi : Control
             Visible = false;
             ReleaseFocus();
             GetTree().Paused = false;
-            AudioManager.Instance.PlaySfx(this, SoundEffect.MenuHide, false);
+            AudioManager.Instance.PlaySfx(this, SoundEffect.PaperPlacedDown, false);
         }
         else
         {
@@ -68,7 +68,7 @@ public partial class FishCatalogueUi : Control
             Visible = true;
             GrabFocus();
             FocusMode = FocusModeEnum.All;
-            AudioManager.Instance.PlaySfx(this, SoundEffect.MenuShow, false);
+            AudioManager.Instance.PlaySfx(this, SoundEffect.PaperFlip, false);
 
             UpdateSpeciesInformationDisplay(0); // show first one
             FishSelectionScrollContainer.ScrollVertical = 0; // fish buttons scroll to top

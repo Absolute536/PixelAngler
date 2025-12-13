@@ -26,7 +26,7 @@ public partial class FishBitingState : State
         Fish.LatchTarget.BobberCollisionShape.SetDeferred(CollisionShape2D.PropertyName.Disabled, true);
 
         // Play the sound cue here (for the fish bite - start of QTE)
-        AudioManager.Instance.PlaySfx(this, SoundEffect.QteNotification, true);
+        AudioManager.Instance.PlaySfx(this, SoundEffect.QteNotification, false);
 
         Texture2D biteAlertTexture = GD.Load<Texture2D>("res://assets/ui_design/fish_bite_alert_icon.png");
         Sprite2D biteAlertIcon = new Sprite2D
@@ -73,14 +73,8 @@ public partial class FishBitingState : State
         if (IsCurrentlyActive)
         {
             // Maybe can include another sound cue for success (like ding!)
+            AudioManager.Instance.PlaySfx(this, SoundEffect.QteSuccess, false);
 
-            // Freeze frame on success as well? (Before all these, nope it doesn't matter)
-            // Oh? OR we put all these in the timeout function?
-            // SceneTreeTimer freezeFrameTimer = GetTree().CreateTimer(0.2, true, true); // always process regardless of pause
-            // freezeFrameTimer.Timeout += () => 
-            // {
-
-            // };
 
             // GetTree().Paused = true;
             // GetTree().Paused = false;

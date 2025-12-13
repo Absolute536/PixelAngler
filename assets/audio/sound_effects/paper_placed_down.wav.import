@@ -3,12 +3,12 @@
 importer="wav"
 type="AudioStreamWAV"
 uid="uid://dg3c8xx34oadx"
-path="res://.godot/imported/menu_hide.wav-1e99562937f4539fddcb8ecda8e4c5af.sample"
+path="res://.godot/imported/paper_placed_down.wav-7c293cb547e85e204754b2302ebf83cd.sample"
 
 [deps]
 
-source_file="res://assets/audio/sound_effects/menu_hide.wav"
-dest_files=["res://.godot/imported/menu_hide.wav-1e99562937f4539fddcb8ecda8e4c5af.sample"]
+source_file="res://assets/audio/sound_effects/paper_placed_down.wav"
+dest_files=["res://.godot/imported/paper_placed_down.wav-7c293cb547e85e204754b2302ebf83cd.sample"]
 
 [params]
 

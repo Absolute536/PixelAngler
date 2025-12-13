@@ -3,12 +3,12 @@
 importer="wav"
 type="AudioStreamWAV"
 uid="uid://deaoh6dfx31jb"
-path="res://.godot/imported/menu_show.wav-0c90de56ec671c8080060b4d0c42a2cb.sample"
+path="res://.godot/imported/paper_flip.wav-62a5779137ef38db891347af54550a05.sample"
 
 [deps]
 
-source_file="res://assets/audio/sound_effects/menu_show.wav"
-dest_files=["res://.godot/imported/menu_show.wav-0c90de56ec671c8080060b4d0c42a2cb.sample"]
+source_file="res://assets/audio/sound_effects/paper_flip.wav"
+dest_files=["res://.godot/imported/paper_flip.wav-62a5779137ef38db891347af54550a05.sample"]
 
 [params]
 

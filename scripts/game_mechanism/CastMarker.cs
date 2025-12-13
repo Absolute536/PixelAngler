@@ -90,6 +90,9 @@ public partial class CastMarker : Sprite2D
 			else
 				GlobalPosition = _initialPosition + new Vector2(-_castLength, 0);
 		}
+
+		if (_castLength == MaxCastingLength)
+			CastTimer.Stop(); // stop early if reached max length
 		
 		// Console Output
 		GD.Print("Direction: " + TargetPlayer.FacingDirection);

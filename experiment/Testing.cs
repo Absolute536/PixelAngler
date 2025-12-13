@@ -1,7 +1,7 @@
+using GameWorld;
 using Godot;
 using System;
 using System.Collections.Generic;
-using System.IO;
 public class SuperTest
 {
     
@@ -77,9 +77,15 @@ public partial class Testing : Node2D
 		// {
 		// 	GD.Print(GD.RandRange(0,3));
 		// }
-		List<int> list = [0, 1, 2, 3, 4, 5];
-		ShuffleListWithSideEffect<int>(list);
-		list.ForEach(x => GD.Print(x));
+		// List<int> list = [0, 1, 2, 3, 4, 5];
+		// ShuffleListWithSideEffect<int>(list);
+		// list.ForEach(x => GD.Print(x));
+
+		foreach (SoundEffect tt in Enum.GetValues(typeof(SoundEffect)))
+		{
+			GD.Print(tt.ToString().ToSnakeCase());
+		}
+
 
 	}
 

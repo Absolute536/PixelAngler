@@ -105,9 +105,9 @@ public partial class SaveLoadUtil : Node
         if (err != Error.Ok)
         {
             _loadedSettings.SetValue("Window", "fullscreen", false);
-            _loadedSettings.SetValue("Audio", "master_volume", 10.0);
-            _loadedSettings.SetValue("Audio", "music_volume", 10.0);
-            _loadedSettings.SetValue("Audio", "sfx_volume", 10.0);
+            _loadedSettings.SetValue("Audio", "master_volume", 10);
+            _loadedSettings.SetValue("Audio", "music_volume", 10);
+            _loadedSettings.SetValue("Audio", "sfx_volume", 10);
         }
 
     }

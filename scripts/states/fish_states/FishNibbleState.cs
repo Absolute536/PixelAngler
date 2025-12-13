@@ -228,12 +228,14 @@ public partial class FishNibbleState : State
         if (area is Bobber)
         {
             GD.Print("Bobber entered");
-            AudioManager.Instance.PlaySfx(this, SoundEffect.FishNibble, true);
+            
             _currentNibbleCount += 1;
             _isReverse = true;
 
             if (_currentNibbleCount > _nibbleCountRequired)
                 OnStateTransitioned("FishBitingState");
+            else
+                AudioManager.Instance.PlaySfx(this, SoundEffect.FishNibble, true);
 
             GD.Print("Fish Nibble!");
         }

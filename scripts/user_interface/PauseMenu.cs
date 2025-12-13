@@ -12,6 +12,13 @@ public partial class PauseMenu : Control
 
     [Export] public CheckButton FullscreenToggle;
     [Export] public Button QuitButton;
+
+    private const float DefaultMasterVolumeDb = 0.0f;
+    private const float DefaultMusicVolumeDb = 0.0f;
+    private const float DefaultSfxVolumeDb = -15.0f;
+
+    private const float VolumeDbAdjustment = 3.0f;
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
     {
@@ -40,24 +47,36 @@ public partial class PauseMenu : Control
             GetTree().Quit();
         };
 
+        MasterVolume.DragEnded += (bool hasChanged) =>
+        {
+            if (hasChanged)
+            {
+                float ratio = (float) (MasterVolume.Value / MasterVolume.MaxValue); // 0.0 ~ 1.0 (0 / 10 ~ 10 / 10, with steps of 1.0)
+                AudioServer.SetBusVolumeLinear(AudioServer.GetBusIndex("Master"), ratio);
+            }
+        };
+
+        MusicVolume.DragEnded += (bool hasChanged) =>
+        {
+            if (hasChanged)
+            {
+                float ratio = (float) (MusicVolume.Value / MusicVolume.MaxValue);
+                AudioServer.SetBusVolumeLinear(AudioServer.GetBusIndex("Music"), ratio);
+            }
+        };
+
+        SfxVolume.DragEnded += (bool hasChanged) =>
+        {
+            if (hasChanged)
+            {
+                float ratio = (float) (SfxVolume.Value / SfxVolume.MaxValue);
+                AudioServer.SetBusVolumeLinear(AudioServer.GetBusIndex("Sfx"), ratio * Mathf.DbToLinear(-18.0f)); // cuz base value is -18db (scale from it)
+            }
+        };
+
         InitialiseSettings();
         InitialiseUiSoundEffects();
     }
-
-    // public override void _UnhandledInput(InputEvent @event)
-    // {
-    //     if (@event.IsActionPressed("ShowPause"))
-    //     {
-    //         // if  (PauseMenuContainer.Visible)
-    //         // {
-    //         //     PauseMenuContainer.Visible = false;
-    //         //     ReleaseFocus();
-
-    //         //     GetTree().Paused = false;
-    //         // }
-    //         GetTree().Paused = true;
-    //     }
-    // }
 
 
     private void InitialiseSettings()
@@ -83,17 +102,17 @@ public partial class PauseMenu : Control
         QuitButton.Pressed += () => {AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonClick, false);};
 
         MasterVolume.MouseEntered += () => {AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonHover, false);};
-        MasterVolume.MouseExited += () => {AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonHover, false);};
+        // MasterVolume.MouseExited += () => {AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonHover, false);};
         MasterVolume.DragStarted += () => {AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonClick, false);};
         MasterVolume.DragEnded += (bool isChanged) => {if (isChanged) {AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonClick, false);}};
 
         MusicVolume.MouseEntered += () => {AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonHover, false);};
-        MusicVolume.MouseExited += () => {AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonHover, false);};
+        // MusicVolume.MouseExited += () => {AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonHover, false);};
         MusicVolume.DragStarted += () => {AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonClick, false);};
         MusicVolume.DragEnded += (bool isChanged) => {if (isChanged) {AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonClick, false);}};
 
         SfxVolume.MouseEntered += () => {AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonHover, false);};
-        SfxVolume.MouseExited += () => {AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonHover, false);};
+        // SfxVolume.MouseExited += () => {AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonHover, false);};
         SfxVolume.DragStarted += () => {AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonClick, false);};
         SfxVolume.DragEnded += (bool isChanged) => {if (isChanged) {AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonClick, false);}};
     }
@@ -118,7 +137,7 @@ public partial class PauseMenu : Control
             ReleaseFocus();
             // PauseMsgLabel.Visible = false;
             PauseMenuContainer.Visible = false;
-            AudioManager.Instance.PlaySfx(this,SoundEffect.MenuHide, false);
+            AudioManager.Instance.PlaySfx(this,SoundEffect.PaperPlacedDown, false);
         }	
         else
         {
@@ -126,7 +145,7 @@ public partial class PauseMenu : Control
             GrabFocus();
             // PauseMsgLabel.Visible = true;
             PauseMenuContainer.Visible = true;
-            AudioManager.Instance.PlaySfx(this,SoundEffect.MenuShow, false);
+            AudioManager.Instance.PlaySfx(this,SoundEffect.PaperPlacedDown, false);
         }
     }
 }

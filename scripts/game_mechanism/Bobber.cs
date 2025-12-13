@@ -232,7 +232,7 @@ public partial class Bobber : Area2D
 					// GD.Print("Print if landed in water");
                     BobberCollisionShape.SetDeferred(CollisionShape2D.PropertyName.Disabled, false); // it's the area2d of bobber actually, not the collsion(wait?)
 					// yeah, just disabling the collision won't stop fish (it's raycast only) from detecting
-					AudioManager.Instance.PlaySfx(this, SoundEffect.WaterSplash, true);
+					AudioManager.Instance.PlaySfx(this, SoundEffect.BobberSplash, false);
 					waterSplash.Emitting = true; // need to reset to false afterwards to ensure it emits once only
                 }
 					

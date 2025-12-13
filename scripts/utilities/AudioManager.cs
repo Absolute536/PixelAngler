@@ -9,13 +9,7 @@ public partial class AudioManager : Node
 
     private readonly AudioStreamPlayer _bgmAudioPlayer = new ();
 
-    private readonly Dictionary<PlayerActionAudio, AudioStreamPlayer> _playerActionAudioPlayers = new ()
-    {
-        
-    };
-
-
-    // Hardcode it here?
+    private readonly Dictionary<PlayerActionAudio, AudioStreamPlayer> _playerActionAudioPlayers = new ();
     private readonly Dictionary<SoundEffect, AudioStream> _sfxAudioStreams = new ();
 
     private readonly List<AudioStream> _dayBgmAudioStreams = new ();
@@ -35,6 +29,8 @@ public partial class AudioManager : Node
         InitialiseNightTimeBgms();
         InitialiseSfxWavs();
         InitialisePlayerActionPlayers();
+
+        InitialiseAudioBusVolumes();
 
         AddChild(_bgmAudioPlayer);
 
@@ -105,37 +101,26 @@ public partial class AudioManager : Node
         // Imma hard code it now (loop 3 times, cuz only 3)
         // Proper way should be get directory, count files, then loop until count while loading each audio file
         for (int i = 0; i < 3; i++)
-            _dayBgmAudioStreams.Add(AudioStreamMP3.LoadFromFile($"res://assets/audio/music/bgm_day_{i}.mp3"));
+            // _dayBgmAudioStreams.Add(AudioStreamMP3.LoadFromFile($"res://assets/audio/music/bgm_day_{i}.mp3"));
+            _dayBgmAudioStreams.Add(GD.Load<AudioStreamMP3>($"res://assets/audio/music/bgm_day_{i}.mp3"));
     }
 
     private void InitialiseNightTimeBgms()
     {
         // Same for night time's
         for (int i = 0; i < 3; i++)
-            _nightBgmAudioStreams.Add(AudioStreamMP3.LoadFromFile($"res://assets/audio/music/bgm_night_{i}.mp3"));
+            // _nightBgmAudioStreams.Add(AudioStreamMP3.LoadFromFile($"res://assets/audio/music/bgm_night_{i}.mp3"));
+            _nightBgmAudioStreams.Add(GD.Load<AudioStreamMP3>($"res://assets/audio/music/bgm_night_{i}.mp3"));
     }
 
     private void InitialiseSfxWavs()
     {
-        // This one gonna hard code it
-        // There are better ways I guess
-        // Organise the directory structure and use loop to load (Idk if this is good enough)
-        // use a loop and toString the enums as the file name
-        // But for now, just hard code it first (here or use the collection expression?)
-        _sfxAudioStreams.Add(SoundEffect.MinigameSuccess, AudioStreamWav.LoadFromFile("res://assets/audio/sound_effects/minigame_success.wav"));
-        _sfxAudioStreams.Add(SoundEffect.MinigameFailure, AudioStreamWav.LoadFromFile("res://assets/audio/sound_effects/minigame_failure.wav"));
-        _sfxAudioStreams.Add(SoundEffect.QteNotification, AudioStreamWav.LoadFromFile("res://assets/audio/sound_effects/qte_notif.wav")); // change maybe?
-        _sfxAudioStreams.Add(SoundEffect.WaterSplash, AudioStreamWav.LoadFromFile("res://assets/audio/sound_effects/bobber_splash.wav"));
-        _sfxAudioStreams.Add(SoundEffect.CastMarkProgress, AudioStreamWav.LoadFromFile("res://assets/audio/sound_effects/cast_mark_progress.wav"));
-        _sfxAudioStreams.Add(SoundEffect.FishNibble, AudioStreamWav.LoadFromFile("res://assets/audio/sound_effects/fish_nibble.wav"));
-        _sfxAudioStreams.Add(SoundEffect.ShowOff, AudioStreamWav.LoadFromFile("res://assets/audio/sound_effects/show_off.wav"));
-        _sfxAudioStreams.Add(SoundEffect.ForwardCast, AudioStreamWav.LoadFromFile("res://assets/audio/sound_effects/forward_cast.wav"));
-        _sfxAudioStreams.Add(SoundEffect.ReverseCast, AudioStreamWav.LoadFromFile("res://assets/audio/sound_effects/reverse_cast.wav"));
-        _sfxAudioStreams.Add(SoundEffect.FishCaught, AudioStreamWav.LoadFromFile("res://assets/audio/sound_effects/fish_caught.wav"));
-        _sfxAudioStreams.Add(SoundEffect.MenuShow, AudioStreamWav.LoadFromFile("res://assets/audio/sound_effects/menu_show.wav"));
-        _sfxAudioStreams.Add(SoundEffect.MenuHide, AudioStreamWav.LoadFromFile("res://assets/audio/sound_effects/menu_hide.wav"));
-        _sfxAudioStreams.Add(SoundEffect.ButtonClick, AudioStreamWav.LoadFromFile("res://assets/audio/sound_effects/button_click.wav"));
-        _sfxAudioStreams.Add(SoundEffect.ButtonHover, AudioStreamWav.LoadFromFile("res://assets/audio/sound_effects/button_hover.wav"));
+        // Better version: iterate through the enum values that represent each sound effect and load the corresponding audio file
+        foreach(SoundEffect effect in Enum.GetValues(typeof(SoundEffect)))
+        {
+            string effectName = effect.ToString().ToSnakeCase(); //So that the SoundEffect (CamelCase) becones sound_effect (snake_case). Thanks Godot!
+            _sfxAudioStreams.Add(effect, GD.Load<AudioStreamWav>($"res://assets/audio/sound_effects/{effectName}.wav"));
+        }
 
         // https://sfxr.me/ (sfx)
     }
@@ -144,7 +129,7 @@ public partial class AudioManager : Node
     {
         AudioStreamPlayer walkingPlayer = new AudioStreamPlayer()
         {
-            Stream = AudioStreamWav.LoadFromFile("res://assets/audio/sound_effects/action_walking.wav"),
+            Stream = GD.Load<AudioStreamWav>("res://assets/audio/sound_effects/action_walking.wav"),
             Bus = "Sfx",
             ProcessMode = ProcessModeEnum.Pausable
         };
@@ -154,7 +139,7 @@ public partial class AudioManager : Node
 
         AudioStreamPlayer fishGreenPlayer = new AudioStreamPlayer()
         {
-            Stream = AudioStreamWav.LoadFromFile("res://assets/audio/sound_effects/action_fishing_green.wav"),
+            Stream = GD.Load<AudioStreamWav>("res://assets/audio/sound_effects/action_fishing_green.wav"),
             Bus = "Sfx",
             ProcessMode = ProcessModeEnum.Pausable
         };
@@ -163,7 +148,7 @@ public partial class AudioManager : Node
 
         AudioStreamPlayer fishYellowPlayer = new AudioStreamPlayer()
         {
-            Stream = AudioStreamWav.LoadFromFile("res://assets/audio/sound_effects/action_fishing_yellow.wav"),
+            Stream = GD.Load<AudioStreamWav>("res://assets/audio/sound_effects/action_fishing_yellow.wav"),
             Bus = "Sfx",
             ProcessMode = ProcessModeEnum.Pausable,
         };
@@ -173,12 +158,25 @@ public partial class AudioManager : Node
 
         AudioStreamPlayer fishRedPlayer = new AudioStreamPlayer()
         {
-            Stream = AudioStreamWav.LoadFromFile("res://assets/audio/sound_effects/action_fishing_red.wav"),
+            Stream = GD.Load<AudioStreamWav>("res://assets/audio/sound_effects/action_fishing_red.wav"),
             Bus = "Sfx",
             ProcessMode = ProcessModeEnum.Pausable
         };
         _playerActionAudioPlayers.Add(PlayerActionAudio.FishingRed, fishRedPlayer);
         AddChild(fishRedPlayer);
+    }
+
+    private void InitialiseAudioBusVolumes()
+    {
+        float masterVolume = (float) SaveLoadUtil.Instance.LoadedSettings.GetValue("Audio", "master_volume");
+        float musicVolume = (float) SaveLoadUtil.Instance.LoadedSettings.GetValue("Audio", "music_volume");
+        float sfxVolume = (float) SaveLoadUtil.Instance.LoadedSettings.GetValue("Audio", "sfx_volume");
+        AudioServer.SetBusVolumeLinear(AudioServer.GetBusIndex("Master"), masterVolume / 10.0f);
+        AudioServer.SetBusVolumeLinear(AudioServer.GetBusIndex("Music"), musicVolume / 10.0f);
+        AudioServer.SetBusVolumeLinear(AudioServer.GetBusIndex("Sfx"), sfxVolume / 10.0f * Mathf.DbToLinear(-18.0f));
+        // GD.Print("Master: " + AudioServer.GetBusVolumeDb(0));
+        // GD.Print("Music: " + AudioServer.GetBusVolumeDb(1));
+        // GD.Print("Sfx: " + AudioServer.GetBusVolumeDb(2));
     }
 
     private void HandleTimeOfDayChanged(object sender, EventArgs e)
@@ -268,7 +266,8 @@ public enum SoundEffect
     MinigameSuccess,
     MinigameFailure,
     QteNotification,
-    WaterSplash,
+    QteSuccess,
+    BobberSplash,
     CastMarkProgress,
     ForwardCast,
     ReverseCast,
@@ -277,8 +276,8 @@ public enum SoundEffect
     ShowOff, // ba ba ba ba ~ sth like that?
     ButtonHover,
     ButtonClick,
-    MenuShow,
-    MenuHide
+    PaperFlip,
+    PaperPlacedDown
 }
 
 public enum PlayerActionAudio

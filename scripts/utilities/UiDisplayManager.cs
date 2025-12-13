@@ -34,7 +34,7 @@ public partial class UiDisplayManager : Node
                 else
                     baitSelector.ToNextBait();
                 
-                AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonClick, true); // maybe enable pitch shift for this one
+                AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonClick, false);
             }
         }
     }
