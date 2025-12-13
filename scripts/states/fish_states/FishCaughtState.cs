@@ -58,13 +58,13 @@ public partial class FishCaughtState : State
         
         Fish.AddChild(caughtNotif);
         // origin is at the top-left, so need to shift to the left by X / 2 to centre it, also 4 pixel above the fish
-        caughtNotif.Position = new Vector2(-caughtNotif.Size.X / 2, -24); // Somehow only 24 pixel above fish works???
+        caughtNotif.Position = new Vector2(-caughtNotif.Size.X / 2, -40); // Somehow only 24 pixel above fish works???
         caughtNotif.Visible = true;
 
         GetTree().CreateTimer(3.0f, false, true).Timeout += () =>
         {
             SignalBus.Instance.FishObtained -= HandleFishObtained;
-            Fish.QueueFree(); // should also free the notif (Yep.)
+            Fish.QueueFree(); // should also free the notif cuz it's a child of the fish (Yep.)
         };
     }
 
@@ -85,6 +85,10 @@ public partial class FishCaughtState : State
         //     caughtNotif.AddThemeColorOverride("default_color", new Color(0.16f, 0.64f, 0.39f));
         // else
         //     caughtNotif.AddThemeColorOverride("default_color", new Color(0.74f, 0.20f, 0.23f));
+
+        // This is after progress update, so check if == 1
+        if (FishRepository.Instance.FishCatchProgress[Fish.SpeciesInformation.FishId].NumbersCaught == 1)
+            notifContent.Append("New Species Discovered !!!\n");
 
         notifContent.Append(" " + Fish.SpeciesInformation.SpeciesName);
         notifContent.Append($" ({Fish.CurrentSizeMeasurement:F2}m) ");

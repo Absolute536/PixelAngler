@@ -119,6 +119,7 @@ public partial class Bobber : Area2D
 		// Start Physics Process to initiate the bobber's motion
 		SetPhysicsProcess(true);
 
+		AudioManager.Instance.PlaySfx(this, SoundEffect.ForwardCast, true); // play forward cast sfx
 		waterSplash.Emitting = false;
 		// Initiate the fishing line physics as well
 		FishingLine.InitiateFishingLine();
@@ -140,6 +141,7 @@ public partial class Bobber : Area2D
 		_reverseMotion = true; // Flip the flag to indicate we're in reverse motion
 		Visible = true;
 
+		AudioManager.Instance.PlaySfx(this, SoundEffect.ReverseCast, true); // play reverse cast sfx
 		// For reverse motion, need to disable as well, in case it lands in water, and we reel back but the fish detects it
 		BobberCollisionShape.SetDeferred(CollisionShape2D.PropertyName.Disabled, true);
 
@@ -229,7 +231,8 @@ public partial class Bobber : Area2D
                 {
 					// GD.Print("Print if landed in water");
                     BobberCollisionShape.SetDeferred(CollisionShape2D.PropertyName.Disabled, false); // it's the area2d of bobber actually, not the collsion(wait?)
-					// yeah, just disabling the collision won't stop fish from detecting
+					// yeah, just disabling the collision won't stop fish (it's raycast only) from detecting
+					AudioManager.Instance.PlaySfx(this, SoundEffect.WaterSplash, true);
 					waterSplash.Emitting = true; // need to reset to false afterwards to ensure it emits once only
                 }
 					

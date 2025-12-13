@@ -34,6 +34,7 @@ public partial class CastMarker : Sprite2D
 
 		// Connect to Timeout signal of the marker's Timer
 		CastTimer.Timeout += CastMarkingProcess;
+		CastTimer.Timeout += () => {AudioManager.Instance.PlaySfx(this, SoundEffect.CastMarkProgress, true);};
 		GlobalPosition = TargetPlayer.GlobalPosition;
 	}
 

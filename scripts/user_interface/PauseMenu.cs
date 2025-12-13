@@ -3,7 +3,7 @@ using System;
 
 public partial class PauseMenu : Control
 {
-	[Export] public TextureButton actualButton;
+	[Export] public TextureButton PauseButton;
 	[Export] public Label PauseMsgLabel;
     [Export] public TextureRect PauseMenuContainer;
     [Export] public HSlider MasterVolume;
@@ -15,7 +15,7 @@ public partial class PauseMenu : Control
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
     {
-        actualButton.Pressed += ShowHidePauseMenu;
+        PauseButton.Pressed += ShowHidePauseMenu;
 
         FullscreenToggle.Toggled += (bool isToogled) =>
         {
@@ -41,6 +41,7 @@ public partial class PauseMenu : Control
         };
 
         InitialiseSettings();
+        InitialiseUiSoundEffects();
     }
 
     // public override void _UnhandledInput(InputEvent @event)
@@ -69,6 +70,34 @@ public partial class PauseMenu : Control
 
     }
 
+    private void InitialiseUiSoundEffects()
+    {
+        PauseButton.MouseEntered += () => {AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonHover, false);};
+        PauseButton.MouseExited += () => {AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonHover, false);};
+        PauseButton.Pressed += () => {AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonClick, false);};
+
+        FullscreenToggle.Pressed += () => {AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonClick, false);};
+
+        QuitButton.MouseEntered += () => {AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonHover, false);};
+        QuitButton.MouseExited += () => {AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonHover, false);};
+        QuitButton.Pressed += () => {AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonClick, false);};
+
+        MasterVolume.MouseEntered += () => {AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonHover, false);};
+        MasterVolume.MouseExited += () => {AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonHover, false);};
+        MasterVolume.DragStarted += () => {AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonClick, false);};
+        MasterVolume.DragEnded += (bool isChanged) => {if (isChanged) {AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonClick, false);}};
+
+        MusicVolume.MouseEntered += () => {AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonHover, false);};
+        MusicVolume.MouseExited += () => {AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonHover, false);};
+        MusicVolume.DragStarted += () => {AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonClick, false);};
+        MusicVolume.DragEnded += (bool isChanged) => {if (isChanged) {AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonClick, false);}};
+
+        SfxVolume.MouseEntered += () => {AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonHover, false);};
+        SfxVolume.MouseExited += () => {AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonHover, false);};
+        SfxVolume.DragStarted += () => {AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonClick, false);};
+        SfxVolume.DragEnded += (bool isChanged) => {if (isChanged) {AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonClick, false);}};
+    }
+
     // also part of the persistent state group
     private void SaveState()
     {
@@ -82,10 +111,14 @@ public partial class PauseMenu : Control
     {
         if (PauseMenuContainer.Visible) // change to visible to prevent unpausing when catalogue is open
         {
-            GetTree().Paused = false;
+            FishCatalogueUi catalogue = GetNode<FishCatalogueUi>("/root/Main/HUD/FishCatalogue");
+            if (!catalogue.Visible) // only unpause if catalogue is not shown
+                GetTree().Paused = false;
+
             ReleaseFocus();
             // PauseMsgLabel.Visible = false;
             PauseMenuContainer.Visible = false;
+            AudioManager.Instance.PlaySfx(this,SoundEffect.MenuHide, false);
         }	
         else
         {
@@ -93,6 +126,7 @@ public partial class PauseMenu : Control
             GrabFocus();
             // PauseMsgLabel.Visible = true;
             PauseMenuContainer.Visible = true;
+            AudioManager.Instance.PlaySfx(this,SoundEffect.MenuShow, false);
         }
     }
 }

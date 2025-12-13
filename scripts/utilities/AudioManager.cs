@@ -68,8 +68,15 @@ public partial class AudioManager : Node
         SignalBus.Instance.TimeOfDayChanged += HandleTimeOfDayChanged;
     }
 
-    public void PlaySfx(Node parent, SoundEffect sfx)
+    public void PlaySfx(Node parent, SoundEffect sfx, bool enablePitchShift)
     {
+        // Introduce some pitch shift per sfx play
+        AudioEffectPitchShift pitchShift = AudioServer.GetBusEffect(AudioServer.GetBusIndex("Sfx"), 0) as AudioEffectPitchShift;
+        if (enablePitchShift)
+            pitchShift.PitchScale = (float) GD.RandRange(0.9995, 1.0005);
+        else
+            pitchShift.PitchScale = 1.0f;
+
         AudioStreamPlayer audioPlayer = new AudioStreamPlayer()
         {
             Stream = _sfxAudioStreams[sfx],
@@ -83,6 +90,8 @@ public partial class AudioManager : Node
 
     public void PlayActionAudio(PlayerActionAudio action)
     {
+        AudioEffectPitchShift pitchShift = AudioServer.GetBusEffect(AudioServer.GetBusIndex("Sfx"), 0) as AudioEffectPitchShift;
+        pitchShift.PitchScale = 1.0f; // reset to normal for the action's sfx
         _playerActionAudioPlayers[action].Play();
     }
 
@@ -111,9 +120,22 @@ public partial class AudioManager : Node
         // This one gonna hard code it
         // There are better ways I guess
         // Organise the directory structure and use loop to load (Idk if this is good enough)
+        // use a loop and toString the enums as the file name
         // But for now, just hard code it first (here or use the collection expression?)
         _sfxAudioStreams.Add(SoundEffect.MinigameSuccess, AudioStreamWav.LoadFromFile("res://assets/audio/sound_effects/minigame_success.wav"));
         _sfxAudioStreams.Add(SoundEffect.MinigameFailure, AudioStreamWav.LoadFromFile("res://assets/audio/sound_effects/minigame_failure.wav"));
+        _sfxAudioStreams.Add(SoundEffect.QteNotification, AudioStreamWav.LoadFromFile("res://assets/audio/sound_effects/qte_notif.wav")); // change maybe?
+        _sfxAudioStreams.Add(SoundEffect.WaterSplash, AudioStreamWav.LoadFromFile("res://assets/audio/sound_effects/bobber_splash.wav"));
+        _sfxAudioStreams.Add(SoundEffect.CastMarkProgress, AudioStreamWav.LoadFromFile("res://assets/audio/sound_effects/cast_mark_progress.wav"));
+        _sfxAudioStreams.Add(SoundEffect.FishNibble, AudioStreamWav.LoadFromFile("res://assets/audio/sound_effects/fish_nibble.wav"));
+        _sfxAudioStreams.Add(SoundEffect.ShowOff, AudioStreamWav.LoadFromFile("res://assets/audio/sound_effects/show_off.wav"));
+        _sfxAudioStreams.Add(SoundEffect.ForwardCast, AudioStreamWav.LoadFromFile("res://assets/audio/sound_effects/forward_cast.wav"));
+        _sfxAudioStreams.Add(SoundEffect.ReverseCast, AudioStreamWav.LoadFromFile("res://assets/audio/sound_effects/reverse_cast.wav"));
+        _sfxAudioStreams.Add(SoundEffect.FishCaught, AudioStreamWav.LoadFromFile("res://assets/audio/sound_effects/fish_caught.wav"));
+        _sfxAudioStreams.Add(SoundEffect.MenuShow, AudioStreamWav.LoadFromFile("res://assets/audio/sound_effects/menu_show.wav"));
+        _sfxAudioStreams.Add(SoundEffect.MenuHide, AudioStreamWav.LoadFromFile("res://assets/audio/sound_effects/menu_hide.wav"));
+        _sfxAudioStreams.Add(SoundEffect.ButtonClick, AudioStreamWav.LoadFromFile("res://assets/audio/sound_effects/button_click.wav"));
+        _sfxAudioStreams.Add(SoundEffect.ButtonHover, AudioStreamWav.LoadFromFile("res://assets/audio/sound_effects/button_hover.wav"));
 
         // https://sfxr.me/ (sfx)
     }
@@ -250,7 +272,9 @@ public enum SoundEffect
     CastMarkProgress,
     ForwardCast,
     ReverseCast,
-    FishCaughtShowOff, // ba ba ba ba ~ sth like that?
+    FishNibble,
+    FishCaught,
+    ShowOff, // ba ba ba ba ~ sth like that?
     ButtonHover,
     ButtonClick,
     MenuShow,

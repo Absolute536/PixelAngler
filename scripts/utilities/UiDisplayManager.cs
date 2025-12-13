@@ -13,18 +13,17 @@ public partial class UiDisplayManager : Node
 
     public override void _UnhandledInput(InputEvent @event)
     {
+        FishCatalogueUi catalogue = GetNode<FishCatalogueUi>("/root/Main/HUD/FishCatalogue");
+        PauseMenu pauseMenu = GetNode<PauseMenu>("/root/Main/HUD/PauseMenu");
         // use if-statements should be fine cuz there're only 2
         // Ok... now it's growing (dang it)
         if (@event.IsActionPressed("ShowCatalogue"))
         {
-            FishCatalogueUi catalogue = GetNode<FishCatalogueUi>("/root/Main/HUD/FishCatalogue");
-            catalogue.ShowHideCatalogue();
+            if (!pauseMenu.PauseMenuContainer.Visible) // only show catalogue if pause menu is not shown
+                catalogue.ShowHideCatalogue();
         }
         else if (@event.IsActionPressed("ShowPause"))
-        {
-            PauseMenu pauseMenu = GetNode<PauseMenu>("/root/Main/HUD/PauseMenu");
             pauseMenu.ShowHidePauseMenu();
-        }
         else if (@event.IsActionPressed("PreviousItem") || @event.IsActionPressed("NextItem"))
         {
             if (!GetTree().Paused && CanSelectBait) // not if the scene is not paused
@@ -34,6 +33,8 @@ public partial class UiDisplayManager : Node
                     baitSelector.ToPreviousBait();
                 else
                     baitSelector.ToNextBait();
+                
+                AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonClick, true); // maybe enable pitch shift for this one
             }
         }
     }

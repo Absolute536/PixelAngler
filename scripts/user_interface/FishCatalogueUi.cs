@@ -36,8 +36,8 @@ public partial class FishCatalogueUi : Control
     }
 
     // use unhandled_input, cuz the child control doesn't consume the OpenCatalogue event. Using Gui_input doesn't work, cuz the children has focus, and theirs will be triggered instead
-    public override void _UnhandledInput(InputEvent @event)
-    {
+    // public override void _UnhandledInput(InputEvent @event)
+    // {
         // if (@event.IsActionPressed("ShowCatalogue"))
         // {
         //     if (Visible)
@@ -50,7 +50,7 @@ public partial class FishCatalogueUi : Control
 		// 	    // Visible = false;
         //     // FocusMode = FocusModeEnum.None;
         // }
-    }
+    // }
 
     public void ShowHideCatalogue()
     {
@@ -59,6 +59,7 @@ public partial class FishCatalogueUi : Control
             Visible = false;
             ReleaseFocus();
             GetTree().Paused = false;
+            AudioManager.Instance.PlaySfx(this, SoundEffect.MenuHide, false);
         }
         else
         {
@@ -67,6 +68,7 @@ public partial class FishCatalogueUi : Control
             Visible = true;
             GrabFocus();
             FocusMode = FocusModeEnum.All;
+            AudioManager.Instance.PlaySfx(this, SoundEffect.MenuShow, false);
 
             UpdateSpeciesInformationDisplay(0); // show first one
             FishSelectionScrollContainer.ScrollVertical = 0; // fish buttons scroll to top
@@ -77,7 +79,8 @@ public partial class FishCatalogueUi : Control
         List<FishSpecies> allFishSpecies = FishRepository.Instance.FishSpeciesInformation;
         List<FishDescription> allSpeciesDesc = FishRepository.Instance.FishDescription;
 
-        Shader shadowShader = GD.Load<Shader>("res://resources/shaders/fish.gdshader"); // load first
+        // Shader shadowShader = GD.Load<Shader>("res://resources/shaders/fish.gdshader"); // load first
+        ShaderMaterial shadowShader = GD.Load<ShaderMaterial>("res://resources/shaders/fish_underwater_shader.tres");
 
         foreach (FishSpecies species in allFishSpecies)
         {
@@ -94,12 +97,15 @@ public partial class FishCatalogueUi : Control
             selectionButton.CustomMinimumSize = new Vector2(48, 48);
             selectionButton.FishSelectionChanged = UpdateSpeciesInformationDisplay; // just assign, cuz only 1
 
+            selectionButton.MouseEntered += () => {AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonHover, false);}; // enter only
+            selectionButton.Pressed += () => {AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonClick, false);};
+
             FishSelectionButtons.Add(selectionButton);
             // shoudl be up there
             // so we're initialising the icons based on progress (which would be loaded from the save file already)
             if (FishRepository.Instance.FishCatchProgress[species.FishId].NumbersCaught == 0)
             {
-                selectionButton.IconSprite.Material = new ShaderMaterial() {Shader = shadowShader};
+                selectionButton.IconSprite.Material = shadowShader;
             }
                 
 

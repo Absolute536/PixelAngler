@@ -135,7 +135,7 @@ public partial class MinigameManager : Node
                     GD.Print("Mouse pressed detected");
                 }
                 else
-                    _fishingProgress.GameProgressBar.Value -= 0.30 * _currentSpeciesInGame.Aggressiveness;
+                    _fishingProgress.GameProgressBar.Value -= 0.35 * _currentSpeciesInGame.Aggressiveness;
                 
                 // just quick test
                 StyleBoxFlat promptStyleBox = _fishingProgress.GameActionPrompt.GetThemeStylebox("normal").Duplicate() as StyleBoxFlat;
@@ -143,9 +143,13 @@ public partial class MinigameManager : Node
                 if (CurrentBehaviour == FishBehaviour.Green)
                 {
                     promptStyleBox.BgColor = Colors.LimeGreen;
+                    _fishingProgress.GameActionPrompt.Text = "L";
                 }
                 else
+                {
                     promptStyleBox.BgColor = Colors.Crimson;
+                    _fishingProgress.GameActionPrompt.Text = "R";
+                }
 
                 _fishingProgress.GameActionPrompt.AddThemeStyleboxOverride("normal", promptStyleBox);
                 _fishingProgress.GameActionPrompt.AddThemeColorOverride("default_color", Colors.White);
@@ -184,9 +188,7 @@ public partial class MinigameManager : Node
             if (_fishingProgress.GameProgressBar.Value >= _fishingProgress.GameProgressBar.MaxValue)
             {
                 // Play win sound cue
-                AudioManager.Instance.PlaySfx(this, SoundEffect.MinigameSuccess);
-
-
+                AudioManager.Instance.PlaySfx(this, SoundEffect.MinigameSuccess, true);
 
                 SceneTreeTimer freezeFrameTimer = GetTree().CreateTimer(0.25, true, true);
                 freezeFrameTimer.Timeout += () =>
@@ -196,6 +198,9 @@ public partial class MinigameManager : Node
                     // Ok, need to stop it after the freeze frame in order to prevent the unpaused notification from play it
                     AudioManager.Instance.StopActionAudio(PlayerActionAudio.FishingGreen);
                     AudioManager.Instance.StopActionAudio(PlayerActionAudio.FishingRed);
+                    
+                    // can play splashing sound
+                    AudioManager.Instance.PlaySfx(this, SoundEffect.FishCaught, true);
                     WinMinigame();
                 };
                 GetTree().Paused = true;
@@ -205,7 +210,7 @@ public partial class MinigameManager : Node
             if (_fishingProgress.GameProgressBar.Value == _fishingProgress.GameProgressBar.MinValue)
             {
                 // Play lose sound cue
-                AudioManager.Instance.PlaySfx(this, SoundEffect.MinigameFailure);
+                AudioManager.Instance.PlaySfx(this, SoundEffect.MinigameFailure, true);
 
 
 

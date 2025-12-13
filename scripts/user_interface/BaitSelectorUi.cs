@@ -23,13 +23,10 @@ public partial class BaitSelectorUi : Control
 		NextBait.Pressed += ToNextBait;
 		DisplayTimer.Timeout += () => {BaitName.Visible = false;};
 
+		InitialiseUiSoundEffects();
+
 		UpdatePlayerSelectedBait(0); // update selected bait (or else it can be null)
     }
-
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	// public override void _Process(double delta)
-	// {
-	// }
 
 	public void ToPreviousBait()
     {
@@ -57,6 +54,17 @@ public partial class BaitSelectorUi : Control
 			UpdateBaitInformation();
 		}
     }
+
+	private void InitialiseUiSoundEffects()
+	{
+		PreviousBait.MouseEntered += () => {AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonHover, false);};
+		PreviousBait.MouseExited += () => {AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonHover, false);};
+		PreviousBait.Pressed += () => {AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonClick, false);};
+
+		NextBait.MouseEntered += () => {AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonHover, false);};
+		NextBait.MouseExited += () => {AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonHover, false);};
+		NextBait.Pressed += () => {AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonClick, false);};
+	}
 
 	private void UpdateBaitInformation()
     {

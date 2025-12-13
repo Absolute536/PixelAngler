@@ -12,7 +12,7 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_v4r4p"]
 
-[node name="PauseMenu" type="Control" node_paths=PackedStringArray("actualButton", "PauseMsgLabel", "PauseMenuContainer", "MasterVolume", "MusicVolume", "SfxVolume", "FullscreenToggle", "QuitButton") groups=["PersistentState"]]
+[node name="PauseMenu" type="Control" node_paths=PackedStringArray("PauseButton", "PauseMsgLabel", "PauseMenuContainer", "MasterVolume", "MusicVolume", "SfxVolume", "FullscreenToggle", "QuitButton") groups=["PersistentState"]]
 process_mode = 3
 layout_mode = 3
 anchors_preset = 15
@@ -23,7 +23,7 @@ grow_vertical = 2
 focus_mode = 2
 mouse_filter = 2
 script = ExtResource("1_8gfrl")
-actualButton = NodePath("TextureButton")
+PauseButton = NodePath("TextureButton")
 PauseMsgLabel = NodePath("Label")
 PauseMenuContainer = NodePath("TextureRect")
 MasterVolume = NodePath("TextureRect/VBoxContainer/GridContainer/MasterVolumeSlider")
