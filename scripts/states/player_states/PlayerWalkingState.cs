@@ -59,7 +59,7 @@ public partial class PlayerWalkingState : State
             velocity.X = direction.X * MovementSpeed;
             velocity.Y = direction.Y * MovementSpeed;
 
-            Player.FacingDirection = direction;
+            Player.FacingDirection = direction; // hmm.. assign every frame huh... (dang it! I've got no time left)
             PlayWalkingAnimation(direction);
         }
         // Stop and transition to IDLE when no direction input (update 10/12/2025: only when no directional input)

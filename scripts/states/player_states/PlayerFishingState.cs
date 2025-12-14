@@ -60,6 +60,35 @@ public partial class PlayerFishingState : State
 
     public override void PhysicsProcessUpdate(double delta)
     {
+        // So... just play the animations here? (We do have the player reference) -> like the walking state
+        // I guess the animation will just play, but the sfx will only play if you provide the correct action?
+        // Yeah, just need to get this over with. Still have 36 FRICKING FISH SPRITES TO DRAW!!!
+
+        if (IsCurrentlyActive) // Don't forget this.
+        {
+            if (MinigameManager.Instance.CurrentBehaviour == FishBehaviour.Green || MinigameManager.Instance.CurrentBehaviour == FishBehaviour.Yellow)
+            {
+                if (Player.FacingDirection == Vector2.Up)
+                    Player.AnimationPlayer.Play("BackReel");
+                else if (Player.FacingDirection == Vector2.Down)
+                    Player.AnimationPlayer.Play("FrontReel");
+                else if (Player.FacingDirection == Vector2.Left)
+                    Player.AnimationPlayer.Play("LeftReel");
+                else
+                    Player.AnimationPlayer.Play("RightReel");
+            }
+            else if (MinigameManager.Instance.CurrentBehaviour == FishBehaviour.Red) // probably can just use else, cuz it's an enum
+            {
+                if (Player.FacingDirection == Vector2.Up)
+                    Player.AnimationPlayer.Play("BackHold");
+                else if (Player.FacingDirection == Vector2.Down)
+                    Player.AnimationPlayer.Play("FrontHold");
+                else if (Player.FacingDirection == Vector2.Left)
+                    Player.AnimationPlayer.Play("LeftHold");
+                else
+                    Player.AnimationPlayer.Play("RightHold");
+            }
+        }
 
     }
 

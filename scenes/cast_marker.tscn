@@ -1,10 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://cwtba6wd0gfht"]
+[gd_scene load_steps=4 format=3 uid="uid://cwtba6wd0gfht"]
 
-[ext_resource type="Texture2D" uid="uid://v8vf2wflbo6g" path="res://assets/player/cast_marker.png" id="1_i45yn"]
+[ext_resource type="Texture2D" uid="uid://dt8ppa3qr8xgm" path="res://assets/ui_design/cast_marker.png" id="1_i45yn"]
+[ext_resource type="Material" uid="uid://kjauxd6f4e5y" path="res://resources/shaders/unshaded_canvas_item_material.tres" id="1_t5our"]
 [ext_resource type="Script" uid="uid://5b503ors8bhg" path="res://scripts/game_mechanism/CastMarker.cs" id="2_i45yn"]
 
 [node name="CastMarker" type="Sprite2D" node_paths=PackedStringArray("CastTimer")]
-scale = Vector2(0.25, 0.25)
+material = ExtResource("1_t5our")
 texture = ExtResource("1_i45yn")
 script = ExtResource("2_i45yn")
 CastTimer = NodePath("Timer")

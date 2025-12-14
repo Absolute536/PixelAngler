@@ -17,6 +17,27 @@ public partial class PlayerIdleState : State
     public override void EnterState(string previousState)
     {
         base.EnterState(previousState);
+
+        Player.AnimationPlayer.Stop();
+        Player.AnimationPlayer.Frame = 0;
+        
+        if (previousState != "PlayerWalkingState")
+        {
+            if (previousState == "PlayerCastingState" || previousState == "PlayerAnglingState" || previousState == "PlayerFishingState")
+            {
+                if (Player.FacingDirection == Vector2.Up)
+                    Player.AnimationPlayer.Animation = "Up";
+                else if (Player.FacingDirection == Vector2.Left)
+                    Player.AnimationPlayer.Animation = "Left";
+                else if (Player.FacingDirection == Vector2.Right)
+                    Player.AnimationPlayer.Animation = "Right";
+                else
+                    Player.AnimationPlayer.Animation = "Down";
+            }
+            else
+                Player.AnimationPlayer.Animation = "Down";
+            
+        }
         
         // Comment out first cuz haven't made the animation yet
         // player.AnimationPlayer.Play("Idle");

@@ -141,7 +141,16 @@ public partial class Bobber : Area2D
 		_reverseMotion = true; // Flip the flag to indicate we're in reverse motion
 		Visible = true;
 
+		if (Player.FacingDirection == Vector2.Up)
+			Player.AnimationPlayer.PlayBackwards("BackCast");
+		else if (Player.FacingDirection == Vector2.Down)
+			Player.AnimationPlayer.PlayBackwards("FrontCast");
+		else if (Player.FacingDirection == Vector2.Left)
+			Player.AnimationPlayer.PlayBackwards("LeftCast");
+		else
+			Player.AnimationPlayer.PlayBackwards("RightCast");
 		AudioManager.Instance.PlaySfx(this, SoundEffect.ReverseCast, true); // play reverse cast sfx
+
 		// For reverse motion, need to disable as well, in case it lands in water, and we reel back but the fish detects it
 		BobberCollisionShape.SetDeferred(CollisionShape2D.PropertyName.Disabled, true);
 
@@ -153,7 +162,7 @@ public partial class Bobber : Area2D
 	{
 		Visible = false;
 
-		_startPosition = Player.GlobalPosition + new Vector2(0, -16); // starting position is the player's position + offset of 16 pixels upwards
+		_startPosition = Player.GlobalPosition + new Vector2(0, -23); // starting position is the player's position + offset of 16 pixels upwards
 		GlobalPosition = _startPosition;
 
 		_timeElapsed = 0;

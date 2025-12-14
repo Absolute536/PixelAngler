@@ -53,31 +53,39 @@ public partial class PlayerCastingState : State
             _landedInWater = castingInfo.Item1 == TileType.Water;
             Bobber.InWater = _landedInWater;
 
-            if (_landedInWater)
-            {
-                // if on water do sth
-                // OnStateTransitioned("PlayerFishingState");
-                Bobber.StartBobberMotion(castingInfo.Item2);
-                // cast fishing line, passing the landing position
-                // actually, we can't put it here if we want the line to "animate" with the bobber motion
-
-                // Go back to idle state for now
-            }
+            Bobber.StartBobberMotion(castingInfo.Item2);
+            
+            if (Player.FacingDirection == Vector2.Up)
+                Player.AnimationPlayer.Play("BackCast");
+            else if (Player.FacingDirection == Vector2.Down)
+                Player.AnimationPlayer.Play("FrontCast");
+            else if (Player.FacingDirection == Vector2.Left)
+                Player.AnimationPlayer.Play("LeftCast");
             else
-            {
-                // reset the bobber and fishing line to initial state
-                // in-between can pop-up message or some other operations etc.
-                // transition back to idle state
+                Player.AnimationPlayer.Play("RightCast");
+            // if (_landedInWater)
+            // {
+            //     // if on water do sth
+            //     // OnStateTransitioned("PlayerFishingState");
+            //     Bobber.StartBobberMotion(castingInfo.Item2);
+            //     // cast fishing line, passing the landing position
+            //     // actually, we can't put it here if we want the line to "animate" with the bobber motion
+            // }
+            // else
+            // {
+            //     // reset the bobber and fishing line to initial state
+            //     // in-between can pop-up message or some other operations etc.
+            //     // transition back to idle state
 
-                // wait until bobber stops before resetting and transition back to idle state
-                // kinda works, because even in Stardew valley, you cast on non-water tile, you'll still be animation locked until the casting finishes
-                // but yeah, having a loop is kinda dangerous
-                // K... now it froze???
-                // Ok, I see the problem. Cuz HasStopped() is called on the frame (at least within a few frame I suppose) click is released, we don't know when it stops
-                // and Has stoppped is called, before the bobber ends(???)
+            //     // wait until bobber stops before resetting and transition back to idle state
+            //     // kinda works, because even in Stardew valley, you cast on non-water tile, you'll still be animation locked until the casting finishes
+            //     // but yeah, having a loop is kinda dangerous
+            //     // K... now it froze???
+            //     // Ok, I see the problem. Cuz HasStopped() is called on the frame (at least within a few frame I suppose) click is released, we don't know when it stops
+            //     // and Has stoppped is called, before the bobber ends(???)
 
-                Bobber.StartBobberMotion(castingInfo.Item2);
-            }
+            //     // Bobber.StartBobberMotion(castingInfo.Item2);
+            // }
         }
     }
 

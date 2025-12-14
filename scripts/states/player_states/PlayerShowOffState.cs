@@ -16,7 +16,8 @@ public partial class PlayerShowOffState : State
     {
         base.EnterState(previousState);
         // play the show off animation
-        
+        Player.AnimationPlayer.Animation = "ShowOff";
+
         AudioManager.Instance.PlaySfx(this, SoundEffect.ShowOff, true);
 
         // position the fish

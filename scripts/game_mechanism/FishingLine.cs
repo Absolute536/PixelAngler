@@ -21,7 +21,7 @@ public partial class FishingLine : Line2D
         SetProcess(false);
         SetPhysicsProcess(false);
         _addPointTimer.WaitTime = 0.02; // every 0.02 we check and modify the line instead of every physics frame?
-        AnchorPoint = new Vector2(0, -32);
+        AnchorPoint = new Vector2(0, -32); // default 32 pixel above player
 	}
 
     public override void _PhysicsProcess(double delta)
@@ -71,6 +71,18 @@ public partial class FishingLine : Line2D
 
     public void InitiateFishingLine()
     {
+        // Should initialise anchor point based on player's facing direction
+        // Based on to the position of the tip of the fishing rod in the sprite
+        // Magic numbers here (FUCK!)
+            if (Player.FacingDirection == Vector2.Up)
+                AnchorPoint = new Vector2(3,-23);
+            else if (Player.FacingDirection == Vector2.Down)
+                AnchorPoint = new Vector2(-3, -23);
+            else if (Player.FacingDirection == Vector2.Left)
+                AnchorPoint = new Vector2(-4, -23);
+            else
+                AnchorPoint = new Vector2(7, -24);
+
         Points = [AnchorPoint];
         Visible = true;
         SetPhysicsProcess(true);

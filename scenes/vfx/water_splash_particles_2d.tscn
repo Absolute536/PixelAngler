@@ -8,5 +8,4 @@ amount = 10
 lifetime = 0.35
 one_shot = true
 explosiveness = 1.0
-local_coords = true
 process_material = ExtResource("1_q8ovq")

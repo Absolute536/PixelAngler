@@ -40,7 +40,6 @@ public partial class CastMarker : Sprite2D
 
 	public void StartCastMarking()
 	{
-		Visible = true;
 		CastTimer.Start();
 
 		// Initialise casting marker's direction and position (player's position + 2 tiles away from the facing direction)
@@ -52,6 +51,8 @@ public partial class CastMarker : Sprite2D
 		Bobber.ResetBobberStatus();
 		FishingLine.TerminateFishingLine();
 		// FishingLine.ResetLineStatus(); ~ something like this maybe
+
+		Visible = true; // Make visible last
 	}
 	
 	public Tuple<TileType, Vector2> StopCastMarking()
