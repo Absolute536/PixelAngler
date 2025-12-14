@@ -59,9 +59,9 @@ public partial class AudioManager : Node
             _bgmAudioPlayer.Stream = GetRandomNightBgm();
         
         _bgmAudioPlayer.Bus = "Music";
-        _bgmAudioPlayer.Play();
 
         SignalBus.Instance.TimeOfDayChanged += HandleTimeOfDayChanged;
+        SignalBus.Instance.WorldLoaded += HandleWorldLoaded; // Only start playing bgm when the tilesets are initialised
     }
 
     public void PlaySfx(Node parent, SoundEffect sfx, bool enablePitchShift)
@@ -222,6 +222,11 @@ public partial class AudioManager : Node
         }
 
         _currentTimeOfDay = nextTimeOfDay;
+    }
+
+    private void HandleWorldLoaded(object sender, EventArgs e)
+    {
+        _bgmAudioPlayer.Play();
     }
 
     private AudioStream GetRandomDayBgm()

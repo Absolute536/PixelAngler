@@ -19,6 +19,7 @@ radius = 4.0
 height = 8.0
 
 [node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("AnimationPlayer", "AudioPlayer", "PlayerCamera") groups=["PersistentState", "Player", "StateSave"]]
+y_sort_enabled = true
 motion_mode = 1
 script = ExtResource("1_v6fml")
 AnimationPlayer = NodePath("PlayerAnimation")

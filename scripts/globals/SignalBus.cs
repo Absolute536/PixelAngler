@@ -160,6 +160,12 @@ public partial class SignalBus : Node
         FishObtained?.Invoke(sender, e);
     }
 
+    public event EventHandler WorldLoaded;
+    public void OnWorldLoaded(object sender, EventArgs e)
+    {
+        WorldLoaded?.Invoke(sender, e);
+    }
+
 
 
 }

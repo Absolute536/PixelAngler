@@ -137,6 +137,7 @@ public partial class World : Node2D
 
 			// SignalBus.Instance.PositionChanged += GetTileType;
 			// PPlayer.LocationChanged = OnPlayerLocationChanged;
+			SignalBus.Instance.OnWorldLoaded(this, EventArgs.Empty);
 		}
 	}
 

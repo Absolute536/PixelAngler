@@ -29,7 +29,7 @@ public partial class StateMachine : Node
         {
             initialState.EnterState(""); // previous state is an empty string since it's the very first state (might change it later?)
             currentState = initialState;
-            GD.Print("State Machine: Initial State " + initialState.StateName);
+            // GD.Print("State Machine: Initial State " + initialState.StateName);
         }
         else
         {
