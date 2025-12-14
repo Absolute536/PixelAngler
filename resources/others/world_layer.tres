@@ -1,33 +1,30 @@
 [gd_resource type="TileSet" load_steps=3 format=3 uid="uid://ddgpbpwjrig08"]
 
-[ext_resource type="Texture2D" uid="uid://buhkdjlwhysjk" path="res://assets/terrain/Word.png" id="1_vj4dq"]
+[ext_resource type="Texture2D" uid="uid://b45i02i1agsdd" path="res://assets/terrain/world_marker.png" id="2_5ymws"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7g83o"]
-texture = ExtResource("1_vj4dq")
-0:0/next_alternative_id = 3
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yvga1"]
+texture = ExtResource("2_5ymws")
 0:0/0 = 0
-0:0/0/custom_data_0 = "Forest"
-0:0/1 = 1
-0:0/1/custom_data_0 = "Mountain"
-1:0/next_alternative_id = 3
+0:0/0/custom_data_0 = "Pond"
 1:0/0 = 0
 1:0/0/custom_data_0 = "Forest"
-1:0/1 = 1
-1:0/1/custom_data_0 = "Mountain"
-1:0/2 = 2
-1:0/2/custom_data_0 = "Ocean"
 2:0/0 = 0
-2:0/0/custom_data_0 = "Forest"
+2:0/0/custom_data_0 = "Pond"
 3:0/0 = 0
-3:0/0/custom_data_0 = "Forest"
+3:0/0/custom_data_0 = "Pond"
+0:1/0 = 0
+0:1/0/custom_data_0 = "Forest"
+1:1/0 = 0
+1:1/0/custom_data_0 = "Ocean"
+2:1/0 = 0
+2:1/0/custom_data_0 = "Ocean"
+3:1/0 = 0
+3:1/0/custom_data_0 = "Forest"
 4:0/0 = 0
-4:0/0/custom_data_0 = "Forest"
-5:0/0 = 0
-5:0/0/custom_data_0 = "Forest"
-6:0/0 = 0
-6:0/0/custom_data_0 = "Forest"
+4:1/0 = 0
 
 [resource]
+physics_layer_0/collision_layer = 1
 custom_data_layer_0/name = "Location"
 custom_data_layer_0/type = 4
-sources/0 = SubResource("TileSetAtlasSource_7g83o")
+sources/0 = SubResource("TileSetAtlasSource_yvga1")

@@ -113,17 +113,12 @@ layout_mode = 2
 theme_override_constants/separation = 16
 alignment = 1
 
-[node name="FishDisplayBackground" type="NinePatchRect" parent="FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(176, 80)
+[node name="FishDisplayBackground" type="TextureRect" parent="FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(176, 86)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
 texture = ExtResource("4_yn27h")
-region_rect = Rect2(6, 6, 100, 36)
-patch_margin_left = 12
-patch_margin_top = 12
-patch_margin_right = 12
-patch_margin_bottom = 12
 
 [node name="FishDisplaySprite" type="TextureRect" parent="FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer/FishDisplayBackground"]
 custom_minimum_size = Vector2(32, 32)
@@ -142,6 +137,7 @@ grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
 texture = ExtResource("2_kbqgc")
+expand_mode = 3
 
 [node name="Species" type="Label" parent="FishCatalogueContainer/FishSpeciesInformation/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(128, 8)

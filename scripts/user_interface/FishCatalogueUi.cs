@@ -86,12 +86,10 @@ public partial class FishCatalogueUi : Control
         {
             CatalogueButton selectionButton = new ();
             selectionButton.ButtonId = species.FishId;
+            selectionButton.StretchMode = TextureButton.StretchModeEnum.Keep;
 
-            // selectionButton.TextureNormal = species.SpriteTexture; // It works, but not as well as I think cuz of the sprite size, might need to create individual button?
-            selectionButton.AddChild(selectionButton.IconSprite);
             selectionButton.IconSprite.Texture = species.SpriteTexture;
-            selectionButton.IconSprite.SetAnchorsPreset(LayoutPreset.Center, true);
-            selectionButton.IconSprite.CustomMinimumSize = new Vector2(species.SpriteTexture.GetSize().X, 16); // just use the original size, cuz 48, 48 can contain it?
+            selectionButton.IconSprite.Size = species.SpriteTexture.GetSize();
 
             // OR, create the border, and put the fish as a textureRect like the sprite texture
             selectionButton.CustomMinimumSize = new Vector2(48, 48);

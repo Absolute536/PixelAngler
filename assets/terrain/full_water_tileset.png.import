@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cmvxbr7b7q4s2"
-path="res://.godot/imported/DirtBaseTile.png-5b82495c3f6241dbf836986336a654c6.ctex"
+uid="uid://botsh8qqgt31u"
+path="res://.godot/imported/full_water_tileset.png-be90c2ff3fc236acfbb4b5bd861864bc.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/terrain/DirtBaseTile.png"
-dest_files=["res://.godot/imported/DirtBaseTile.png-5b82495c3f6241dbf836986336a654c6.ctex"]
+source_file="res://assets/terrain/full_water_tileset.png"
+dest_files=["res://.godot/imported/full_water_tileset.png-be90c2ff3fc236acfbb4b5bd861864bc.ctex"]
 
 [params]
 

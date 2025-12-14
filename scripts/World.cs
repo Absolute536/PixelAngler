@@ -23,31 +23,25 @@ public enum TileConfig
 // Should flip the enum definition order so that they are automatically ordered
 public enum TileType
 {
+	Void,
 	Water,
-	Dirt,
+	DeepWater,
+	Sand,
 	Grass,
-	Path,
-	// Damn these MountainLayer shites are hacky af (cuz I insisted on using 1 TileMapLayer for the terrain) Why so stupid?
-	MountainLayer1,
-	MountainLayer2,
-	MountainLayer3
+	Track,
+	Dirt,
+	HighGrass
+
 }
 
 public partial class World : Node2D
 {
 	[Export] TileMapLayer DisplayLayer;
 	[Export] public TileMapLayer WorldLayer;
-	[Export] Vector2I GrassTileWorldAtlas;
-	[Export] Vector2I DirtTileWorldAtlas;
-	[Export] Vector2I PathTileWorldAtlas;
-	[Export] Vector2I WaterTileWorldAtlas;
-	[Export] Vector2I MountainLayerOneWorldAtlas;
-	[Export] Vector2I MountainLayerTwoWorldAtlas;
-	[Export] Vector2I MountainLayerThreeWorldAtlas;
 
 	private Player PPlayer;
 
-	private const int TileNeighbourhoodSize = 4;
+	private Vector2I[] _specialTerrainDisplayCoords;
 
 	// Array of the 4 neighbourhood calculation vectors
 	// Used for calculating (converting) world coordinate to display coordinate and vice versa
@@ -58,18 +52,26 @@ public partial class World : Node2D
 	// [Display to World] bottom right, top right, bottom left, top left
 	readonly Vector2I[] NEIGHBOURS = [new(1, 1), new(0, 1), new(0, 0), new(1, 0)];
 
-	// readonly Dictionary<string, Vector2I> NeighbourCalculationVectors = new()
-	// {
-	// 	{"TopLeftDisplayVector", new (0, 0)}, // Bottom Right for World (kinda trivial)
-	// 	{"BottomLeftDisplayVector", new (0, 1)}, // Top Right for World
-	// 	{"TopRightDisplayVector", new (1, 0)}, // Bottom Left for World
-	// 	{"BottomRightDisplayVector", new (1, 1)} // Top Left for World
-	// };
+	private readonly Dictionary<Vector2I, TileType> WorldAtlasTileType = new ()
+	{
+		{new Vector2I(0, 0), Grass},
+		{new Vector2I(1, 0), HighGrass},
+		{new Vector2I(3, 0), Water},
+		{new Vector2I(1, 1), Water}, 
+		{new Vector2I(3, 1), Water},
+		{new Vector2I(2, 0), Track},
+		{new Vector2I(0, 1), Dirt},
+		{new Vector2I(2, 1), Sand},
+		{new Vector2I(4, 0), TileType.Void},
+		{new Vector2I(4, 1), DeepWater},
+		{new Vector2I(-1, -1), TileType.Void} // empty space also void
+	};
 
 	// Dictionary of 4-neighbour TileType -> Atlas coordinate of the tile to be selected
 	// TileConfig starts from the top left corner and go clockwise
+	// Note: Full tile is (1, 1) in most tilesets, but water doesn't have that, so we need to do some hacky stuff with the png itself
 	readonly Dictionary<Tuple<TileConfig, TileConfig, TileConfig, TileConfig>, Vector2I> neighbourhoodRules = new() {
-		{new (Primary, Primary, Primary, Primary), new(0 , 0)}, // Full Primary
+		{new (Primary, Primary, Primary, Primary), new(1, 1)}, // Full Primary (for water there's a need for some hack)
 		{new (Primary, Secondary, Secondary, Secondary), new(2, 2)}, // Top Left Corner
 		{new (Secondary, Primary, Secondary, Secondary), new(0, 2)}, // Top Right Corner
 		{new (Secondary, Secondary, Primary, Secondary), new(0, 0)}, // Bottom Right Corner
@@ -92,22 +94,27 @@ public partial class World : Node2D
 	// AND THEY ALL POINT TO THE SAME TILE SOURCE (aMaZiNg)
 	readonly Dictionary<(TileType primaryTile, TileType secondaryTile), int> tileCombinationSource = new()
 	{
+		{new (Grass, Grass), 0},
 		{new (Grass, Water), 0},
-		{new (Water, Water), 2},
-		{new (Grass, Grass), 1},
-		{new (Grass, Dirt), 4},
-		{new (Dirt, Dirt), 3},
+		{new (Water, Water), 1},
+		{new (HighGrass, Water), 2},
+		{new (HighGrass, HighGrass), 2},
+		{new (Track, Grass), 3},
+		{new (Track, Track), 3},
+		{new (HighGrass, Dirt), 4},
 		{new (Dirt, Water), 5},
-		{new (Path, Path), 6},
-		{new (Path, Grass), 7},
-		{new (MountainLayer1, Grass), 8},
-		{new (MountainLayer1, MountainLayer1), 1},
-		{new (MountainLayer2, MountainLayer1), 8},
-		{new (MountainLayer2, Grass), 8},
-		{new (MountainLayer2, MountainLayer2), 1},
-		{new (MountainLayer3, MountainLayer2), 8},
-		{new (MountainLayer3, Grass), 8},
-		{new (MountainLayer3, MountainLayer3), 1}
+		{new (Dirt, Dirt), 5},
+		{new (Sand, Water), 6},
+		{new (Sand, Sand), 6},
+		{new (Dirt, Sand), 7},
+		{new (HighGrass, Grass), 8},
+		{new (Dirt, Track), 9},
+		{new (HighGrass, Sand), 10},
+		{new (Water, TileType.Void), 11},
+		{new (TileType.Void, TileType.Void), 12},
+		{new (DeepWater, Water), 13},
+		{new (DeepWater, DeepWater), 13},
+		{new (DeepWater, TileType.Void), 14}
 	};
 
 
@@ -118,7 +125,7 @@ public partial class World : Node2D
 		// worldAtlasTileType.Add(DirtTileWorldAtlas, Dirt);
 		// worldAtlasTileType.Add(WaterTileWorldAtlas, Water);
 		// worldAtlasTileType.Add(PathTileWorldAtlas, Path);
-
+		_specialTerrainDisplayCoords = DisplayLayer.GetUsedCells().ToArray();
 		if (!Engine.IsEditorHint())
 		{
 			PPlayer = GetNode<CharacterBody2D>("WorldEntities/Player") as Player;
@@ -151,6 +158,9 @@ public partial class World : Node2D
 		// Determine the tile type of he 4 corners in each neighbour
 		foreach (Vector2I neighbourDisplayCoord in neighbourDisplayCoords)
 		{
+			if (_specialTerrainDisplayCoords.Contains(neighbourDisplayCoord)) // skip the objects? (Yup)
+				continue;
+
 			TileType[] cornerTileTypes = CalculateCornerTileTypes(neighbourDisplayCoord);
 
 			// Determine the display tile atlas coordinate
@@ -221,22 +231,7 @@ public partial class World : Node2D
 		Vector2I worldAtlas = WorldLayer.GetCellAtlasCoords(worldCoord);
 		// Console.WriteLine(worldCoord);
 
-		if (worldAtlas == GrassTileWorldAtlas)
-			return Grass;
-		else if (worldAtlas == WaterTileWorldAtlas)
-			return Water;
-		else if (worldAtlas == DirtTileWorldAtlas)
-			return Dirt;
-		else if (worldAtlas == PathTileWorldAtlas)
-			return Path;
-		else if (worldAtlas == MountainLayerOneWorldAtlas)
-			return MountainLayer1;
-		else if (worldAtlas == MountainLayerTwoWorldAtlas)
-			return MountainLayer2;
-		else if (worldAtlas == MountainLayerThreeWorldAtlas)
-			return MountainLayer3;
-		else
-			return Grass;
+		return WorldAtlasTileType[worldAtlas];
 	}
 	
 	public TileType GetTileTypeFromPosition(Vector2 position)

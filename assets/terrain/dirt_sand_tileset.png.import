@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bbwxxlqjphvbw"
-path="res://.godot/imported/Mountain(Grass).png-07763f567ca336d3acf5c680ba9357ed.ctex"
+uid="uid://bfikcncpd8oo8"
+path="res://.godot/imported/dirt_sand_tileset.png-a7a162343c8c10c1a8d1bb5e25556739.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/terrain/Mountain(Grass).png"
-dest_files=["res://.godot/imported/Mountain(Grass).png-07763f567ca336d3acf5c680ba9357ed.ctex"]
+source_file="res://assets/terrain/dirt_sand_tileset.png"
+dest_files=["res://.godot/imported/dirt_sand_tileset.png-a7a162343c8c10c1a8d1bb5e25556739.ctex"]
 
 [params]
 

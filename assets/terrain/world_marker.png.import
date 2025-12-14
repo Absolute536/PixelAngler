@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://70ad4ikm7g6j"
-path="res://.godot/imported/PathBaseTile.png-456be6d6c1d2a249d99912624ae542f8.ctex"
+uid="uid://b45i02i1agsdd"
+path="res://.godot/imported/world_marker.png-0cc866de1c72f48d325524f22eecfb8c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/terrain/PathBaseTile.png"
-dest_files=["res://.godot/imported/PathBaseTile.png-456be6d6c1d2a249d99912624ae542f8.ctex"]
+source_file="res://assets/terrain/world_marker.png"
+dest_files=["res://.godot/imported/world_marker.png-0cc866de1c72f48d325524f22eecfb8c.ctex"]
 
 [params]
 

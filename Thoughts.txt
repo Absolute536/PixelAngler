@@ -321,3 +321,6 @@ Audio
 -> then in autoload I'll have a playsfx(parent, what you want to play) for sfx and add child to parent, then connect to finished signal to free itself
 -> player action also on demand I guess;
 -> Scrapped ambience sounds, cuz too distracting
+-> Ok, maybe can add it back IF we have extra time
+-> New idea is let the player control the changing of ambience sounds by emiting signals to audio manager on location change
+-> yeah, it's right there. Guess my brain turned to mush after 1 night of 0 sleep. (YaY)

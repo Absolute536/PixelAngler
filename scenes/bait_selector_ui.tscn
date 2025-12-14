@@ -68,7 +68,6 @@ theme = ExtResource("4_olfpk")
 texture_normal = ExtResource("4_f8pyj")
 texture_pressed = ExtResource("5_olfpk")
 texture_hover = ExtResource("6_xb60k")
-stretch_mode = 0
 script = ExtResource("2_p34w1")
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer/GridContainer"]
@@ -85,7 +84,6 @@ theme = ExtResource("4_olfpk")
 texture_normal = ExtResource("9_euwcb")
 texture_pressed = ExtResource("10_wgo41")
 texture_hover = ExtResource("11_15e4e")
-stretch_mode = 0
 script = ExtResource("2_p34w1")
 
 [node name="DisplayTimer" type="Timer" parent="."]

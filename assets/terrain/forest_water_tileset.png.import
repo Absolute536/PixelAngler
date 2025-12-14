@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://buhkdjlwhysjk"
-path="res://.godot/imported/Word.png-ab880e027ed24ab04080b713fdbe3c13.ctex"
+uid="uid://ddbe3rbivm55x"
+path="res://.godot/imported/forest_water_tileset.png-7da54760eb7cd14aea4b0434215735b0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/terrain/Word.png"
-dest_files=["res://.godot/imported/Word.png-ab880e027ed24ab04080b713fdbe3c13.ctex"]
+source_file="res://assets/terrain/forest_water_tileset.png"
+dest_files=["res://.godot/imported/forest_water_tileset.png-7da54760eb7cd14aea4b0434215735b0.ctex"]
 
 [params]
 

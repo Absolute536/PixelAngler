@@ -14,6 +14,14 @@ public partial class CatalogueButton : TextureButton
     {
         // No need to unsubscribe I presume
         Pressed += () => {FishSelectionChanged?.Invoke(ButtonId);};
+        TextureHover = GD.Load<Texture2D>("res://assets/ui_design/fish_selection_button_hover.png");
+        TextureNormal = GD.Load<Texture2D>("res://assets/ui_design/fish_selection_button_normal.png");
+        TexturePressed = GD.Load<Texture2D>("res://assets/ui_design/fish_selection_button_press.png");
+        
+        AddChild(IconSprite);
+        IconSprite.StretchMode = TextureRect.StretchModeEnum.KeepCentered;
+        IconSprite.ExpandMode = TextureRect.ExpandModeEnum.KeepSize;
+        IconSprite.SetAnchorsAndOffsetsPreset(LayoutPreset.Center, LayoutPresetMode.Minsize);
     }
 
     

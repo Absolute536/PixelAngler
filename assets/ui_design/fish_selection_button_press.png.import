@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bkkugsarlk2l8"
-path="res://.godot/imported/BaseTiles.png-b43a75d63a42cc37f7247ef4ee63501c.ctex"
+uid="uid://cxts4r3hnyq3"
+path="res://.godot/imported/fish_selection_button_press.png-921949cd4c68329793d623eaadd9a086.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/terrain/BaseTiles.png"
-dest_files=["res://.godot/imported/BaseTiles.png-b43a75d63a42cc37f7247ef4ee63501c.ctex"]
+source_file="res://assets/ui_design/fish_selection_button_press.png"
+dest_files=["res://.godot/imported/fish_selection_button_press.png-921949cd4c68329793d623eaadd9a086.ctex"]
 
 [params]
 
