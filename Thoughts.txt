@@ -331,6 +331,7 @@ DONE
 - it's finished, I guess
 - still more room for improvement
 -> a help manual
+-> decorate the pause menu
 -> dynamic audio,especially for the walking sound
 -> there is also a slight flaw in the playing of the fishing sfx, if you hold while in red then green, progress will increase, but the sfx will be off
    -> probably cuz we use unhandled_input for the playing of sfx
