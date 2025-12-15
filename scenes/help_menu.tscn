@@ -1,0 +1,144 @@
+[gd_scene load_steps=9 format=3 uid="uid://2dcyp8upswtt"]
+
+[ext_resource type="Texture2D" uid="uid://dkwhuh1onefek" path="res://assets/ui_design/help_background_book.png" id="1_g0qdk"]
+[ext_resource type="Script" uid="uid://brvocaj3i68n1" path="res://scripts/user_interface/HelpMenu.cs" id="1_nx501"]
+[ext_resource type="FontFile" uid="uid://cibnl77dc0ji7" path="res://resources/fonts/prstartk.ttf" id="2_dfimx"]
+[ext_resource type="Texture2D" uid="uid://tpm8eqwcr8ob" path="res://assets/ui_design/help_close_button_normal.png" id="3_2xk8j"]
+[ext_resource type="Texture2D" uid="uid://b6veyyyt1w5cj" path="res://assets/ui_design/help_close_button_press.png" id="4_1e2ud"]
+[ext_resource type="Texture2D" uid="uid://c2ed6c1css8g4" path="res://assets/ui_design/help_close_button_hover.png" id="5_8f3ry"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nx501"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2xk8j"]
+
+[node name="HelpMenu" type="Control" node_paths=PackedStringArray("LeftPage", "RightPage", "PreviousPage", "NextPage", "CloseButton")]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 2
+script = ExtResource("1_nx501")
+LeftPage = NodePath("VBoxContainer/HSplitContainer/LeftPage")
+RightPage = NodePath("VBoxContainer/HSplitContainer/RightPage")
+PreviousPage = NodePath("VBoxContainer/GridContainer/PreviousPage")
+NextPage = NodePath("VBoxContainer/GridContainer/NextPage")
+CloseButton = NodePath("VBoxContainer/HBoxContainer/TextureButton")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(464, 312)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -232.0
+offset_top = -156.0
+offset_right = 232.0
+offset_bottom = 156.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_g0qdk")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+custom_minimum_size = Vector2(416, 232)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -208.0
+offset_top = -120.0
+offset_right = 208.0
+offset_bottom = 112.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+alignment = 2
+
+[node name="TextureButton" type="TextureButton" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+texture_normal = ExtResource("3_2xk8j")
+texture_pressed = ExtResource("4_1e2ud")
+texture_hover = ExtResource("5_8f3ry")
+
+[node name="HSplitContainer" type="HSplitContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(392, 192)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+dragging_enabled = false
+
+[node name="LeftPage" type="RichTextLabel" parent="VBoxContainer/HSplitContainer"]
+custom_minimum_size = Vector2(196, 0)
+layout_mode = 2
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_constants/line_separation = 2
+theme_override_fonts/normal_font = ExtResource("2_dfimx")
+theme_override_font_sizes/normal_font_size = 8
+bbcode_enabled = true
+text = "[center]~ Controls ~[/center]
+
+[ul] W [Move Up][/ul]
+[ul] A [Move Left][/ul]
+[ul] S [Move Down][/ul]
+[ul] D [Move Right][/ul]
+
+[ul] Left Click [Fishing][/ul]
+[ul] Right Click [Fishing][/ul]
+[ul] Scroll [Swap Bait][/ul]
+
+[ul] C [Show Catalogue][/ul]
+[ul] Esc [Pause Menu][/ul]
+"
+scroll_active = false
+tab_size = 1
+
+[node name="RightPage" type="RichTextLabel" parent="VBoxContainer/HSplitContainer"]
+custom_minimum_size = Vector2(196, 0)
+layout_mode = 2
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_constants/line_separation = 2
+theme_override_fonts/normal_font = ExtResource("2_dfimx")
+theme_override_font_sizes/normal_font_size = 8
+bbcode_enabled = true
+text = "[center]~ How to Fish 1 ~[/center]
+
+Left click & Release to cast while standing still. Hold left click to cast further.
+
+Left click while no fish is hooked to cancel the cast.
+
+Bobber can only be cast into water bodies."
+scroll_active = false
+tab_size = 0
+
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+columns = 2
+
+[node name="PreviousPage" type="Button" parent="VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+size_flags_horizontal = 2
+theme_override_fonts/font = ExtResource("2_dfimx")
+theme_override_font_sizes/font_size = 8
+theme_override_styles/focus = SubResource("StyleBoxEmpty_nx501")
+text = "Previous Page"
+
+[node name="NextPage" type="Button" parent="VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_fonts/font = ExtResource("2_dfimx")
+theme_override_font_sizes/font_size = 8
+theme_override_styles/focus = SubResource("StyleBoxEmpty_2xk8j")
+text = "Next Page"

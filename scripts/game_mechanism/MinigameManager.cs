@@ -135,7 +135,7 @@ public partial class MinigameManager : Node
                     // GD.Print("Mouse pressed detected");
                 }
                 else
-                    _fishingProgress.GameProgressBar.Value -= 0.35 * _currentSpeciesInGame.Aggressiveness;
+                    _fishingProgress.GameProgressBar.Value -= 0.30 * _currentSpeciesInGame.Aggressiveness;
                 
                 // just quick test
                 StyleBoxFlat promptStyleBox = _fishingProgress.GameActionPrompt.GetThemeStylebox("normal").Duplicate() as StyleBoxFlat;

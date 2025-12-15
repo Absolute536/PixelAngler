@@ -11,6 +11,7 @@ public partial class PauseMenu : Control
     [Export] public HSlider SfxVolume;
 
     [Export] public CheckButton FullscreenToggle;
+    [Export] public Button HelpButton;
     [Export] public Button QuitButton;
 
     private const float DefaultMasterVolumeDb = 0.0f;
@@ -31,6 +32,14 @@ public partial class PauseMenu : Control
             else
                 DisplayServer.WindowSetMode(DisplayServer.WindowMode.Windowed);
         };
+
+        HelpButton.Pressed += () =>
+        {
+            ShowHelpMenu();
+            AudioManager.Instance.PlaySfx(this, SoundEffect.PaperPlacedDown, false);
+        };
+
+        HelpButton.MouseEntered += () => {AudioManager.Instance.PlaySfx(this, SoundEffect.ButtonHover, false);};
 
         QuitButton.Pressed += () =>
         {
@@ -128,6 +137,11 @@ public partial class PauseMenu : Control
 
     public void ShowHidePauseMenu()
     {
+        // Dang it. THIS is REALLY BAD (duplicated), but I just want to get it done now.
+        HelpMenu helpMenu = GetNode<HelpMenu>("/root/Main/HUD/HelpMenu");
+        if (helpMenu.Visible)
+            return; // do nothing if help menu is visible
+
         if (PauseMenuContainer.Visible) // change to visible to prevent unpausing when catalogue is open
         {
             FishCatalogueUi catalogue = GetNode<FishCatalogueUi>("/root/Main/HUD/FishCatalogue");
@@ -147,5 +161,13 @@ public partial class PauseMenu : Control
             PauseMenuContainer.Visible = true;
             AudioManager.Instance.PlaySfx(this,SoundEffect.PaperPlacedDown, false);
         }
+    }
+
+    private void ShowHelpMenu()
+    {
+        HelpMenu helpMenu = GetNode<HelpMenu>("/root/Main/HUD/HelpMenu");
+        helpMenu.ShowHideHelpMenu();
+        ReleaseFocus();
+
     }
 }

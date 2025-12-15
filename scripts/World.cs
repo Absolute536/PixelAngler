@@ -41,7 +41,8 @@ public partial class World : Node2D
 
 	private Player PPlayer;
 
-	private Vector2I[] _specialTerrainDisplayCoords;
+	private Godot.Collections.Array<Vector2I> _specialTerrainDisplayCoords;
+	private Dictionary<Vector2I, bool> _specialTerrainDisplayCoordsLookup = new ();
 
 	// Array of the 4 neighbourhood calculation vectors
 	// Used for calculating (converting) world coordinate to display coordinate and vice versa
@@ -125,7 +126,17 @@ public partial class World : Node2D
 		// worldAtlasTileType.Add(DirtTileWorldAtlas, Dirt);
 		// worldAtlasTileType.Add(WaterTileWorldAtlas, Water);
 		// worldAtlasTileType.Add(PathTileWorldAtlas, Path);
-		_specialTerrainDisplayCoords = DisplayLayer.GetUsedCells().ToArray();
+		_specialTerrainDisplayCoords = DisplayLayer.GetUsedCells(); // get the manually placed display layer tiles
+		// WorldLayer.GetUsedCells();
+
+		// ok, how about we bulid a dictionary out of this? (cuz it's not that many tiles)
+		// then only iterate once O(n), and lookup is O(1)
+		// instead of O(n) every loop
+		foreach(Vector2I coord in _specialTerrainDisplayCoords)
+		{
+			_specialTerrainDisplayCoordsLookup.Add(coord, true);
+		}
+
 		if (!Engine.IsEditorHint())
 		{
 			PPlayer = GetNode<CharacterBody2D>("WorldEntities/Player") as Player;
@@ -156,10 +167,15 @@ public partial class World : Node2D
 		// Calculate coordinate of each of the neighbours
 		Vector2I[] neighbourDisplayCoords = CalculateDisplayLayerNeighbourCoordinates(worldLayerCoordinate);
 
+		// maybe we add the other here (not special ones) to the lookup
+		// it works LET'S GO!!!
+		foreach(Vector2I coord in neighbourDisplayCoords)
+			_specialTerrainDisplayCoordsLookup.TryAdd(coord, false); // hmm.. are there duplicated keys?
+
 		// Determine the tile type of he 4 corners in each neighbour
 		foreach (Vector2I neighbourDisplayCoord in neighbourDisplayCoords)
 		{
-			if (_specialTerrainDisplayCoords.Contains(neighbourDisplayCoord)) // skip the objects? (Yup)
+			if (_specialTerrainDisplayCoordsLookup[neighbourDisplayCoord]) // skip the objects? (Yup)
 				continue;
 
 			TileType[] cornerTileTypes = CalculateCornerTileTypes(neighbourDisplayCoord);

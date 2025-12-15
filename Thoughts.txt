@@ -339,3 +339,69 @@ DONE
 -> and YEAH.... a main menu, a loading screen, ...
 ==> well, I'll move on first to ensure we can finish this whole project
 ==> we'll come back later if we have extra time (YOU KNOW DAMN WELL THERE ISN'T)
+
+[center]~ How to Fish 1 ~[/center]
+
+Left click & Release to cast while standing still. Hold left click to cast further.
+
+Left click while no fish is hooked to cancel the cast.
+
+Bobber can only be cast into water bodies.
+
+
+----------------------------------------------
+
+[center]~ How to Fish 2 ~[/center]
+
+Fish will notice the cast bait and will be attracted to nibble at it if it SATISFIES their preferences.
+
+Left click at the precise timing when the fish bites to hook the fish.
+
+Missing the timing results in the bait being eaten, requiring another cast.
+
+-------------------------------------------------------------
+
+[center]~ How to Fish 3 ~[/center]
+
+To catch a fish, perform various actions based on its behaviour (colour prompt):
+
+When the fish is [color=LimeGreen]hooked[/color], hold left click.
+
+When the fish is [color=Gold]wrestling[/color], left click repeatedly.
+
+When the fish is [color=Crimson]diving[/color], hold right click.
+
+
+[center]~ How to Fish 4 ~[/center]
+
+A fish's preference is defined by their diet type and size.
+
+Swap between various baits and use the correct one to discover the preferences of each fish.
+
+
+
+
+[center]~ How to Fish 5 ~[/center]
+
+[center]
+6 Available Baits
+[/center]
+For Carnivores:
+* Worm
+* Small Fish
+* Fish Flesh Chunk
+
+For Herbivores:
+* Pea
+* Walnut
+* Bread
+
+
+[center]~ How to fish 6 ~[/center]
+
+The catch progress of each fish species is recorded in the catalogue.
+
+Various information of every fish species discovered is documented in the catalgoue.
+
+[color=MediumBlue]Quick Tip:
+Hints to finding undiscovered fish species can be found in the catalogue.[/color]

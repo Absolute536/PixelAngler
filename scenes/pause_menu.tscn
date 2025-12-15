@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://wogasyn6bm4b"]
+[gd_scene load_steps=11 format=3 uid="uid://wogasyn6bm4b"]
 
 [ext_resource type="Script" uid="uid://bw1i5x7lix6fs" path="res://scripts/user_interface/PauseMenu.cs" id="1_8gfrl"]
 [ext_resource type="Texture2D" uid="uid://ckst5stxry06n" path="res://assets/ui_design/pause_button_normal.png" id="1_rh5fn"]
@@ -10,9 +10,11 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7l7mv"]
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1s2dm"]
+
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_v4r4p"]
 
-[node name="PauseMenu" type="Control" node_paths=PackedStringArray("PauseButton", "PauseMsgLabel", "PauseMenuContainer", "MasterVolume", "MusicVolume", "SfxVolume", "FullscreenToggle", "QuitButton") groups=["PersistentState"]]
+[node name="PauseMenu" type="Control" node_paths=PackedStringArray("PauseButton", "PauseMsgLabel", "PauseMenuContainer", "MasterVolume", "MusicVolume", "SfxVolume", "FullscreenToggle", "HelpButton", "QuitButton") groups=["PersistentState"]]
 process_mode = 3
 layout_mode = 3
 anchors_preset = 15
@@ -30,6 +32,7 @@ MasterVolume = NodePath("TextureRect/VBoxContainer/GridContainer/MasterVolumeSli
 MusicVolume = NodePath("TextureRect/VBoxContainer/GridContainer/MusicVolumeSlider")
 SfxVolume = NodePath("TextureRect/VBoxContainer/GridContainer/SfxVolumeSlider")
 FullscreenToggle = NodePath("TextureRect/VBoxContainer/CheckButton")
+HelpButton = NodePath("TextureRect/VBoxContainer/Button")
 QuitButton = NodePath("TextureRect/VBoxContainer/TextureButton")
 metadata/_edit_lock_ = true
 
@@ -159,6 +162,14 @@ size_flags_vertical = 1
 theme_override_constants/center_grabber = 1
 max_value = 10.0
 value = 10.0
+
+[node name="Button" type="Button" parent="TextureRect/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("5_7l7mv")
+theme_override_font_sizes/font_size = 8
+theme_override_styles/focus = SubResource("StyleBoxEmpty_1s2dm")
+text = " Help "
 
 [node name="TextureButton" type="Button" parent="TextureRect/VBoxContainer"]
 layout_mode = 2
