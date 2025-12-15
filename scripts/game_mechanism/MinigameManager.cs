@@ -132,7 +132,7 @@ public partial class MinigameManager : Node
                     if (CurrentBehaviour == FishBehaviour.Green)
                         _fishingProgress.GameProgressBar.Value += 0.40 * (1 - _currentSpeciesInGame.Aggressiveness);
 
-                    GD.Print("Mouse pressed detected");
+                    // GD.Print("Mouse pressed detected");
                 }
                 else
                     _fishingProgress.GameProgressBar.Value -= 0.35 * _currentSpeciesInGame.Aggressiveness;

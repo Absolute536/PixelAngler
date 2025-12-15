@@ -102,4 +102,4 @@ TraceTarget = NodePath("../Bobber")
 visible = false
 Player = NodePath("../..")
 FishingLine = NodePath("../FishingLine")
-SetLaunchAngle = 45.0
+FixedLaunchAngle = 45.0

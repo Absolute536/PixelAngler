@@ -37,8 +37,9 @@ public partial class EntitySpawnPoint : Node2D
         string spawnLocation = GameInfo.Instance.GetWorldLocation(GlobalPosition);
         List<FishSpecies> spawnList = _fishPoolGenerator.GetRandomFishPool(spawnLocation);
 
-        GD.Print("Spawn location: " + spawnLocation);
-        GD.Print("Spawn list size: " + spawnList.Count);
+        // GD.Print("Spawn location: " + spawnLocation);
+        // GD.Print("Spawn list size: " + spawnList.Count);
+        
         // 17:37, 07/12/2025 -> I see what's happening now
         // Cuz the randomiser selected a rare rarity, but there are no available "rare" fish that satisfy such condition (AHHHH~~~)
         // So, we use a loop to keep rolling I guess (is this dangerous? probably fine)

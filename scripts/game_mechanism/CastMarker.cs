@@ -96,9 +96,9 @@ public partial class CastMarker : Sprite2D
 			CastTimer.Stop(); // stop early if reached max length
 		
 		// Console Output
-		GD.Print("Direction: " + TargetPlayer.FacingDirection);
-		GD.Print("Player: " + TargetPlayer.Position);
-		GD.Print("Marker Offset FROM Player: " + Position);
+		// GD.Print("Direction: " + TargetPlayer.FacingDirection);
+		// GD.Print("Player: " + TargetPlayer.Position);
+		// GD.Print("Marker Offset FROM Player: " + Position);
     }
 
 }

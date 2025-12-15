@@ -54,7 +54,7 @@ MaxEntityCount = 3
 
 [node name="SpawnPoint20" parent="SpawnPoints" instance=ExtResource("5_71j4m")]
 position = Vector2(1871, 359)
-MaxEntityCount = 4
+MaxEntityCount = 3
 
 [node name="SpawnPoint29" parent="SpawnPoints" instance=ExtResource("5_71j4m")]
 position = Vector2(2641, 1391)
@@ -64,17 +64,17 @@ MaxEntityCount = 2
 position = Vector2(3854, 1396)
 MaxEntityCount = 3
 
-[node name="SpawnPoint21" parent="SpawnPoints" instance=ExtResource("5_71j4m")]
-position = Vector2(2520, -777)
-
 [node name="SpawnPoint22" parent="SpawnPoints" instance=ExtResource("5_71j4m")]
-position = Vector2(1933, -639)
+position = Vector2(1916, -560)
+MaxEntityCount = 4
 
 [node name="SpawnPoint23" parent="SpawnPoints" instance=ExtResource("5_71j4m")]
-position = Vector2(583, -587)
+position = Vector2(566, -487)
+MaxEntityCount = 3
 
 [node name="SpawnPoint24" parent="SpawnPoints" instance=ExtResource("5_71j4m")]
-position = Vector2(-463, 466)
+position = Vector2(-235, 910)
+MaxEntityCount = 3
 
 [node name="SpawnPoint25" parent="SpawnPoints" instance=ExtResource("5_71j4m")]
 position = Vector2(493, 318)
@@ -86,7 +86,7 @@ MaxEntityCount = 3
 
 [node name="SpawnPoint2" parent="SpawnPoints" instance=ExtResource("5_71j4m")]
 position = Vector2(202, -252)
-MaxEntityCount = 3
+MaxEntityCount = 2
 
 [node name="SpawnPoint3" parent="SpawnPoints" instance=ExtResource("5_71j4m")]
 position = Vector2(907, -252)
@@ -122,15 +122,15 @@ MaxEntityCount = 3
 
 [node name="SpawnPoint11" parent="SpawnPoints" instance=ExtResource("5_71j4m")]
 position = Vector2(973, 1491)
-MaxEntityCount = 4
+MaxEntityCount = 3
 
 [node name="SpawnPoint26" parent="SpawnPoints" instance=ExtResource("5_71j4m")]
 position = Vector2(376, 1488)
 MaxEntityCount = 4
 
 [node name="SpawnPoint27" parent="SpawnPoints" instance=ExtResource("5_71j4m")]
-position = Vector2(587, 1922)
-MaxEntityCount = 4
+position = Vector2(584, 1863)
+MaxEntityCount = 3
 
 [node name="SpawnPoint28" parent="SpawnPoints" instance=ExtResource("5_71j4m")]
 position = Vector2(1409, 67)
@@ -141,16 +141,12 @@ position = Vector2(-18, 1450)
 MaxEntityCount = 4
 
 [node name="SpawnPoint13" parent="SpawnPoints" instance=ExtResource("5_71j4m")]
-position = Vector2(1563, 1899)
+position = Vector2(1611, 1864)
 MaxEntityCount = 4
 
 [node name="SpawnPoint14" parent="SpawnPoints" instance=ExtResource("5_71j4m")]
 position = Vector2(3700, 812)
 MaxEntityCount = 4
-
-[node name="SpawnPoint31" parent="SpawnPoints" instance=ExtResource("5_71j4m")]
-position = Vector2(-287, 1131)
-MaxEntityCount = 3
 
 [node name="SpawnPoint15" parent="SpawnPoints" instance=ExtResource("5_71j4m")]
 position = Vector2(3193, 753)
@@ -158,4 +154,4 @@ MaxEntityCount = 4
 
 [node name="SpawnPoint16" parent="SpawnPoints" instance=ExtResource("5_71j4m")]
 position = Vector2(3145, 1081)
-MaxEntityCount = 4
+MaxEntityCount = 3

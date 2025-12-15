@@ -12,8 +12,14 @@ public partial class Bobber : Area2D
 	// OK. I know what's going on. Because of the difference in coordinate system (y axis positive on the usual is negative here)
 	// So, instead of doing this hacky thing, we just need to negate the Endpoint y?
 	// Nope, we need to do this
-	[Export] public float SetLaunchAngle;
+	[Export] public float FixedLaunchAngle;
 	[Export] public CollisionShape2D BobberCollisionShape;
+
+	[Export] public Texture2D NormalTexture;
+	[Export] public Texture2D SubmergedTexture;
+	[Export] public Sprite2D BobberSprite;
+
+
 	private float LaunchAngle
 	{
 		set
@@ -102,9 +108,9 @@ public partial class Bobber : Area2D
 		// Negate launch angle when facing left, because the formula is for launching towards the right (positive x)
 		// For up and down directions, there are no differences, cuz the velocity would be 0, only the gravity component matters
 		if (Player.FacingDirection == Vector2.Left)
-			LaunchAngle = -SetLaunchAngle;
+			LaunchAngle = -FixedLaunchAngle;
 		else
-			LaunchAngle = SetLaunchAngle;
+			LaunchAngle = FixedLaunchAngle;
 
 		// Precompute the Sin and Cos values of the launch angle on start (cuz more expensive), instead of per Physics Frame
 		// Previously, it was in _Ready(), but then that was pretty inflexible
@@ -150,6 +156,7 @@ public partial class Bobber : Area2D
 		else
 			Player.AnimationPlayer.PlayBackwards("RightCast");
 		AudioManager.Instance.PlaySfx(this, SoundEffect.ReverseCast, true); // play reverse cast sfx
+		BobberSprite.Texture = NormalTexture;
 
 		// For reverse motion, need to disable as well, in case it lands in water, and we reel back but the fish detects it
 		BobberCollisionShape.SetDeferred(CollisionShape2D.PropertyName.Disabled, true);
@@ -171,6 +178,7 @@ public partial class Bobber : Area2D
 		_reverseMotion = false;
 
 		waterSplash.Emitting = false;
+		BobberSprite.Texture = NormalTexture;
 
 		// try disabling the collision shape
 		BobberCollisionShape.SetDeferred(CollisionShape2D.PropertyName.Disabled, true);
@@ -241,6 +249,8 @@ public partial class Bobber : Area2D
 					// GD.Print("Print if landed in water");
                     BobberCollisionShape.SetDeferred(CollisionShape2D.PropertyName.Disabled, false); // it's the area2d of bobber actually, not the collsion(wait?)
 					// yeah, just disabling the collision won't stop fish (it's raycast only) from detecting
+
+					BobberSprite.Texture = SubmergedTexture;
 					AudioManager.Instance.PlaySfx(this, SoundEffect.BobberSplash, false);
 					waterSplash.Emitting = true; // need to reset to false afterwards to ensure it emits once only
                 }

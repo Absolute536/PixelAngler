@@ -20,6 +20,11 @@ public partial class FishDespawnState : State
     {
         base.EnterState(previousState);
         _spriteColor = Fish.FishSprite.Modulate;
+
+        // Disable on enter state, and start the despawn process after some delay
+        // This is to prevent stuttering on many queue free() calls in a single instance
+        SetPhysicsProcess(false);
+        GetTree().CreateTimer(GD.RandRange(1, 3), false, true).Timeout += () => {SetPhysicsProcess(true);};
     }
 
     public override void ExitState()

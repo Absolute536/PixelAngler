@@ -1,18 +1,22 @@
-[gd_scene load_steps=5 format=3 uid="uid://1w1wporxjcab"]
+[gd_scene load_steps=6 format=3 uid="uid://1w1wporxjcab"]
 
 [ext_resource type="Script" uid="uid://d0lkcpxvl0v4c" path="res://scripts/game_mechanism/Bobber.cs" id="2_1y8pg"]
 [ext_resource type="Texture2D" uid="uid://cc3t0oh11emj7" path="res://assets/fish/bobber.png" id="2_rn3pg"]
 [ext_resource type="PackedScene" uid="uid://bq3vn7decmj80" path="res://scenes/vfx/water_splash_particles_2d.tscn" id="3_1y8pg"]
+[ext_resource type="Texture2D" uid="uid://cjf3j5gb6n1bk" path="res://assets/fish/bobber_submerged.png" id="3_4o5is"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1y8pg"]
 radius = 2.5
 
-[node name="Bobber" type="Area2D" node_paths=PackedStringArray("BobberCollisionShape", "waterSplash")]
+[node name="Bobber" type="Area2D" node_paths=PackedStringArray("BobberCollisionShape", "BobberSprite", "waterSplash")]
 collision_layer = 2
 collision_mask = 2
 input_pickable = false
 script = ExtResource("2_1y8pg")
 BobberCollisionShape = NodePath("CollisionShape2D")
+NormalTexture = ExtResource("2_rn3pg")
+SubmergedTexture = ExtResource("3_4o5is")
+BobberSprite = NodePath("Sprite2D")
 waterSplash = NodePath("GPUParticles2D")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
