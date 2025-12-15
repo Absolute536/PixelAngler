@@ -3,8 +3,8 @@
 [ext_resource type="Script" uid="uid://cu4l4rhqag1e7" path="res://scripts/fish/Fish.cs" id="1_nub35"]
 [ext_resource type="Resource" uid="uid://bt7anp5yfoc1i" path="res://resources/fish_species/fish_species_0.tres" id="2_k2ocq"]
 [ext_resource type="Material" uid="uid://d33xbpl0us6yw" path="res://resources/shaders/fish_underwater_shader.tres" id="3_dy0hy"]
-[ext_resource type="Texture2D" uid="uid://chuuqucgayxp8" path="res://assets/fish/TestFish.png" id="3_k2ocq"]
 [ext_resource type="Script" uid="uid://bakg405h3gvhu" path="res://scripts/states/StateMachine.cs" id="4_3ig6q"]
+[ext_resource type="Texture2D" uid="uid://db8vn106q6tyc" path="res://assets/fish/Fish.png" id="4_dy0hy"]
 [ext_resource type="Script" uid="uid://bqvg3v6abxftl" path="res://scripts/states/fish_states/FishNibbleState.cs" id="4_pgks6"]
 [ext_resource type="Script" uid="uid://d3qyypo0non2h" path="res://scripts/states/fish_states/FishWanderState.cs" id="5_6lgmd"]
 [ext_resource type="Script" uid="uid://w4at84aqc781" path="res://scripts/states/fish_states/FishHookedState.cs" id="7_21k1a"]
@@ -51,7 +51,7 @@ debug_color = Color(0.79603, 0.410042, 0.299339, 0.42)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 material = ExtResource("3_dy0hy")
-texture = ExtResource("3_k2ocq")
+texture = ExtResource("4_dy0hy")
 centered = false
 offset = Vector2(-16, -8)
 

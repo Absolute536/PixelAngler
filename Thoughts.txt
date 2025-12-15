@@ -324,3 +324,17 @@ Audio
 -> Ok, maybe can add it back IF we have extra time
 -> New idea is let the player control the changing of ambience sounds by emiting signals to audio manager on location change
 -> yeah, it's right there. Guess my brain turned to mush after 1 night of 0 sleep. (YaY)
+
+DONE
+- finally done with drawing all those animations and fish sprites
+- everything's working now.
+- it's finished, I guess
+- still more room for improvement
+-> a help manual
+-> dynamic audio,especially for the walking sound
+-> there is also a slight flaw in the playing of the fishing sfx, if you hold while in red then green, progress will increase, but the sfx will be off
+   -> probably cuz we use unhandled_input for the playing of sfx
+-> parameters for each of the species can be fine tuned more
+-> and YEAH.... a main menu, a loading screen, ...
+==> well, I'll move on first to ensure we can finish this whole project
+==> we'll come back later if we have extra time (YOU KNOW DAMN WELL THERE ISN'T)

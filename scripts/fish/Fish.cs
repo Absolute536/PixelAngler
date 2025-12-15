@@ -83,7 +83,7 @@ public partial class Fish : CharacterBody2D
         if (_isHooked)
         {
             if (FishSprite.FlipH && LatchTarget is not null)
-                LatchTarget.GlobalPosition = GlobalPosition + new Vector2(-16, 0); // if flipH, actual position is at tail, so need to offset by -16 on X-axis
+                LatchTarget.GlobalPosition = GlobalPosition + new Vector2(-SpeciesInformation.SpriteTexture.GetSize().X, 0); // if flipH, actual position is at tail, so need to offset by -16 on X-axis
             else
                 LatchTarget.GlobalPosition = GlobalPosition; // 16 pixel offset upwards because fish's mouth will be at top of bobber without this
                 // I see now. Because  the HandleQTESucceeded is broadcasted to every fish, so need to filter
@@ -99,7 +99,7 @@ public partial class Fish : CharacterBody2D
             if (LatchTarget is not null)
             {
                 if (FishSprite.FlipH)
-                    GlobalPosition = LatchTarget.GlobalPosition + new Vector2(16, 0); // if FlipH, fish position at bobber's offset by 16, 16 to ensure mouth is at the bottom
+                    GlobalPosition = LatchTarget.GlobalPosition + new Vector2(SpeciesInformation.SpriteTexture.GetSize().X, 0); // if FlipH, fish position at bobber's offset by 16, 16 to ensure mouth is at the bottom
                 else
                     GlobalPosition = LatchTarget.GlobalPosition;
             }
@@ -114,15 +114,20 @@ public partial class Fish : CharacterBody2D
         Texture2D spriteTexture = SpeciesInformation.SpriteTexture;
         FishSprite.Texture = spriteTexture;
         Vector2 textureSize = spriteTexture.GetSize();
-        FishSprite.Offset = new Vector2(-textureSize.X, -textureSize.Y / 2);
+        FishSprite.Offset = new Vector2(-textureSize.X, -textureSize.Y / 2); // adjust texture offset to ensure the fish's snout is at the origin
 
         // Adjust the collision shapes
         CapsuleShape2D movementShape = MovementCollisionShape.Shape as CapsuleShape2D;
         CircleShape2D detectionShape = DetectionRadiusShape.Shape as CircleShape2D;
 
-        movementShape.Radius = textureSize.Y;
+        //  Adjust the movement collistion shape size and position
+        movementShape.Radius = (textureSize.Y / 2) + 1; // should be 8? (Make it 9)
         movementShape.Height = textureSize.X;
+        MovementCollisionShape.Position = new Vector2(-textureSize.X / 2, 0);
+
+        // Adjust the bait detection collision shape size and position
         detectionShape.Radius = textureSize.X - 16 + 48; // 16 wide -> 48, 24 wide -> 56, 32 wide -> 64 I guess it's still fine
+        DetectionRadiusShape.Position = new Vector2((-textureSize.X / 2) + 8, 0); // We want the detection radius to be at the centre, so shift by X/2, and +8, cuz the parent is already - 8
 
     }     
 

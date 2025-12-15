@@ -217,7 +217,7 @@ public partial class FishNibbleState : State
     {
         // For the parameters, we use fixed values for now
         // May be replaced with unique values based on the FishStat(?) resource in the future
-        _nibbleCountRequired = GD.RandRange(2, 5); // 2 to 5 nibbles (+ 1 the final one is bite)
+        _nibbleCountRequired = GD.RandRange(2, 4); // 2 to 4 nibbles (+ 1 the final one is bite)
         _currentNibbleCount = 0;
         _nibbleSpeed = (int) (Fish.SpeciesInformation.MovementSpeed * 0.75); // I guess nibble speed should be half as slow
     }

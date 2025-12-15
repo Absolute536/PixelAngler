@@ -11,8 +11,8 @@ public partial class FishWrestleState : State
 
     private Vector2 _wrestleDirection;
 
-    private const int MinClickCount = 8;
-    private const int MaxClickCount = 20;
+    private const int MinClickCount = 6;
+    private const int MaxClickCount = 14;
 
     private const float WrestleDirectionDuration = 0.5f; // make it a constant, then scale with aggressiveness
     private Random _directionRandomiser = new ();

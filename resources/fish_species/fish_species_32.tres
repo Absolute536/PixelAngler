@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="FishSpecies" load_steps=3 format=3 uid="uid://cfavujja0wdho"]
 
-[ext_resource type="Texture2D" uid="uid://db8vn106q6tyc" path="res://assets/fish/Fish.png" id="1_ews3j"]
+[ext_resource type="Texture2D" uid="uid://bodd4c6fvkm8w" path="res://assets/fish/species/fish_species_32.png" id="1_ews3j"]
 [ext_resource type="Script" uid="uid://cfyrovpd32dc0" path="res://scripts/fish/FishSpecies.cs" id="2_dqeym"]
 
 [resource]
