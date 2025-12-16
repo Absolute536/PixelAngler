@@ -66,16 +66,22 @@ public partial class HelpMenu : Control
 			""" 	
 			[center]~ How to Fish 4 ~[/center]
 
-			A fish's preference is defined by their diet type and size.
+			Different fish species are found in different water bodies.
 
-			Swap between various baits and use the correct one to discover the preferences of each fish.
+			[center]3 Fishing Locations[/center]
+
+			* Pond
+			* Forest
+			* Ocean
+			
 			""",
 			"""
 			[center]~ How to Fish 5 ~[/center]
 
-			[center]
-			6 Available Baits
-			[/center]
+			Swap between baits to attract fish of different size and diet type.
+
+			[center]6 Available Baits[/center]
+
 			For Carnivores:
 			* Worm
 			* Small Fish
@@ -105,7 +111,7 @@ public partial class HelpMenu : Control
 
 			Fish and discover the various fish species the game has to offer.
 
-			There is no definite goal in this game. Just enjoy (I hope....).
+			There is no definite goal in this game. Just Fish and enjoy.
 			"""	
 		)
 	];

@@ -83,6 +83,6 @@ public partial class BaitSelectorUi : Control
 		// Ok ok ok. This is dirty but I guess it works
 		Bobber bobber = player.GetChild(5).GetChild(2) as Bobber; // 6th child of player is ActionUI, then 3rd child of ActionUI is bobber
 		bobber.SelectedBait = FishingBaitsAvailable[selection];
-		GD.Print(bobber.SelectedBait.BaitName);
+		// GD.Print(bobber.SelectedBait.BaitName);
 	}
 }

@@ -68,7 +68,7 @@ public partial class FishingQuickTimeEvent : Node
         if (@event.IsActionPressed(_actionName) && _isActive)
         {
             _isSuccessful = true;
-            GD.Print("Sucess input in minigame");
+            GD.Print("Success input in minigame");
             EndQTE();
         }
     }

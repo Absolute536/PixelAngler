@@ -65,10 +65,10 @@ public partial class StateMachine : Node
             State targetState = availableStates[nextState];
 
             currentState.ExitState();
-            GD.Print("State Machine: Exit " + currentState.StateName);
+            // GD.Print("State Machine: Exit " + currentState.StateName);
 
             targetState.EnterState(currentState.StateName); // Currently we use the name of the node (string) to specify the previous state and next state
-            GD.Print("State Machine: Enter " + targetState.StateName);
+            // GD.Print("State Machine: Enter " + targetState.StateName);
             currentState = targetState;
         }
         else

@@ -212,7 +212,7 @@ public partial class Bobber : Area2D
 
 			// Set the (Global) Position per Physics Frame as the starting position + displacement vector
 			GlobalPosition = _startPosition + Displacement;
-			GD.Print("Bobber Global Position: " + GlobalPosition);
+			// GD.Print("Bobber Global Position: " + GlobalPosition);
 		}
 		else
 		{

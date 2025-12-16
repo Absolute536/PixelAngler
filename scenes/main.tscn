@@ -19,6 +19,7 @@ FPSCount = NodePath("Fps")
 [node name="World" parent="." instance=ExtResource("1_o5qli")]
 
 [node name="Fps" type="Label" parent="."]
+visible = false
 offset_left = 427.0
 offset_top = 81.0
 offset_right = 497.0
