@@ -43,6 +43,9 @@ Others are from the following sources, either in its original form or modified u
 - [paper_book_open_1.wav](https://freesound.org/people/Geoff-Bremner-Audio/sounds/663458/) by Geoff-Bremner is licensed under [Creative Commons 0](https://creativecommons.org/publicdomain/zero/1.0/)
 - [paper_crunch_click_wobble_6.wav](https://freesound.org/people/Geoff-Bremner-Audio/sounds/660000/) by Geoff-Bremner is licensed under [Creative Commons 0](https://creativecommons.org/publicdomain/zero/1.0/)
 
+### Font Resources
+[Press Start](https://www.dafont.com/es/press-start.font) by Codeman38 is licensed under [SIL Open Font License](https://openfontlicense.org/).
+
 ### Implementation References
 Some features/mechanism in this project is inspired/adapted from the following sources.
 
