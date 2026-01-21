@@ -5,6 +5,18 @@ This repository houses the source code flies and assets for the game Pixel Angle
 
 It is a 2D, pixel-art style fishing game from a top-down perspective implemented using the Godot game engine. 
 
+## Showcase
+### Game Environment
+![](showcase/environment.gif)
+### Day Night Cycle
+![](showcase/day_night_cycle.gif)
+### Fishing Gameplay
+![](showcase/fishing_gameplay.gif)
+### Fish Catalogue
+![](showcase/fish_catalogue.gif)
+### Pause Menu
+![](showcase/pause_menu_help.gif)
+
 ## Note For Examiners
 For your assessment purposes:
 * The source files are located in the repository itself.
