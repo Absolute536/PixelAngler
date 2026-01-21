@@ -1,0 +1,88 @@
+[gd_scene load_steps=7 format=3 uid="uid://cfx1e2h1ctsb7"]
+
+[ext_resource type="FontFile" uid="uid://cibnl77dc0ji7" path="res://resources/fonts/prstartk.ttf" id="1_naaws"]
+[ext_resource type="Script" uid="uid://daj5y2878lw6y" path="res://scripts/utilities/DebugUtil.cs" id="1_ws1rt"]
+[ext_resource type="ButtonGroup" uid="uid://vt8gtilyq8jo" path="res://resources/others/debug_game_speed_button_group.tres" id="3_tvy7s"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ws1rt"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tvy7s"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lh10x"]
+
+[node name="DebugUtil" type="Control" node_paths=PackedStringArray("DebugVisibilityToogle", "DebugMenu", "TileLabel", "LocationLabel", "FpsLabel")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 2
+mouse_filter = 2
+script = ExtResource("1_ws1rt")
+DebugVisibilityToogle = NodePath("DebugVisibility")
+DebugMenu = NodePath("DebugMenu")
+TileLabel = NodePath("DebugMenu/TiletypeLabel")
+LocationLabel = NodePath("DebugMenu/LocationLabel")
+FpsLabel = NodePath("DebugMenu/FpsLabel")
+GameSpeedToogle = ExtResource("3_tvy7s")
+
+[node name="DebugMenu" type="VBoxContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -72.0
+offset_top = 8.0
+offset_right = 72.0
+offset_bottom = 96.0
+grow_horizontal = 2
+alignment = 2
+
+[node name="TiletypeLabel" type="Label" parent="DebugMenu"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_naaws")
+theme_override_font_sizes/font_size = 8
+text = "Tile:"
+
+[node name="LocationLabel" type="Label" parent="DebugMenu"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_naaws")
+theme_override_font_sizes/font_size = 8
+text = "Location:"
+
+[node name="FpsLabel" type="Label" parent="DebugMenu"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_naaws")
+theme_override_font_sizes/font_size = 8
+text = "FPS:"
+
+[node name="Speed10" type="CheckBox" parent="DebugMenu"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_naaws")
+theme_override_font_sizes/font_size = 8
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ws1rt")
+button_group = ExtResource("3_tvy7s")
+text = "10x Speed"
+
+[node name="Speed25" type="CheckBox" parent="DebugMenu"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_naaws")
+theme_override_font_sizes/font_size = 8
+theme_override_styles/focus = SubResource("StyleBoxEmpty_tvy7s")
+button_group = ExtResource("3_tvy7s")
+text = "25x Speed"
+
+[node name="DebugVisibility" type="CheckButton" parent="."]
+layout_mode = 2
+offset_left = 496.0
+offset_top = 336.0
+offset_right = 640.0
+offset_bottom = 360.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("1_naaws")
+theme_override_font_sizes/font_size = 8
+theme_override_styles/focus = SubResource("StyleBoxEmpty_lh10x")
+text = "Debug Toogle"

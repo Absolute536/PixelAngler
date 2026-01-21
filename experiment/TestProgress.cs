@@ -15,6 +15,7 @@ public partial class TestProgress : ProgressBar
 	{
 	}
 
+    // Called every physics frame. 'delta' is the elapsed time since the previous physics frame.
     public override void _PhysicsProcess(double delta)
     {
         
